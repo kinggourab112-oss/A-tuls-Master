@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel | A-tuls - √MASTER</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #060a12;
+    --card: rgba(255,255,255,0.04);
+    --cyan: #00f0ff;
+    --purple: #7b2fff;
+    --green: #00ff9d;
+    --red: #ff3b5c;
+    --text: #e8f7ff;
+    --muted: #8b9cb3;
+}
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; }
+body {
+    background: radial-gradient(ellipse at 20% 0%, #12182b 0%, var(--bg) 60%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 50px;
+}
+.container { max-width: 720px; margin: 0 auto; }
+
+.header {
+    text-align: center;
+    margin-bottom: 28px;
+    position: relative;
+}
+.header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+.header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+.logout-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(255,59,92,0.15);
+    color: var(--red);
+    border: 1px solid rgba(255,59,92,0.3);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.welcome {
+    background: linear-gradient(135deg, rgba(0,240,255,0.12), rgba(123,47,255,0.12));
+    border: 1px solid rgba(0,240,255,0.25);
+    border-radius: 18px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.welcome h2 { font-size: 1.15rem; margin-bottom: 4px; }
+.welcome p { color: var(--muted); font-size: 13.5px; }
+
+.card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 18px;
+    backdrop-filter: blur(16px);
+}
+.card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.btn-sm {
+    padding: 13px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13.5px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: 0.2s;
+}
+.btn-green { background: var(--green); color: #000; }
+.btn-red { background: var(--red); color: white; }
+.btn-cyan { background: var(--cyan); color: #000; }
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+}
+.btn-sm:active { transform: scale(0.96); }
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 13px 14px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.admin-info {
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+.admin-info a { color: var(--cyan); text-decoration: none; }
+
+.user-card {
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--cyan);
+}
+.user-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+.user-name { font-weight: 700; font-size: 15px; }
+.user-email { font-size: 12px; color: var(--muted); }
+.badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+.badge-active { background: rgba(0,255,157,0.15); color: var(--green); }
+.badge-blocked { background: rgba(255,59,92,0.15); color: var(--red); }
+.badge-pending { background: rgba(255,200,0,0.15); color: #ffc800; }
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.tool-item {
+    background: rgba(255,255,255,0.04);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.toggle {
+    width: 36px; height: 20px;
+    appearance: none;
+    background: #333;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.toggle:checked { background: var(--green); }
+.toggle::before {
+    content: '';
+    width: 16px; height: 16px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px; left: 2px;
+    transition: 0.25s;
+}
+.toggle:checked::before { left: 18px; }
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <h1>A-TOOLS √MASTER</h1>
+        <p>Admin Master Control Panel</p>
+    </div>
+
+    <div class="welcome">
+        <h2>স্বাগতম অ্যাডমিন 👑</h2>
+        <p>আপনি সফলভাবে লগইন করেছেন • Full Control Active</p>
+    </div>
+
+    <!-- Server Control -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-server"></i> Server Control</div>
+        <div class="grid-2">
+            <button class="btn-sm btn-green" onclick="alert('✅ Site is now LIVE')"><i class="fas fa-play"></i> LIVE ON</button>
+            <button class="btn-sm btn-red" onclick="alert('⛔ Site Killed')"><i class="fas fa-power-off"></i> KILL SITE</button>
+        </div>
+    </div>
+
+    <!-- Theme & Registration -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-paint-brush"></i> Theme & Registration</div>
+        <select id="themeSelect">
+            <option value="dark-ocean">Dark Ocean (Default)</option>
+            <option value="neon-night">Neon Night</option>
+            <option value="gold-premium">Gold Premium</option>
+            <option value="cyber-punk">Cyber Punk</option>
+        </select>
+        <div class="grid-2" style="margin-top:8px;">
+            <button class="btn-sm btn-cyan" onclick="alert('Registration OPENED')">REG OPEN</button>
+            <button class="btn-sm btn-outline" onclick="alert('Registration CLOSED')">REG CLOSED</button>
+        </div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="alert('Theme Applied!')">APPLY THEME</button>
+    </div>
+
+    <!-- Double Database -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-database"></i> Double Database Setup</div>
+        <div class="grid-2">
+            <button class="btn-sm btn-cyan" onclick="alert('Switched to PRIMARY Cloud DB')">PRIMARY CLOUD</button>
+            <button class="btn-sm btn-outline" onclick="alert('Switched to BACKUP Cloud DB')">BACKUP CLOUD</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center;">
+            MongoDB Atlas • Cloudflare Ready
+        </p>
+    </div>
+
+    <!-- Global Notice -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-bell"></i> Global Notice</div>
+        <input type="text" id="noticeInput" placeholder="ইউজারদের জন্য নোটিশ লিখুন...">
+        <button class="btn-sm btn-cyan" style="width:100%;" onclick="pushNotice()">PUSH NOTICE</button>
+    </div>
+
+    <!-- Admin Information -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-user-shield"></i> Admin Information</div>
+        <div class="admin-info">
+            <div><i class="fab fa-telegram" style="color:var(--cyan);"></i> Telegram: <strong>+8801944035239</strong></div>
+            <div style="margin-top:6px;"><i class="fab fa-facebook" style="color:#3b82f6;"></i> Facebook: <a href="#" target="_blank">Gourab Official</a></div>
+            <div style="margin-top:6px;"><i class="fas fa-envelope"></i> Email: gourabmon112233@gmail.com</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted);">Developed by Gourab • 01944035239</div>
+        </div>
+    </div>
+
+    <!-- Live User Management -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-users"></i> Live User Management</div>
+        <div id="userList">
+            <!-- Users will load here -->
+        </div>
+    </div>
+
+    <!-- Test All Pages -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-vial"></i> Test All Pages</div>
+        <div class="grid-2">
+            <button class="btn-sm btn-outline" onclick="window.open('index.html')">Index</button>
+            <button class="btn-sm btn-outline" onclick="window.open('dashboard.html')">User Dashboard</button>
+            <button class="btn-sm btn-outline" onclick="window.open('pending.html')">Pending Page</button>
+            <button class="btn-sm btn-outline" onclick="alert('Admin Panel OK')">Admin Panel</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Developed by Gourab | 01944035239<br>
+        A-tuls - √MASTER STYLES • Admin Edition
+    </div>
+</div>
+
+<script>
+// ========== AUTH CHECK ==========
+const role = localStorage.getItem('a_tuls_role');
+if (role !== 'admin') {
+    alert('শুধুমাত্র অ্যাডমিন এই পেজ দেখতে পারবে!');
+    location.href = 'index.html';
+}
+
+// ========== LOGOUT ==========
+function logout() {
+    localStorage.removeItem('a_tuls_role');
+    localStorage.removeItem('a_tuls_user');
+    location.href = 'index.html';
+}
+
+// ========== PUSH NOTICE ==========
+function pushNotice() {
+    const note = document.getElementById('noticeInput').value.trim();
+    localStorage.setItem('a_tuls_global_notice', note);
+    alert(note ? '✅ Notice pushed to all users!' : 'Notice cleared');
+}
+
+// ========== LOAD USERS ==========
+function loadUsers() {
+    const users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
+    const list = document.getElementById('userList');
+
+    if (users.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:var(--muted);padding:20px;">কোনো ইউজার এখনো নেই</p>';
+        return;
+    }
+
+    const tools = ['FB-Check','Pass-Pro','IP-Scan','Mail-Pro','Dev-Scanner','Link-Safe','User-Hunt','Firewall'];
+
+    list.innerHTML = users.map(user => `
+        <div class="user-card">
+            <div class="user-top">
+                <div>
+                    <div class="user-name">${user.name}</div>
+                    <div class="user-email">${user.email}</div>
+                </div>
+                <span class="badge ${
+                    user.status === 'Approved' ? 'badge-active' :
+                    user.status === 'Blocked' ? 'badge-blocked' : 'badge-pending'
+                }">${user.status}</span>
+            </div>
+            <div class="tools-grid">
+                ${tools.map((t, i) => `
+                    <div class="tool-item">
+                        <span>${t}</span>
+                        <input type="checkbox" class="toggle" id="tool-\( {user.id}- \){i}"
+                            ${user.tools && user.tools.includes(t) ? 'checked' : ''}>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="grid-2">
+                <button class="btn-sm btn-cyan" onclick="updateUser('${user.id}', 'Approved')">APPROVE / SAVE</button>
+                <button class="btn-sm btn-red" onclick="updateUser('${user.id}', 'Blocked')">BLOCK</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateUser(userId, status) {
+    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
+    const idx = users.findIndex(u => u.id === userId);
+    if (idx === -1) return;
+
+    const tools = ['FB-Check','Pass-Pro','IP-Scan','Mail-Pro','Dev-Scanner','Link-Safe','User-Hunt','Firewall'];
+    const selected = [];
+    for (let i = 0; i < 8; i++) {
+        const cb = document.getElementById(`tool-\( {userId}- \){i}`);
+        if (cb && cb.checked) selected.push(tools[i]);
+    }
+
+    users[idx].status = status;
+    users[idx].tools = selected;
+    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    alert('ইউজার আপডেট সফল!');
+    loadUsers();
+}
+
+// Initial load
+loadUsers();
+</script>
+</body>
+</html>
