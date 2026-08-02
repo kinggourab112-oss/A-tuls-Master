@@ -7,75 +7,211 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-    --primary: #0d9488;
-    --primary-dark: #0f766e;
-    --bg: #f1f5f9;
-    --text: #0f172a;
-    --muted: #64748b;
-    --sidebar-width: 270px;
+/* =====================================================
+   THEME 1: DARK OCEAN (Default)
+===================================================== */
+:root, [data-theme="dark-ocean"] {
+    --primary: #00f0ff;
+    --primary2: #7b2fff;
+    --bg: #060a12;
+    --bg2: #0c1220;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --text: #e8f7ff;
+    --muted: #8b9cb3;
+    --side1: #0a1628;
+    --side2: #060a12;
+    --top: rgba(12,18,32,0.95);
+    --notice-bg: rgba(0,240,255,0.1);
+    --notice-bd: rgba(0,240,255,0.3);
+    --notice-tx: #00f0ff;
+    --danger-bg: rgba(255,59,92,0.15);
+    --danger-tx: #ff3b5c;
+    --danger-bd: rgba(255,59,92,0.3);
+    --badge-bg: rgba(0,240,255,0.12);
+    --badge-tx: #00f0ff;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --radius: 20px;
+    --card-hover: translateY(-6px);
+    --side-w: 270px;
+    --font: 'Plus Jakarta Sans', sans-serif;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
+/* =====================================================
+   THEME 2: NEON NIGHT
+===================================================== */
+[data-theme="neon-night"] {
+    --primary: #b026ff;
+    --primary2: #00f0ff;
+    --bg: #05010f;
+    --bg2: #12001f;
+    --card: rgba(176,38,255,0.07);
+    --border: rgba(176,38,255,0.25);
+    --text: #f5eaff;
+    --muted: #a78bba;
+    --side1: #1a0033;
+    --side2: #0a0018;
+    --top: rgba(18,0,31,0.96);
+    --notice-bg: rgba(176,38,255,0.14);
+    --notice-bd: rgba(176,38,255,0.4);
+    --notice-tx: #d4a5ff;
+    --danger-bg: rgba(255,59,92,0.18);
+    --danger-tx: #ff6b8a;
+    --danger-bd: rgba(255,59,92,0.35);
+    --badge-bg: rgba(176,38,255,0.18);
+    --badge-tx: #d4a5ff;
+    --shadow: 0 0 40px rgba(176,38,255,0.2);
+    --radius: 16px;
+    --card-hover: translateY(-6px) scale(1.02);
+    --side-w: 270px;
+}
+
+/* =====================================================
+   THEME 3: GOLD PREMIUM
+===================================================== */
+[data-theme="gold-premium"] {
+    --primary: #ffc800;
+    --primary2: #ff8c00;
+    --bg: #0f0c00;
+    --bg2: #1a1400;
+    --card: rgba(255,200,0,0.06);
+    --border: rgba(255,200,0,0.22);
+    --text: #fff8e0;
+    --muted: #b8a66a;
+    --side1: #2a2000;
+    --side2: #120e00;
+    --top: rgba(26,20,0,0.96);
+    --notice-bg: rgba(255,200,0,0.12);
+    --notice-bd: rgba(255,200,0,0.35);
+    --notice-tx: #ffc800;
+    --danger-bg: rgba(255,59,92,0.15);
+    --danger-tx: #ff3b5c;
+    --danger-bd: rgba(255,59,92,0.3);
+    --badge-bg: rgba(255,200,0,0.14);
+    --badge-tx: #ffc800;
+    --shadow: 0 8px 32px rgba(255,200,0,0.12);
+    --radius: 24px;
+    --card-hover: translateY(-8px);
+    --side-w: 280px;
+}
+
+/* =====================================================
+   THEME 4: CYBER PUNK
+===================================================== */
+[data-theme="cyber-punk"] {
+    --primary: #ff2d95;
+    --primary2: #00f0ff;
+    --bg: #0a0014;
+    --bg2: #1a0030;
+    --card: rgba(255,45,149,0.07);
+    --border: rgba(0,240,255,0.22);
+    --text: #e8f7ff;
+    --muted: #9b8bb8;
+    --side1: #2a0040;
+    --side2: #0d001a;
+    --top: rgba(26,0,48,0.96);
+    --notice-bg: rgba(0,240,255,0.1);
+    --notice-bd: rgba(255,45,149,0.4);
+    --notice-tx: #00f0ff;
+    --danger-bg: rgba(255,59,92,0.18);
+    --danger-tx: #ff3b5c;
+    --danger-bd: rgba(255,59,92,0.35);
+    --badge-bg: rgba(255,45,149,0.16);
+    --badge-tx: #ff2d95;
+    --shadow: 0 0 30px rgba(255,45,149,0.18);
+    --radius: 8px;
+    --card-hover: translateY(-4px) skewX(-1deg);
+    --side-w: 260px;
+}
+
+/* =====================================================
+   THEME 5: EMERALD LIGHT
+===================================================== */
+[data-theme="emerald-light"] {
+    --primary: #0d9488;
+    --primary2: #059669;
+    --bg: #f1f5f9;
+    --bg2: #e2e8f0;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --side1: #0f766e;
+    --side2: #134e4a;
+    --top: #ffffff;
+    --notice-bg: #ecfdf5;
+    --notice-bd: #a7f3d0;
+    --notice-tx: #047857;
+    --danger-bg: #fef2f2;
+    --danger-tx: #dc2626;
+    --danger-bd: #fecaca;
+    --badge-bg: #f0fdfa;
+    --badge-tx: #0f766e;
+    --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --radius: 18px;
+    --card-hover: translateY(-5px);
+    --side-w: 270px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family: var(--font, 'Plus Jakarta Sans', sans-serif); }
 
 body {
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
 /* ========== SIDEBAR ========== */
 .sidebar {
-    width: var(--sidebar-width);
-    background: linear-gradient(180deg, #0f766e 0%, #134e4a 100%);
-    color: white;
+    width: var(--side-w);
+    background: linear-gradient(180deg, var(--side1) 0%, var(--side2) 100%);
+    color: #fff;
     height: 100vh;
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 0; top: 0;
     display: flex;
     flex-direction: column;
     z-index: 100;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
-    transition: transform 0.3s ease;
+    box-shadow: 4px 0 28px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease, width 0.35s ease, background 0.4s ease;
 }
 
 .sidebar-header {
-    padding: 24px 20px 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 22px 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 800;
 }
 
 .sidebar-logo i {
-    width: 40px;
-    height: 40px;
+    width: 42px; height: 42px;
     background: rgba(255,255,255,0.15);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .sidebar-menu {
     flex: 1;
-    padding: 16px 12px;
+    padding: 14px 10px;
     overflow-y: auto;
 }
 
 .menu-label {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     opacity: 0.5;
     padding: 12px 12px 6px;
 }
@@ -84,101 +220,114 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 11px 14px;
     border-radius: 12px;
     color: rgba(255,255,255,0.85);
     text-decoration: none;
     font-weight: 500;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    margin-bottom: 3px;
+    font-size: 13.5px;
+    transition: 0.2s;
+    margin-bottom: 2px;
     cursor: pointer;
 }
 
 .menu-item:hover, .menu-item.active {
     background: rgba(255,255,255,0.15);
-    color: white;
+    color: #fff;
 }
 
-.menu-item i {
-    width: 20px;
-    text-align: center;
-    font-size: 14px;
-}
+.menu-item i { width: 20px; text-align: center; font-size: 14px; }
 
 .sidebar-footer {
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 12px;
-    opacity: 0.7;
+    font-size: 11.5px;
+    opacity: 0.65;
     text-align: center;
+}
+
+/* Theme-specific sidebar accents */
+[data-theme="neon-night"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(176,38,255,0.35), transparent);
+    border-left: 3px solid #b026ff;
+}
+[data-theme="gold-premium"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(255,200,0,0.25), transparent);
+    border-left: 3px solid #ffc800;
+}
+[data-theme="cyber-punk"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(255,45,149,0.3), transparent);
+    border-left: 3px solid #00f0ff;
+    border-radius: 4px;
+}
+[data-theme="cyber-punk"] .sidebar-logo i {
+    border-radius: 4px;
+    border: 1px solid rgba(0,240,255,0.4);
 }
 
 /* ========== MAIN ========== */
 .main {
-    margin-left: var(--sidebar-width);
+    margin-left: var(--side-w);
     flex: 1;
     min-height: 100vh;
+    transition: margin-left 0.35s ease;
 }
 
 .topbar {
-    background: white;
-    padding: 16px 24px;
+    background: var(--top);
+    padding: 14px 22px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 50;
+    backdrop-filter: blur(14px);
+    transition: background 0.4s ease;
 }
 
-.topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
 
 .menu-toggle {
     display: none;
-    background: #f1f5f9;
-    border: none;
-    width: 40px;
-    height: 40px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    width: 40px; height: 40px;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 17px;
     cursor: pointer;
     color: var(--text);
 }
 
 .page-title {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
 
 .user-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: #f0fdfa;
-    padding: 8px 14px;
+    gap: 9px;
+    background: var(--badge-bg);
+    padding: 7px 13px;
     border-radius: 50px;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--primary-dark);
+    color: var(--badge-tx);
+    border: 1px solid var(--border);
 }
 
 .user-badge i {
-    width: 28px;
-    height: 28px;
+    width: 28px; height: 28px;
     background: var(--primary);
-    color: white;
+    color: #000;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -186,131 +335,198 @@ body {
     font-size: 12px;
 }
 
+[data-theme="emerald-light"] .user-badge i { color: #fff; }
+
 .logout-btn {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    padding: 8px 14px;
+    background: var(--danger-bg);
+    color: var(--danger-tx);
+    border: 1px solid var(--danger-bd);
+    padding: 8px 13px;
     border-radius: 10px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12.5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
 }
-
-.logout-btn:hover { background: #fee2e2; }
+.logout-btn:hover { opacity: 0.85; }
 
 /* Notice */
 .notice {
-    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-    border: 1px solid #a7f3d0;
-    color: #047857;
-    padding: 14px 20px;
-    margin: 20px 24px 0;
+    background: var(--notice-bg);
+    border: 1px solid var(--notice-bd);
+    color: var(--notice-tx);
+    padding: 13px 18px;
+    margin: 18px 22px 0;
     border-radius: 14px;
-    font-size: 14px;
+    font-size: 13.5px;
     display: none;
     align-items: center;
     gap: 10px;
 }
 
-/* Content */
-.content {
-    padding: 24px;
+/* Admin Info */
+.admin-info-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin: 14px 22px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    display: none;
 }
+.admin-info-box .title {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.admin-info-box a { color: var(--primary); text-decoration: none; }
+
+/* Content */
+.content { padding: 22px; }
 
 .section-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
+.section-title i { color: var(--primary); }
 
-.section-title i {
-    color: var(--primary);
+.theme-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--badge-bg);
+    color: var(--badge-tx);
+    border: 1px solid var(--border);
+    margin-left: 8px;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+}
+
+/* Different grid per theme */
+[data-theme="gold-premium"] .grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+[data-theme="cyber-punk"] .grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
+}
+[data-theme="neon-night"] .grid {
     gap: 18px;
 }
 
 .card {
-    background: white;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-    border: 1px solid #e2e8f0;
-    transition: all 0.25s ease;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: all 0.28s ease;
     cursor: pointer;
     text-decoration: none;
     color: inherit;
     display: block;
+    position: relative;
+    overflow: hidden;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: #14b8a6;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    transform: var(--card-hover);
+    border-color: var(--primary);
+}
+
+/* Theme card accents */
+[data-theme="neon-night"] .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+}
+[data-theme="gold-premium"] .card {
+    border: 1px solid rgba(255,200,0,0.25);
+}
+[data-theme="gold-premium"] .card:hover {
+    box-shadow: 0 12px 40px rgba(255,200,0,0.15);
+}
+[data-theme="cyber-punk"] .card {
+    border-left: 3px solid var(--primary);
+}
+[data-theme="cyber-punk"] .card:hover {
+    border-left-color: var(--primary2);
+    box-shadow: 0 0 25px rgba(0,240,255,0.15);
+}
+[data-theme="emerald-light"] .card:hover {
+    box-shadow: 0 12px 28px rgba(13,148,136,0.12);
 }
 
 .icon {
-    width: 52px;
-    height: 52px;
+    width: 50px; height: 50px;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
-    margin-bottom: 16px;
+    font-size: 20px;
+    margin-bottom: 14px;
 }
 
+[data-theme="cyber-punk"] .icon { border-radius: 6px; }
+[data-theme="gold-premium"] .icon { border-radius: 50%; }
+
 .card h3 {
-    font-size: 15.5px;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 .card p {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--muted);
     line-height: 1.45;
 }
 
-/* Mobile */
+/* Overlay mobile */
 .overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.55);
     z-index: 90;
 }
 
 @media (max-width: 900px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-    .sidebar.open {
-        transform: translateX(0);
-    }
-    .main {
-        margin-left: 0;
-    }
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
     .menu-toggle {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .overlay.show {
-        display: block;
-    }
+    .overlay.show { display: block; }
 }
 </style>
+<script>
+/* Early theme – no flash */
+(function(){
+  var t = localStorage.getItem('a_tuls_dash_color') || localStorage.getItem('a_tuls_theme') || 'dark-ocean';
+  var ok = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
+  document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
+})();
+</script>
 </head>
 <body>
 
@@ -368,7 +584,7 @@ body {
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<!-- Main Content -->
+<!-- Main -->
 <main class="main">
     <div class="topbar">
         <div class="topbar-left">
@@ -388,17 +604,25 @@ body {
         </div>
     </div>
 
-    <!-- Admin Notice -->
     <div class="notice" id="adminNotice"></div>
+
+    <div class="admin-info-box" id="adminInfoBox">
+        <div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>
+        <div><i class="fab fa-telegram"></i> Telegram: <strong>+8801944035239</strong></div>
+        <div><i class="fab fa-facebook"></i> Facebook: <a href="#" target="_blank">Gourab Official</a></div>
+        <div><i class="fas fa-envelope"></i> Email: gourabmon112233@gmail.com</div>
+        <div style="margin-top:4px;opacity:0.7;font-size:12px;">Developed by Gourab • 01944035239</div>
+    </div>
 
     <div class="content">
         <div class="section-title">
             <i class="fas fa-th"></i> Your Premium Tools
+            <span class="theme-tag" id="themeTag">Dark Ocean</span>
         </div>
 
-        <div class="grid">
+        <div class="grid" id="toolsGrid">
             <a class="card" href="Duplicate Email Checker .html">
-                <div class="icon" style="background:#ccfbf1;color:#0d9488;">
+                <div class="icon" style="background:rgba(13,148,136,0.18);color:#0d9488;">
                     <i class="fas fa-copy"></i>
                 </div>
                 <h3>Duplicate Checker</h3>
@@ -406,7 +630,7 @@ body {
             </a>
 
             <a class="card" href="Email Data Formatter.html">
-                <div class="icon" style="background:#dbeafe;color:#2563eb;">
+                <div class="icon" style="background:rgba(37,99,235,0.18);color:#2563eb;">
                     <i class="fas fa-align-left"></i>
                 </div>
                 <h3>Data Formatter</h3>
@@ -414,7 +638,7 @@ body {
             </a>
 
             <a class="card" href="emaill report .html">
-                <div class="icon" style="background:#fce7f3;color:#db2777;">
+                <div class="icon" style="background:rgba(219,39,119,0.18);color:#db2777;">
                     <i class="fas fa-file-alt"></i>
                 </div>
                 <h3>Report Generator</h3>
@@ -422,7 +646,7 @@ body {
             </a>
 
             <a class="card" href="esey emaill vawucer.html">
-                <div class="icon" style="background:#d1fae5;color:#059669;">
+                <div class="icon" style="background:rgba(5,150,105,0.18);color:#059669;">
                     <i class="fas fa-check-double"></i>
                 </div>
                 <h3>Email Validator</h3>
@@ -430,7 +654,7 @@ body {
             </a>
 
             <a class="card" href="parshnol emaill vaault.html">
-                <div class="icon" style="background:#fef3c7;color:#d97706;">
+                <div class="icon" style="background:rgba(217,119,6,0.18);color:#d97706;">
                     <i class="fas fa-vault"></i>
                 </div>
                 <h3>Email Vault</h3>
@@ -438,7 +662,7 @@ body {
             </a>
 
             <a class="card" href="name and recovery ganaretod.html">
-                <div class="icon" style="background:#e0e7ff;color:#4f46e5;">
+                <div class="icon" style="background:rgba(79,70,229,0.18);color:#4f46e5;">
                     <i class="fas fa-users"></i>
                 </div>
                 <h3>Names & Recovery</h3>
@@ -446,7 +670,7 @@ body {
             </a>
 
             <a class="card" href="pasword ganaratod.html">
-                <div class="icon" style="background:#fee2e2;color:#dc2626;">
+                <div class="icon" style="background:rgba(220,38,38,0.18);color:#dc2626;">
                     <i class="fas fa-key"></i>
                 </div>
                 <h3>Password Generator</h3>
@@ -454,7 +678,7 @@ body {
             </a>
 
             <a class="card" href="ip time zoone farat.html">
-                <div class="icon" style="background:#cffafe;color:#0891b2;">
+                <div class="icon" style="background:rgba(8,145,178,0.18);color:#0891b2;">
                     <i class="fas fa-globe"></i>
                 </div>
                 <h3>IP TimeZone Finder</h3>
@@ -465,7 +689,7 @@ body {
 </main>
 
 <script>
-// Auth Check
+// ========== AUTH ==========
 const role = localStorage.getItem('a_tuls_role');
 const user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
 
@@ -475,7 +699,57 @@ if (role !== 'user' && role !== 'admin') {
 
 document.getElementById('userName').textContent = user.name || 'User';
 
-// Admin Notice
+// ========== THEME NAMES ==========
+const THEME_NAMES = {
+    'dark-ocean': 'Dark Ocean',
+    'neon-night': 'Neon Night',
+    'gold-premium': 'Gold Premium',
+    'cyber-punk': 'Cyber Punk',
+    'emerald-light': 'Emerald Light'
+};
+
+// ========== APPLY FULL THEME ==========
+function applyTheme() {
+    const theme = localStorage.getItem('a_tuls_dash_color')
+               || localStorage.getItem('a_tuls_theme')
+               || 'dark-ocean';
+
+    const valid = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
+    const finalTheme = valid.includes(theme) ? theme : 'dark-ocean';
+
+    document.documentElement.setAttribute('data-theme', finalTheme);
+    document.body.setAttribute('data-theme', finalTheme);
+
+    const tag = document.getElementById('themeTag');
+    if (tag) tag.textContent = THEME_NAMES[finalTheme] || finalTheme;
+}
+
+applyTheme();
+
+// Live update from admin
+window.addEventListener('storage', function(e) {
+    if (e.key === 'a_tuls_dash_color' || e.key === 'a_tuls_theme' || e.key === 'a_tuls_theme_updated_at') {
+        applyTheme();
+    }
+    if (e.key === 'a_tuls_admin_info_visible') updateAdminInfo();
+    if (e.key === 'a_tuls_global_notice') {
+        const notice = localStorage.getItem('a_tuls_global_notice');
+        const el = document.getElementById('adminNotice');
+        if (el) {
+            if (notice) {
+                el.style.display = 'flex';
+                el.innerHTML = '<i class="fas fa-bell"></i> <strong>Admin Notice:</strong> ' + notice;
+            } else {
+                el.style.display = 'none';
+                el.innerHTML = '';
+            }
+        }
+    }
+});
+
+setInterval(applyTheme, 2000);
+
+// ========== NOTICE ==========
 const notice = localStorage.getItem('a_tuls_global_notice');
 if (notice) {
     const el = document.getElementById('adminNotice');
@@ -483,6 +757,16 @@ if (notice) {
     el.innerHTML = '<i class="fas fa-bell"></i> <strong>Admin Notice:</strong> ' + notice;
 }
 
+// ========== ADMIN INFO ==========
+function updateAdminInfo() {
+    const visible = localStorage.getItem('a_tuls_admin_info_visible') !== '0';
+    const box = document.getElementById('adminInfoBox');
+    if (box) box.style.display = visible ? 'block' : 'none';
+}
+updateAdminInfo();
+setInterval(updateAdminInfo, 3000);
+
+// ========== LOGOUT / SIDEBAR ==========
 function logout() {
     localStorage.removeItem('a_tuls_role');
     localStorage.removeItem('a_tuls_user');
