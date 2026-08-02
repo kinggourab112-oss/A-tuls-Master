@@ -59,6 +59,29 @@ if (role === 'user' || role === 'admin') {
     location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
 }
 
+/* Device fingerprint for block check */
+function simpleHash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+    }
+    return Math.abs(h).toString(36);
+}
+
+function getFingerprint() {
+    const parts = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        screen.colorDepth,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || 0,
+        navigator.platform || ''
+    ].join('|');
+    return simpleHash(parts);
+}
+
 async function checkStatus() {
     try {
         const res = await fetch(BIN_URL + '/latest', {
@@ -72,6 +95,15 @@ async function checkStatus() {
 
         if (!fresh) {
             document.getElementById('statusText').textContent = 'অ্যাকাউন্ট পাওয়া যায়নি। আবার রেজিস্টার করুন।';
+            return;
+        }
+
+        // Device block check
+        const fp = getFingerprint();
+        if (Array.isArray(fresh.blockedDevices) && fresh.blockedDevices.includes(fp)) {
+            document.getElementById('statusText').textContent = '⛔ এই ডিভাইস Admin কর্তৃক ব্লক করা হয়েছে।';
+            localStorage.removeItem('a_tuls_role');
+            localStorage.removeItem('a_tuls_user');
             return;
         }
 

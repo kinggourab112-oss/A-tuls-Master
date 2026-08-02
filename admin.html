@@ -69,7 +69,7 @@ body {
 
 .stats-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-bottom: 18px;
 }
@@ -81,7 +81,7 @@ body {
     text-align: center;
 }
 .stat-box .num {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: var(--cyan);
 }
@@ -317,6 +317,122 @@ select, input[type="text"], input[type="search"] {
     padding: 24px 10px;
     font-size: 14px;
 }
+
+/* ========== NEW: Ultra Tracking Styles ========== */
+.track-section {
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid rgba(0,240,255,0.12);
+}
+.track-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.track-item {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.track-item.blocked-device {
+    opacity: 0.55;
+    border-left: 2px solid var(--red);
+}
+.track-meta {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+}
+.track-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.btn-xs {
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+.btn-xs-red {
+    background: rgba(255,59,92,0.2);
+    color: var(--red);
+    border: 1px solid rgba(255,59,92,0.35);
+}
+.btn-xs-green {
+    background: rgba(0,255,157,0.15);
+    color: var(--green);
+    border: 1px solid rgba(0,255,157,0.3);
+}
+.usage-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+.usage-chip {
+    background: rgba(0,240,255,0.1);
+    border: 1px solid rgba(0,240,255,0.2);
+    color: var(--cyan);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.login-log {
+    font-size: 11.5px;
+    color: var(--muted);
+    max-height: 110px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+.login-log div {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.details-toggle {
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px;
+    border-radius: 10px;
+    background: rgba(0,240,255,0.08);
+    border: 1px solid rgba(0,240,255,0.2);
+    color: var(--cyan);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.details-box {
+    display: none;
+    margin-top: 10px;
+}
+.details-box.open { display: block; }
+.full-details {
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--muted);
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 12px;
+}
+.full-details strong { color: var(--text); }
+@media (max-width: 520px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
@@ -324,12 +440,12 @@ select, input[type="text"], input[type="search"] {
     <div class="header">
         <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         <h1>A-TOOLS √MASTER</h1>
-        <p>Admin Master Control Panel</p>
+        <p>Admin Master Control Panel • Ultra Tracking</p>
     </div>
 
     <div class="welcome">
         <h2>স্বাগতম অ্যাডমিন 👑</h2>
-        <p>আপনি সফলভাবে লগইন করেছেন • Full Control Active</p>
+        <p>আপনি সফলভাবে লগইন করেছেন • Full Control + Device Tracking Active</p>
     </div>
 
     <!-- Stats -->
@@ -345,6 +461,10 @@ select, input[type="text"], input[type="search"] {
         <div class="stat-box">
             <div class="num" id="pendingUsers">0</div>
             <div class="label">পেন্ডিং</div>
+        </div>
+        <div class="stat-box">
+            <div class="num" id="totalDevices">0</div>
+            <div class="label">মোট ডিভাইস</div>
         </div>
     </div>
 
@@ -445,7 +565,7 @@ select, input[type="text"], input[type="search"] {
 
     <!-- Live User Management -->
     <div class="card">
-        <div class="card-title"><i class="fas fa-users"></i> Live User Management</div>
+        <div class="card-title"><i class="fas fa-users"></i> Live User Management + Ultra Tracking</div>
         
         <div class="search-bar">
             <input type="search" id="userSearch" placeholder="নাম বা ইমেইল দিয়ে সার্চ করুন..." oninput="loadUsers()">
@@ -469,7 +589,7 @@ select, input[type="text"], input[type="search"] {
 
     <div class="footer">
         Developed by Gourab | 01944035239<br>
-        A-tuls - √MASTER STYLES • Admin Edition
+        A-tuls - √MASTER STYLES • Admin Edition • Ultra Tracking
     </div>
 </div>
 
@@ -534,6 +654,16 @@ async function loadDB() {
         if (DB.settings.siteLive === undefined) DB.settings.siteLive = true;
         if (!DB.settings.notice) DB.settings.notice = '';
         if (!DB.settings.globalTools) DB.settings.globalTools = [...ALL_TOOLS];
+
+        // Ensure every user has tracking fields
+        DB.users.forEach(u => {
+            if (!u.devices) u.devices = [];
+            if (!u.loginHistory) u.loginHistory = [];
+            if (!u.toolUsage) u.toolUsage = {};
+            if (!u.blockedDevices) u.blockedDevices = [];
+            if (!u.lastLogin) u.lastLogin = null;
+            if (!u.totalSessions) u.totalSessions = 0;
+        });
 
         selectedDashColor = DB.settings.theme || 'dark-ocean';
         applyUIFromDB();
@@ -670,9 +800,28 @@ function updateStats(users) {
     const t = document.getElementById('totalUsers');
     const a = document.getElementById('activeUsers');
     const p = document.getElementById('pendingUsers');
+    const d = document.getElementById('totalDevices');
     if (t) t.textContent = users.length;
     if (a) a.textContent = users.filter(u => u.status === 'Approved').length;
     if (p) p.textContent = users.filter(u => u.status === 'Pending').length;
+    let deviceCount = 0;
+    users.forEach(u => {
+        if (Array.isArray(u.devices)) deviceCount += u.devices.length;
+    });
+    if (d) d.textContent = deviceCount;
+}
+
+function formatTime(ts) {
+    if (!ts) return 'N/A';
+    try {
+        const d = new Date(ts);
+        return d.toLocaleString('bn-BD', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    } catch (e) {
+        return String(ts);
+    }
 }
 
 function loadUsers() {
@@ -700,6 +849,61 @@ function loadUsers() {
         const mode = user.mode || 'free';
         const tools = Array.isArray(user.tools) ? user.tools : [];
         const statusClass = user.status === 'Blocked' ? 'blocked' : (user.status === 'Pending' ? 'pending' : '');
+        const devices = Array.isArray(user.devices) ? user.devices : [];
+        const blockedDevices = Array.isArray(user.blockedDevices) ? user.blockedDevices : [];
+        const loginHistory = Array.isArray(user.loginHistory) ? user.loginHistory.slice().reverse().slice(0, 8) : [];
+        const toolUsage = user.toolUsage || {};
+        const totalUsage = Object.values(toolUsage).reduce((s, n) => s + (n || 0), 0);
+
+        // Device list HTML
+        let devicesHtml = '';
+        if (devices.length === 0) {
+            devicesHtml = '<div class="track-meta" style="padding:6px 0;">কোনো ডিভাইস ট্র্যাক হয়নি (Dashboard আপডেট প্রয়োজন)</div>';
+        } else {
+            devicesHtml = devices.map((dev, di) => {
+                const isBlocked = blockedDevices.includes(dev.fingerprint);
+                return `
+                <div class="track-item ${isBlocked ? 'blocked-device' : ''}">
+                    <div class="track-meta">
+                        <strong style="color:${isBlocked ? 'var(--red)' : 'var(--text)'}">${escapeHtml(dev.browser || 'Unknown')} • ${escapeHtml(dev.os || 'Unknown')}</strong><br>
+                        ${escapeHtml(dev.deviceType || 'Desktop')} • IP: ${escapeHtml(dev.ip || 'N/A')}<br>
+                        Last: ${formatTime(dev.lastSeen)} ${isBlocked ? '• <span style="color:var(--red)">BLOCKED</span>' : ''}
+                    </div>
+                    <div class="track-actions">
+                        ${isBlocked
+                            ? `<button class="btn-xs btn-xs-green" onclick="unblockDevice('${user.id}', '${escapeHtml(dev.fingerprint)}')"><i class="fas fa-unlock"></i></button>`
+                            : `<button class="btn-xs btn-xs-red" onclick="blockDevice('${user.id}', '${escapeHtml(dev.fingerprint)}')"><i class="fas fa-ban"></i></button>`
+                        }
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // Tool usage chips
+        let usageHtml = '';
+        const usageEntries = Object.entries(toolUsage).filter(([_, c]) => c > 0);
+        if (usageEntries.length === 0) {
+            usageHtml = '<div class="track-meta">কোনো চেকার ব্যবহার হয়নি</div>';
+        } else {
+            usageHtml = '<div class="usage-bar">' + usageEntries
+                .sort((a, b) => b[1] - a[1])
+                .map(([name, count]) => `<span class="usage-chip">${escapeHtml(name)}: ${count}x</span>`)
+                .join('') + '</div>';
+        }
+
+        // Login history
+        let loginHtml = '';
+        if (loginHistory.length === 0) {
+            loginHtml = '<div class="track-meta">লগইন হিস্টরি নেই</div>';
+        } else {
+            loginHtml = '<div class="login-log">' + loginHistory.map(log => `
+                <div>
+                    <i class="fas fa-clock" style="color:var(--cyan);font-size:10px;"></i>
+                    ${formatTime(log.time)} • ${escapeHtml(log.browser || '?')} • ${escapeHtml(log.os || '?')}
+                    ${log.ip ? ' • IP: ' + escapeHtml(log.ip) : ''}
+                </div>
+            `).join('') + '</div>';
+        }
 
         return `
         <div class="user-card ${statusClass}" id="ucard-${user.id}">
@@ -707,7 +911,7 @@ function loadUsers() {
                 <div>
                     <div class="user-name">${escapeHtml(user.name || 'Unknown')}</div>
                     <div class="user-email">${escapeHtml(user.email || '')}</div>
-                    <div class="user-meta">ID: ${user.id} • Joined: ${user.joined || 'N/A'}</div>
+                    <div class="user-meta">ID: ${user.id} • Joined: ${user.joined || 'N/A'} • Devices: ${devices.length}</div>
                 </div>
                 <div style="text-align:right;">
                     <span class="badge ${
@@ -757,7 +961,51 @@ function loadUsers() {
                 }).join('')}
             </div>
 
-            <div class="grid-2">
+            <!-- Ultra Tracking Toggle -->
+            <button class="details-toggle" onclick="toggleDetails('${user.id}')">
+                <i class="fas fa-radar"></i> Ultra Tracking & Full Details
+                <span style="float:right;font-size:11px;opacity:0.7;">(${devices.length} device • ${totalUsage} uses)</span>
+            </button>
+
+            <div class="details-box" id="details-${user.id}">
+                <!-- Devices -->
+                <div class="track-section">
+                    <div class="track-title"><i class="fas fa-mobile-alt"></i> ডিভাইস ও ব্রাউজার (${devices.length})</div>
+                    ${devicesHtml}
+                </div>
+
+                <!-- Tool Usage -->
+                <div class="track-section">
+                    <div class="track-title"><i class="fas fa-chart-bar"></i> চেকার ব্যবহার (${totalUsage} বার)</div>
+                    ${usageHtml}
+                </div>
+
+                <!-- Login History -->
+                <div class="track-section">
+                    <div class="track-title"><i class="fas fa-history"></i> লগইন হিস্টরি (শেষ ৮টি)</div>
+                    ${loginHtml}
+                </div>
+
+                <!-- Full Details -->
+                <div class="track-section">
+                    <div class="track-title"><i class="fas fa-info-circle"></i> ফুল ইউজার ডিটেইলস</div>
+                    <div class="full-details">
+                        <div><strong>Name:</strong> ${escapeHtml(user.name || '—')}</div>
+                        <div><strong>Email:</strong> ${escapeHtml(user.email || '—')}</div>
+                        <div><strong>User ID:</strong> ${user.id}</div>
+                        <div><strong>Status:</strong> ${user.status || 'Pending'}</div>
+                        <div><strong>Mode:</strong> ${mode}</div>
+                        <div><strong>Joined:</strong> ${user.joined || 'N/A'}</div>
+                        <div><strong>Last Login:</strong> ${formatTime(user.lastLogin)}</div>
+                        <div><strong>Total Sessions:</strong> ${user.totalSessions || 0}</div>
+                        <div><strong>Active Devices:</strong> ${devices.filter(d => !blockedDevices.includes(d.fingerprint)).length}</div>
+                        <div><strong>Blocked Devices:</strong> ${blockedDevices.length}</div>
+                        <div><strong>Allowed Tools:</strong> ${(tools.length ? tools.join(', ') : 'None')}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top:12px;">
                 <button class="btn-sm btn-cyan" onclick="updateUser('${user.id}', 'Approved')">
                     <i class="fas fa-check"></i> APPROVE / SAVE
                 </button>
@@ -777,12 +1025,18 @@ function loadUsers() {
     }).join('');
 }
 
+function toggleDetails(userId) {
+    const box = document.getElementById('details-' + userId);
+    if (box) box.classList.toggle('open');
+}
+
 function escapeHtml(str) {
     return String(str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 async function setUserMode(userId, mode) {
@@ -872,6 +1126,29 @@ async function deleteUser(userId) {
     DB.users = DB.users.filter(u => u.id !== userId);
     await saveDB();
     alert('🗑️ ইউজার সম্পূর্ণ ডিলিট করা হয়েছে!');
+    loadUsers();
+}
+
+/* ========== DEVICE BLOCK / UNBLOCK ========== */
+async function blockDevice(userId, fingerprint) {
+    const idx = DB.users.findIndex(u => u.id === userId);
+    if (idx === -1) return;
+    if (!Array.isArray(DB.users[idx].blockedDevices)) DB.users[idx].blockedDevices = [];
+    if (!DB.users[idx].blockedDevices.includes(fingerprint)) {
+        DB.users[idx].blockedDevices.push(fingerprint);
+    }
+    await saveDB();
+    alert('⛔ এই ডিভাইস/ব্রাউজার ব্লক করা হয়েছে!\nইউজার এই ডিভাইস থেকে আর লগইন করতে পারবে না।');
+    loadUsers();
+}
+
+async function unblockDevice(userId, fingerprint) {
+    const idx = DB.users.findIndex(u => u.id === userId);
+    if (idx === -1) return;
+    if (!Array.isArray(DB.users[idx].blockedDevices)) DB.users[idx].blockedDevices = [];
+    DB.users[idx].blockedDevices = DB.users[idx].blockedDevices.filter(f => f !== fingerprint);
+    await saveDB();
+    alert('✅ ডিভাইস আনব্লক করা হয়েছে!');
     loadUsers();
 }
 

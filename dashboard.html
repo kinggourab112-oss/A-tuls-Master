@@ -716,6 +716,10 @@ const THEME_NAMES = {
 
 const role = localStorage.getItem('a_tuls_role');
 let user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
+let DB = null;
+let saving = false;
+let deviceInfo = null;
+let trackingDone = false;
 
 if (role !== 'user' && role !== 'admin') {
     location.href = 'index.html';
@@ -723,6 +727,83 @@ if (role !== 'user' && role !== 'admin') {
 
 document.getElementById('userName').textContent = user.name || 'User';
 
+/* ========== DEVICE FINGERPRINT ========== */
+function getBrowserName() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Edg/')) return 'Edge ' + (ua.match(/Edg\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Firefox/')) return 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Safari/') && !ua.includes('Chrome')) return 'Safari ' + (ua.match(/Version\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('OPR/') || ua.includes('Opera')) return 'Opera';
+    return 'Unknown Browser';
+}
+
+function getOS() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Windows NT 10')) return 'Windows 10/11';
+    if (ua.includes('Windows')) return 'Windows';
+    if (ua.includes('Android')) return 'Android ' + (ua.match(/Android ([\d.]+)/)?.[1] || '');
+    if (ua.includes('iPhone') || ua.includes('iPad')) return 'iOS ' + (ua.match(/OS ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '');
+    if (ua.includes('Mac OS X')) return 'macOS ' + (ua.match(/Mac OS X ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '');
+    if (ua.includes('Linux')) return 'Linux';
+    return 'Unknown OS';
+}
+
+function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) {
+        if (/iPad|Tablet/i.test(ua)) return 'Tablet';
+        return 'Mobile';
+    }
+    return 'Desktop';
+}
+
+function simpleHash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+    }
+    return Math.abs(h).toString(36);
+}
+
+function getFingerprint() {
+    const parts = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        screen.colorDepth,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || 0,
+        navigator.platform || ''
+    ].join('|');
+    return simpleHash(parts);
+}
+
+async function getIP() {
+    try {
+        const r = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(4000) });
+        if (r.ok) {
+            const d = await r.json();
+            return d.ip || 'N/A';
+        }
+    } catch (e) {}
+    return 'N/A';
+}
+
+async function collectDeviceInfo() {
+    const ip = await getIP();
+    return {
+        fingerprint: getFingerprint(),
+        browser: getBrowserName(),
+        os: getOS(),
+        deviceType: getDeviceType(),
+        ip: ip,
+        lastSeen: new Date().toISOString()
+    };
+}
+
+/* ========== DB HELPERS ========== */
 async function fetchDB() {
     const res = await fetch(BIN_URL + '/latest', {
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -730,6 +811,121 @@ async function fetchDB() {
     if (!res.ok) throw new Error('DB load failed');
     const data = await res.json();
     return data.record || { users: [], settings: {} };
+}
+
+async function saveDB() {
+    if (saving || !DB) return;
+    saving = true;
+    try {
+        const res = await fetch(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(DB)
+        });
+        if (!res.ok) throw new Error('Save failed');
+    } finally {
+        saving = false;
+    }
+}
+
+/* ========== ULTRA TRACKING ========== */
+async function recordTracking() {
+    if (role === 'admin' || trackingDone || !user || !user.email) return;
+    trackingDone = true;
+
+    try {
+        deviceInfo = await collectDeviceInfo();
+        if (!DB) DB = await fetchDB();
+        if (!DB.users) DB.users = [];
+
+        const idx = DB.users.findIndex(u =>
+            (u.email || '').toLowerCase() === (user.email || '').toLowerCase()
+        );
+        if (idx === -1) return;
+
+        const u = DB.users[idx];
+
+        // Ensure tracking fields
+        if (!Array.isArray(u.devices)) u.devices = [];
+        if (!Array.isArray(u.loginHistory)) u.loginHistory = [];
+        if (!Array.isArray(u.blockedDevices)) u.blockedDevices = [];
+        if (!u.toolUsage || typeof u.toolUsage !== 'object') u.toolUsage = {};
+        if (!u.totalSessions) u.totalSessions = 0;
+
+        // Blocked device check
+        if (u.blockedDevices.includes(deviceInfo.fingerprint)) {
+            alert('⛔ এই ডিভাইস/ব্রাউজার Admin কর্তৃক ব্লক করা হয়েছে।\nআপনি এই ডিভাইস থেকে লগইন করতে পারবেন না।');
+            localStorage.removeItem('a_tuls_role');
+            localStorage.removeItem('a_tuls_user');
+            location.href = 'index.html';
+            return;
+        }
+
+        // Update or add device
+        const existingDev = u.devices.findIndex(d => d.fingerprint === deviceInfo.fingerprint);
+        if (existingDev >= 0) {
+            u.devices[existingDev] = { ...u.devices[existingDev], ...deviceInfo };
+        } else {
+            u.devices.push(deviceInfo);
+            // Keep max 15 devices
+            if (u.devices.length > 15) u.devices = u.devices.slice(-15);
+        }
+
+        // Login history (max 30)
+        u.loginHistory.push({
+            time: deviceInfo.lastSeen,
+            browser: deviceInfo.browser,
+            os: deviceInfo.os,
+            ip: deviceInfo.ip,
+            deviceType: deviceInfo.deviceType
+        });
+        if (u.loginHistory.length > 30) u.loginHistory = u.loginHistory.slice(-30);
+
+        u.lastLogin = deviceInfo.lastSeen;
+        u.totalSessions = (u.totalSessions || 0) + 1;
+
+        DB.users[idx] = u;
+        user = u;
+        localStorage.setItem('a_tuls_user', JSON.stringify(u));
+
+        await saveDB();
+    } catch (e) {
+        console.error('Tracking error', e);
+    }
+}
+
+async function trackToolUse(toolName) {
+    if (role === 'admin' || !user || !user.email || !toolName) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        const idx = DB.users.findIndex(u =>
+            (u.email || '').toLowerCase() === (user.email || '').toLowerCase()
+        );
+        if (idx === -1) return;
+
+        if (!DB.users[idx].toolUsage || typeof DB.users[idx].toolUsage !== 'object') {
+            DB.users[idx].toolUsage = {};
+        }
+        DB.users[idx].toolUsage[toolName] = (DB.users[idx].toolUsage[toolName] || 0) + 1;
+
+        // Also refresh lastSeen on current device
+        if (deviceInfo) {
+            if (!Array.isArray(DB.users[idx].devices)) DB.users[idx].devices = [];
+            const di = DB.users[idx].devices.findIndex(d => d.fingerprint === deviceInfo.fingerprint);
+            if (di >= 0) {
+                DB.users[idx].devices[di].lastSeen = new Date().toISOString();
+            }
+        }
+
+        user = DB.users[idx];
+        localStorage.setItem('a_tuls_user', JSON.stringify(user));
+        await saveDB();
+    } catch (e) {
+        console.error('Tool track error', e);
+    }
 }
 
 function applyTheme(theme) {
@@ -760,8 +956,8 @@ function updateNotice(notice) {
 
 async function syncFromCloud() {
     try {
-        const db = await fetchDB();
-        const settings = db.settings || {};
+        DB = await fetchDB();
+        const settings = DB.settings || {};
 
         // Theme
         applyTheme(settings.theme || 'dark-ocean');
@@ -773,9 +969,19 @@ async function syncFromCloud() {
         updateNotice(settings.notice || '');
 
         // Refresh current user status from cloud
-        if (user && user.email && db.users) {
-            const fresh = db.users.find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
+        if (user && user.email && DB.users) {
+            const fresh = DB.users.find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
             if (fresh) {
+                // Device block check (live)
+                if (deviceInfo && Array.isArray(fresh.blockedDevices) &&
+                    fresh.blockedDevices.includes(deviceInfo.fingerprint)) {
+                    alert('⛔ এই ডিভাইস Admin কর্তৃক ব্লক করা হয়েছে।');
+                    localStorage.removeItem('a_tuls_role');
+                    localStorage.removeItem('a_tuls_user');
+                    location.href = 'index.html';
+                    return;
+                }
+
                 if (fresh.status === 'Blocked') {
                     alert('আপনার একাউন্ট ব্লক করা হয়েছে।');
                     localStorage.removeItem('a_tuls_role');
@@ -824,7 +1030,7 @@ function filterToolsByPermission(userObj, settings) {
 
     const globalTools = (settings && Array.isArray(settings.globalTools) && settings.globalTools.length)
         ? settings.globalTools
-        : null; // null = all allowed globally
+        : null;
 
     const userTools = (userObj && Array.isArray(userObj.tools)) ? userObj.tools : [];
     const mode = (userObj && userObj.mode) || 'free';
@@ -833,25 +1039,19 @@ function filterToolsByPermission(userObj, settings) {
         const toolName = card.getAttribute('data-tool');
         let allowed = true;
 
-        // Global tools gate
         if (globalTools && !globalTools.includes(toolName)) {
             allowed = false;
         }
 
-        // Per-user tools: if user has tools list, only show those
-        // Free mode with empty tools = hide all until admin assigns
         if (userTools.length > 0) {
             if (!userTools.includes(toolName)) allowed = false;
         } else if (mode === 'free') {
-            // Free + no tools assigned yet → hide all (admin must assign 1)
             allowed = false;
         }
-        // Premium + empty tools → show all (global still applies)
 
         card.style.display = allowed ? '' : 'none';
     });
 
-    // Sidebar menu items with data-tool
     menuItems.forEach(item => {
         const toolName = item.getAttribute('data-tool');
         const matchingCard = document.querySelector('#toolsGrid .card[data-tool="' + toolName + '"]');
@@ -877,8 +1077,19 @@ function closeSidebar() {
     document.getElementById('overlay').classList.remove('show');
 }
 
+/* Tool click tracking */
+document.addEventListener('click', function(e) {
+    const card = e.target.closest('[data-tool]');
+    if (card) {
+        const toolName = card.getAttribute('data-tool');
+        if (toolName) trackToolUse(toolName);
+    }
+}, true);
+
 // Initial + live sync every 5s
-syncFromCloud();
+syncFromCloud().then(() => {
+    recordTracking();
+});
 setInterval(syncFromCloud, 5000);
 </script>
 </body>

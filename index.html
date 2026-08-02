@@ -154,6 +154,82 @@ const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 const ADMIN_EMAIL = 'gourabmon112233@gmail.com';
 const ADMIN_PASS  = 'goUrab@2008';
 
+/* ========== DEVICE HELPERS (Ultra Tracking) ========== */
+function getBrowserName() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Edg/')) return 'Edge ' + (ua.match(/Edg\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Firefox/')) return 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('Safari/') && !ua.includes('Chrome')) return 'Safari ' + (ua.match(/Version\/([\d.]+)/)?.[1] || '');
+    if (ua.includes('OPR/') || ua.includes('Opera')) return 'Opera';
+    return 'Unknown Browser';
+}
+
+function getOS() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Windows NT 10')) return 'Windows 10/11';
+    if (ua.includes('Windows')) return 'Windows';
+    if (ua.includes('Android')) return 'Android ' + (ua.match(/Android ([\d.]+)/)?.[1] || '');
+    if (ua.includes('iPhone') || ua.includes('iPad')) return 'iOS ' + (ua.match(/OS ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '');
+    if (ua.includes('Mac OS X')) return 'macOS ' + (ua.match(/Mac OS X ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '');
+    if (ua.includes('Linux')) return 'Linux';
+    return 'Unknown OS';
+}
+
+function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) {
+        if (/iPad|Tablet/i.test(ua)) return 'Tablet';
+        return 'Mobile';
+    }
+    return 'Desktop';
+}
+
+function simpleHash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+    }
+    return Math.abs(h).toString(36);
+}
+
+function getFingerprint() {
+    const parts = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        screen.colorDepth,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || 0,
+        navigator.platform || ''
+    ].join('|');
+    return simpleHash(parts);
+}
+
+async function getIP() {
+    try {
+        const r = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(4000) });
+        if (r.ok) {
+            const d = await r.json();
+            return d.ip || 'N/A';
+        }
+    } catch (e) {}
+    return 'N/A';
+}
+
+async function collectDeviceInfo() {
+    const ip = await getIP();
+    return {
+        fingerprint: getFingerprint(),
+        browser: getBrowserName(),
+        os: getOS(),
+        deviceType: getDeviceType(),
+        ip: ip,
+        lastSeen: new Date().toISOString()
+    };
+}
+
 async function fetchDB() {
     const res = await fetch(BIN_URL + '/latest', {
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -220,12 +296,38 @@ async function doLogin() {
 
     try {
         const db = await fetchDB();
-        const users = db.users || [];
-        const user = users.find(u => (u.email || '').toLowerCase() === email && u.password === pass);
 
-        if (!user) {
+        // Site live check
+        if (db.settings && db.settings.siteLive === false) {
+            msg.className = 'msg error';
+            msg.textContent = 'সাইট সাময়িক বন্ধ আছে। পরে চেষ্টা করুন।';
+            return;
+        }
+
+        const users = db.users || [];
+        const userIdx = users.findIndex(u => (u.email || '').toLowerCase() === email && u.password === pass);
+
+        if (userIdx === -1) {
             msg.className = 'msg error';
             msg.textContent = 'ভুল ইমেইল বা পাসওয়ার্ড!';
+            return;
+        }
+
+        let user = users[userIdx];
+
+        // Ensure tracking fields exist
+        if (!Array.isArray(user.devices)) user.devices = [];
+        if (!Array.isArray(user.loginHistory)) user.loginHistory = [];
+        if (!Array.isArray(user.blockedDevices)) user.blockedDevices = [];
+        if (!user.toolUsage || typeof user.toolUsage !== 'object') user.toolUsage = {};
+        if (!user.totalSessions) user.totalSessions = 0;
+
+        // Collect device & check block BEFORE allowing login
+        const deviceInfo = await collectDeviceInfo();
+
+        if (user.blockedDevices.includes(deviceInfo.fingerprint)) {
+            msg.className = 'msg error';
+            msg.textContent = '⛔ এই ডিভাইস/ব্রাউজার Admin কর্তৃক ব্লক করা হয়েছে। লগইন সম্ভব নয়।';
             return;
         }
 
@@ -241,6 +343,30 @@ async function doLogin() {
             msg.textContent = 'আপনার একাউন্ট ব্লক করা হয়েছে।';
             return;
         }
+
+        // Record login tracking
+        const existingDev = user.devices.findIndex(d => d.fingerprint === deviceInfo.fingerprint);
+        if (existingDev >= 0) {
+            user.devices[existingDev] = { ...user.devices[existingDev], ...deviceInfo };
+        } else {
+            user.devices.push(deviceInfo);
+            if (user.devices.length > 15) user.devices = user.devices.slice(-15);
+        }
+
+        user.loginHistory.push({
+            time: deviceInfo.lastSeen,
+            browser: deviceInfo.browser,
+            os: deviceInfo.os,
+            ip: deviceInfo.ip,
+            deviceType: deviceInfo.deviceType
+        });
+        if (user.loginHistory.length > 30) user.loginHistory = user.loginHistory.slice(-30);
+
+        user.lastLogin = deviceInfo.lastSeen;
+        user.totalSessions = (user.totalSessions || 0) + 1;
+
+        db.users[userIdx] = user;
+        await saveDB(db);
 
         localStorage.setItem('a_tuls_role', 'user');
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
@@ -290,8 +416,19 @@ async function doRegister() {
                 adminInfoVisible: true,
                 registrationOpen: true,
                 siteLive: true,
-                notice: ''
+                notice: '',
+                globalTools: [
+                    'Duplicate Checker', 'Data Formatter', 'Report Generator',
+                    'Email Validator', 'Email Vault', 'Names & Recovery',
+                    'Password Generator', 'IP TimeZone Finder', 'Gmail format fixer'
+                ]
             };
+        }
+
+        if (db.settings.siteLive === false) {
+            msg.className = 'msg error';
+            msg.textContent = 'সাইট সাময়িক বন্ধ আছে।';
+            return;
         }
 
         if (db.settings.registrationOpen === false) {
@@ -306,6 +443,9 @@ async function doRegister() {
             return;
         }
 
+        // Collect device for new user
+        const deviceInfo = await collectDeviceInfo();
+
         const newUser = {
             id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
             name,
@@ -315,7 +455,20 @@ async function doRegister() {
             mode: 'free',
             tools: [],
             joined: new Date().toLocaleDateString('en-GB'),
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
+            // Ultra Tracking fields
+            devices: [deviceInfo],
+            blockedDevices: [],
+            loginHistory: [{
+                time: deviceInfo.lastSeen,
+                browser: deviceInfo.browser,
+                os: deviceInfo.os,
+                ip: deviceInfo.ip,
+                deviceType: deviceInfo.deviceType
+            }],
+            toolUsage: {},
+            lastLogin: deviceInfo.lastSeen,
+            totalSessions: 1
         };
 
         db.users.push(newUser);
