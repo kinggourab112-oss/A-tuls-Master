@@ -98,7 +98,8 @@ input:focus { border-color: var(--cyan); }
     justify-content: center;
     gap: 8px;
 }
-.btn:hover { transform: translateY(-2px); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn:hover:not(:disabled) { transform: translateY(-2px); }
 .msg {
     margin-top: 14px;
     padding: 12px;
@@ -111,6 +112,7 @@ input:focus { border-color: var(--cyan); }
 .msg.success { background: rgba(0,255,157,0.15); color: var(--green); display:block; }
 .footer { text-align:center; margin-top:24px; font-size:12px; color:var(--muted); }
 #registerForm { display: none; }
+.loading { font-size: 13px; color: var(--muted); text-align: center; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
@@ -123,29 +125,56 @@ input:focus { border-color: var(--cyan); }
         <div class="tab" id="regTab" onclick="showRegister()">Register</div>
     </div>
 
-    <!-- Login -->
     <div id="loginForm">
         <input type="email" id="loginEmail" placeholder="Email address">
         <input type="password" id="loginPass" placeholder="Password">
-        <button class="btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button class="btn" id="loginBtn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
         <div class="msg" id="loginMsg"></div>
+        <div class="loading" id="loginLoading">লোড হচ্ছে...</div>
     </div>
 
-    <!-- Register -->
     <div id="registerForm">
         <input type="text" id="regName" placeholder="Full Name">
         <input type="email" id="regEmail" placeholder="Email address">
         <input type="password" id="regPass" placeholder="Password">
-        <button class="btn" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
+        <button class="btn" id="regBtn" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
         <div class="msg" id="regMsg"></div>
+        <div class="loading" id="regLoading">সেভ হচ্ছে...</div>
     </div>
 
     <div class="footer">Developed by Gourab • 01944035239</div>
 </div>
 
 <script>
-const ADMIN_EMAIL = "gourabmon112233@gmail.com";
-const ADMIN_PASS  = "goUrab@2008";
+/* ========== JSONBin Config ========== */
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+
+const ADMIN_EMAIL = 'gourabmon112233@gmail.com';
+const ADMIN_PASS  = 'goUrab@2008';
+
+async function fetchDB() {
+    const res = await fetch(BIN_URL + '/latest', {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!res.ok) throw new Error('DB load failed: ' + res.status);
+    const data = await res.json();
+    return data.record || { users: [], settings: {} };
+}
+
+async function saveDB(db) {
+    const res = await fetch(BIN_URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+        },
+        body: JSON.stringify(db)
+    });
+    if (!res.ok) throw new Error('DB save failed: ' + res.status);
+    return await res.json();
+}
 
 function showLogin() {
     document.getElementById('loginForm').style.display = 'block';
@@ -160,52 +189,82 @@ function showRegister() {
     document.getElementById('loginTab').classList.remove('active');
 }
 
-function doLogin() {
+async function doLogin() {
     const email = document.getElementById('loginEmail').value.trim().toLowerCase();
     const pass  = document.getElementById('loginPass').value;
     const msg   = document.getElementById('loginMsg');
+    const btn   = document.getElementById('loginBtn');
+    const loading = document.getElementById('loginLoading');
 
-    // Admin direct login
+    msg.className = 'msg';
+    msg.style.display = 'none';
+
+    if (!email || !pass) {
+        msg.className = 'msg error';
+        msg.textContent = 'ইমেইল ও পাসওয়ার্ড দিন';
+        return;
+    }
+
+    // Admin direct login (no cloud needed)
     if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
         localStorage.setItem('a_tuls_role', 'admin');
-        localStorage.setItem('a_tuls_user', JSON.stringify({name:'Admin Gourab', email:ADMIN_EMAIL, status:'Approved'}));
+        localStorage.setItem('a_tuls_user', JSON.stringify({
+            name: 'Admin Gourab', email: ADMIN_EMAIL, status: 'Approved', mode: 'premium'
+        }));
         window.location.href = 'admin.html';
         return;
     }
 
-    // Normal user
-    const users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const user = users.find(u => u.email === email && u.password === pass);
+    btn.disabled = true;
+    loading.style.display = 'block';
 
-    if (!user) {
-        msg.className = 'msg error';
-        msg.textContent = 'ভুল ইমেইল বা পাসওয়ার্ড!';
-        return;
-    }
+    try {
+        const db = await fetchDB();
+        const users = db.users || [];
+        const user = users.find(u => (u.email || '').toLowerCase() === email && u.password === pass);
 
-    if (user.status === 'Pending') {
-        localStorage.setItem('a_tuls_role', 'pending');
+        if (!user) {
+            msg.className = 'msg error';
+            msg.textContent = 'ভুল ইমেইল বা পাসওয়ার্ড!';
+            return;
+        }
+
+        if (user.status === 'Pending') {
+            localStorage.setItem('a_tuls_role', 'pending');
+            localStorage.setItem('a_tuls_user', JSON.stringify(user));
+            window.location.href = 'pending.html';
+            return;
+        }
+
+        if (user.status === 'Blocked') {
+            msg.className = 'msg error';
+            msg.textContent = 'আপনার একাউন্ট ব্লক করা হয়েছে।';
+            return;
+        }
+
+        localStorage.setItem('a_tuls_role', 'user');
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
-        window.location.href = 'pending.html';
-        return;
-    }
-
-    if (user.status === 'Blocked') {
+        window.location.href = 'dashboard.html';
+    } catch (e) {
         msg.className = 'msg error';
-        msg.textContent = 'আপনার একাউন্ট ব্লক করা হয়েছে।';
-        return;
+        msg.textContent = 'নেটওয়ার্ক এরর! আবার চেষ্টা করুন।';
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        loading.style.display = 'none';
     }
-
-    localStorage.setItem('a_tuls_role', 'user');
-    localStorage.setItem('a_tuls_user', JSON.stringify(user));
-    window.location.href = 'dashboard.html';
 }
 
-function doRegister() {
+async function doRegister() {
     const name  = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim().toLowerCase();
     const pass  = document.getElementById('regPass').value;
     const msg   = document.getElementById('regMsg');
+    const btn   = document.getElementById('regBtn');
+    const loading = document.getElementById('regLoading');
+
+    msg.className = 'msg';
+    msg.style.display = 'none';
 
     if (!name || !email || !pass) {
         msg.className = 'msg error';
@@ -213,29 +272,71 @@ function doRegister() {
         return;
     }
 
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    if (users.find(u => u.email === email)) {
+    if (pass.length < 4) {
         msg.className = 'msg error';
-        msg.textContent = 'এই ইমেইল ইতিমধ্যে রেজিস্টার্ড';
+        msg.textContent = 'পাসওয়ার্ড কমপক্ষে ৪ অক্ষর হতে হবে';
         return;
     }
 
-    users.push({
-        id: Date.now().toString(36),
-        name, email, password: pass,
-        status: 'Pending',
-        created: new Date().toISOString(),
-        tools: []
-    });
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    btn.disabled = true;
+    loading.style.display = 'block';
 
-    msg.className = 'msg success';
-    msg.textContent = 'রেজিস্ট্রেশন সফল! অ্যাডমিন অ্যাপ্রুভের জন্য অপেক্ষা করুন।';
-    setTimeout(() => {
-        localStorage.setItem('a_tuls_role', 'pending');
-        localStorage.setItem('a_tuls_user', JSON.stringify(users[users.length-1]));
-        window.location.href = 'pending.html';
-    }, 1500);
+    try {
+        const db = await fetchDB();
+        if (!db.users) db.users = [];
+        if (!db.settings) {
+            db.settings = {
+                theme: 'dark-ocean',
+                adminInfoVisible: true,
+                registrationOpen: true,
+                siteLive: true,
+                notice: ''
+            };
+        }
+
+        if (db.settings.registrationOpen === false) {
+            msg.className = 'msg error';
+            msg.textContent = 'রেজিস্ট্রেশন এখন বন্ধ আছে!';
+            return;
+        }
+
+        if (db.users.find(u => (u.email || '').toLowerCase() === email)) {
+            msg.className = 'msg error';
+            msg.textContent = 'এই ইমেইল ইতিমধ্যে রেজিস্টার্ড';
+            return;
+        }
+
+        const newUser = {
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+            name,
+            email,
+            password: pass,
+            status: 'Pending',
+            mode: 'free',
+            tools: [],
+            joined: new Date().toLocaleDateString('en-GB'),
+            created: new Date().toISOString()
+        };
+
+        db.users.push(newUser);
+        await saveDB(db);
+
+        msg.className = 'msg success';
+        msg.textContent = 'রেজিস্ট্রেশন সফল! অ্যাডমিন অ্যাপ্রুভের জন্য অপেক্ষা করুন।';
+
+        setTimeout(() => {
+            localStorage.setItem('a_tuls_role', 'pending');
+            localStorage.setItem('a_tuls_user', JSON.stringify(newUser));
+            window.location.href = 'pending.html';
+        }, 1200);
+    } catch (e) {
+        msg.className = 'msg error';
+        msg.textContent = 'নেটওয়ার্ক এরর! আবার চেষ্টা করুন।';
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        loading.style.display = 'none';
+    }
 }
 </script>
 </body>

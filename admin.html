@@ -473,58 +473,123 @@ select, input[type="text"], input[type="search"] {
     </div>
 </div>
 
+
 <script>
-// ========== ALL TOOLS ==========
+/* ========== JSONBin Config ========== */
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+
 const ALL_TOOLS = [
-    'FB-Check',
-    'Pass-Pro',
-    'IP-Scan',
-    'Mail-Pro',
-    'Dev-Scanner',
-    'Link-Safe',
-    'User-Hunt',
-    'Firewall'
+    'Duplicate Checker',
+    'Data Formatter',
+    'Report Generator',
+    'Email Validator',
+    'Email Vault',
+    'Names & Recovery',
+    'Password Generator',
+    'IP TimeZone Finder',
+    'Gmail format fixer'
 ];
 
-// ========== AUTH CHECK ==========
+let DB = { users: [], settings: {} };
+let selectedDashColor = 'dark-ocean';
+let saving = false;
+
+async function fetchDB() {
+    const res = await fetch(BIN_URL + '/latest', {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!res.ok) throw new Error('DB load failed');
+    const data = await res.json();
+    return data.record || { users: [], settings: {} };
+}
+
+async function saveDB() {
+    if (saving) return;
+    saving = true;
+    try {
+        const res = await fetch(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(DB)
+        });
+        if (!res.ok) throw new Error('Save failed');
+    } finally {
+        saving = false;
+    }
+}
+
+async function loadDB() {
+    try {
+        DB = await fetchDB();
+        if (!DB.users) DB.users = [];
+        if (!DB.settings) DB.settings = {};
+        if (!DB.settings.theme) DB.settings.theme = 'dark-ocean';
+        if (DB.settings.adminInfoVisible === undefined) DB.settings.adminInfoVisible = true;
+        if (DB.settings.registrationOpen === undefined) DB.settings.registrationOpen = true;
+        if (DB.settings.siteLive === undefined) DB.settings.siteLive = true;
+        if (!DB.settings.notice) DB.settings.notice = '';
+        if (!DB.settings.globalTools) DB.settings.globalTools = [...ALL_TOOLS];
+
+        selectedDashColor = DB.settings.theme || 'dark-ocean';
+        applyUIFromDB();
+        loadUsers();
+        loadGlobalTools();
+        updateInfoVisibilityUI();
+        setDashColor(selectedDashColor);
+        const sel = document.getElementById('themeSelect');
+        if (sel) sel.value = selectedDashColor;
+        const noticeInput = document.getElementById('noticeInput');
+        if (noticeInput) noticeInput.value = DB.settings.notice || '';
+    } catch (e) {
+        console.error(e);
+        alert('ক্লাউড ডেটা লোড ব্যর্থ! নেট চেক করুন।');
+    }
+}
+
+function applyUIFromDB() {
+    // nothing visual needed beyond stats/users
+}
+
+/* ========== AUTH ========== */
 const role = localStorage.getItem('a_tuls_role');
 if (role !== 'admin') {
     alert('শুধুমাত্র অ্যাডমিন এই পেজ দেখতে পারবে!');
     location.href = 'index.html';
 }
 
-// ========== LOGOUT ==========
 function logout() {
     localStorage.removeItem('a_tuls_role');
     localStorage.removeItem('a_tuls_user');
     location.href = 'index.html';
 }
 
-// ========== SITE STATUS ==========
-function setSiteStatus(live) {
-    localStorage.setItem('a_tuls_site_live', live ? '1' : '0');
+/* ========== SITE / REG ========== */
+async function setSiteStatus(live) {
+    DB.settings.siteLive = !!live;
+    await saveDB();
     alert(live ? '✅ Site is now LIVE' : '⛔ Site Killed');
 }
 
-// ========== REG STATUS ==========
-function setRegStatus(open) {
-    localStorage.setItem('a_tuls_reg_open', open ? '1' : '0');
+async function setRegStatus(open) {
+    DB.settings.registrationOpen = !!open;
+    await saveDB();
     alert(open ? '✅ Registration OPENED' : '⛔ Registration CLOSED');
 }
 
-// ========== THEME ==========
-function applyTheme() {
+/* ========== THEME ========== */
+async function applyTheme() {
     const theme = document.getElementById('themeSelect').value;
-    localStorage.setItem('a_tuls_theme', theme);
-    localStorage.setItem('a_tuls_dash_color', theme);
+    DB.settings.theme = theme;
     selectedDashColor = theme;
     setDashColor(theme);
-    try { localStorage.setItem('a_tuls_theme_updated_at', Date.now().toString()); } catch(e) {}
+    await saveDB();
     alert('✅ Full Dashboard Theme Applied for ALL users!\nTheme: ' + theme);
 }
-
-// ========== DASHBOARD COLOR ==========
-let selectedDashColor = localStorage.getItem('a_tuls_dash_color') || 'dark-ocean';
 
 function setDashColor(color) {
     selectedDashColor = color;
@@ -533,67 +598,54 @@ function setDashColor(color) {
     });
 }
 
-function applyDashColor() {
-    // One-click: save for ALL users (same site localStorage)
-    localStorage.setItem('a_tuls_dash_color', selectedDashColor);
-    localStorage.setItem('a_tuls_theme', selectedDashColor);
-    document.getElementById('themeSelect').value = selectedDashColor;
-
-    // Broadcast so other open tabs update instantly
-    try {
-        localStorage.setItem('a_tuls_theme_updated_at', Date.now().toString());
-    } catch(e) {}
-
+async function applyDashColor() {
+    DB.settings.theme = selectedDashColor;
+    const sel = document.getElementById('themeSelect');
+    if (sel) sel.value = selectedDashColor;
+    await saveDB();
     alert('✅ Dashboard Theme Applied for ALL users!\nTheme: ' + selectedDashColor);
 }
 
-// One click on color box = select + apply
-function pickAndApplyColor(color) {
+async function pickAndApplyColor(color) {
     setDashColor(color);
-    applyDashColor();
+    await applyDashColor();
 }
 
-// ========== DB SWITCH ==========
 function switchDB(type) {
-    localStorage.setItem('a_tuls_db', type);
-    alert(type === 'primary' ? '✅ Switched to PRIMARY Cloud DB' : '✅ Switched to BACKUP Cloud DB');
+    alert(type === 'primary' ? '✅ PRIMARY Cloud (JSONBin) Active' : '✅ Backup mode (same cloud)');
 }
 
-// ========== PUSH NOTICE ==========
-function pushNotice() {
-    const note = document.getElementById('noticeInput').value.trim();
-    localStorage.setItem('a_tuls_global_notice', note);
+async function pushNotice() {
+    const note = (document.getElementById('noticeInput').value || '').trim();
+    DB.settings.notice = note;
+    await saveDB();
     alert(note ? '✅ Notice pushed to all users!' : 'Notice cleared');
 }
 
-// ========== ADMIN INFO SHOW / HIDE ==========
-function setAdminInfoVisible(show) {
-    localStorage.setItem('a_tuls_admin_info_visible', show ? '1' : '0');
+async function setAdminInfoVisible(show) {
+    DB.settings.adminInfoVisible = !!show;
+    await saveDB();
     updateInfoVisibilityUI();
-    alert(show 
-        ? '✅ Admin Info এখন ইউজার ড্যাশবোর্ডে দেখা যাবে' 
+    alert(show
+        ? '✅ Admin Info এখন ইউজার ড্যাশবোর্ডে দেখা যাবে'
         : '⛔ Admin Info এখন ইউজার ড্যাশবোর্ডে হাইড করা আছে');
 }
 
 function updateInfoVisibilityUI() {
-    const visible = localStorage.getItem('a_tuls_admin_info_visible') !== '0';
+    const visible = DB.settings && DB.settings.adminInfoVisible !== false;
     const statusEl = document.getElementById('infoVisibilityStatus');
     if (statusEl) {
-        statusEl.innerHTML = visible 
+        statusEl.innerHTML = visible
             ? '<span style="color:var(--green);">● Status: SHOW (ড্যাশবোর্ডে দেখা যাচ্ছে)</span>'
             : '<span style="color:var(--red);">● Status: HIDE (ড্যাশবোর্ডে লুকানো)</span>';
     }
 }
 
-// ========== GLOBAL TOOLS ==========
+/* ========== GLOBAL TOOLS ========== */
 function loadGlobalTools() {
-    let globalTools = JSON.parse(localStorage.getItem('a_tuls_global_tools') || 'null');
-    if (!globalTools) {
-        globalTools = [...ALL_TOOLS];
-        localStorage.setItem('a_tuls_global_tools', JSON.stringify(globalTools));
-    }
-
+    const globalTools = (DB.settings && DB.settings.globalTools) ? DB.settings.globalTools : [...ALL_TOOLS];
     const grid = document.getElementById('globalToolsGrid');
+    if (!grid) return;
     grid.innerHTML = ALL_TOOLS.map((t, i) => `
         <div class="tool-item">
             <span>${t}</span>
@@ -602,27 +654,32 @@ function loadGlobalTools() {
     `).join('');
 }
 
-function saveGlobalTools() {
+async function saveGlobalTools() {
     const selected = [];
     ALL_TOOLS.forEach((t, i) => {
-        const cb = document.getElementById(`gtool-${i}`);
+        const cb = document.getElementById('gtool-' + i);
         if (cb && cb.checked) selected.push(t);
     });
-    localStorage.setItem('a_tuls_global_tools', JSON.stringify(selected));
+    DB.settings.globalTools = selected;
+    await saveDB();
     alert('✅ Global tools saved! ইউজার ড্যাশবোর্ডে শুধু এইগুলো দেখা যাবে।');
 }
 
-// ========== UPDATE STATS ==========
+/* ========== STATS + USERS ========== */
 function updateStats(users) {
-    document.getElementById('totalUsers').textContent = users.length;
-    document.getElementById('activeUsers').textContent = users.filter(u => u.status === 'Approved').length;
-    document.getElementById('pendingUsers').textContent = users.filter(u => u.status === 'Pending').length;
+    const t = document.getElementById('totalUsers');
+    const a = document.getElementById('activeUsers');
+    const p = document.getElementById('pendingUsers');
+    if (t) t.textContent = users.length;
+    if (a) a.textContent = users.filter(u => u.status === 'Approved').length;
+    if (p) p.textContent = users.filter(u => u.status === 'Pending').length;
 }
 
-// ========== LOAD USERS ==========
 function loadUsers() {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
+    let users = DB.users || [];
     const search = (document.getElementById('userSearch')?.value || '').toLowerCase().trim();
+
+    updateStats(DB.users || []);
 
     if (search) {
         users = users.filter(u =>
@@ -631,9 +688,8 @@ function loadUsers() {
         );
     }
 
-    updateStats(JSON.parse(localStorage.getItem('a_tuls_users') || '[]'));
-
     const list = document.getElementById('userList');
+    if (!list) return;
 
     if (users.length === 0) {
         list.innerHTML = '<div class="empty-msg">কোনো ইউজার এখনো নেই / সার্চ রেজাল্ট খালি</div>';
@@ -667,13 +723,13 @@ function loadUsers() {
             </div>
 
             <div class="mode-row">
-                <button class="mode-btn ${mode === 'free' ? 'active-free' : ''}" 
+                <button class="mode-btn ${mode === 'free' ? 'active-free' : ''}"
                     onclick="setUserMode('${user.id}', 'free')">
                     <i class="fas fa-user"></i> FREE (1 Checker)
                 </button>
-                <button class="mode-btn ${mode === 'premium' ? 'active-premium' : ''}" 
+                <button class="mode-btn ${mode === 'premium' ? 'active-premium' : ''}"
                     onclick="setUserMode('${user.id}', 'premium')">
-                    <i class="fas fa-crown"></i> PREMIUM (8 Checker)
+                    <i class="fas fa-crown"></i> PREMIUM (All Tools)
                 </button>
             </div>
 
@@ -683,7 +739,7 @@ function loadUsers() {
                 </div>
             ` : `
                 <div class="free-hint" style="color:var(--green);background:rgba(0,255,157,0.08);">
-                    ★ Premium মোডে সব ৮টি চেকার দিতে পারবেন।
+                    ★ Premium মোডে সব টুল অন করতে পারবেন।
                 </div>
             `}
 
@@ -693,7 +749,7 @@ function loadUsers() {
                     return `
                     <div class="tool-item" id="toolwrap-${user.id}-${i}">
                         <span>${t}</span>
-                        <input type="checkbox" class="toggle" 
+                        <input type="checkbox" class="toggle"
                             id="tool-${user.id}-${i}"
                             ${checked ? 'checked' : ''}
                             onchange="onToolToggle('${user.id}', ${i}, this)">
@@ -729,29 +785,24 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-function setUserMode(userId, mode) {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const idx = users.findIndex(u => u.id === userId);
+async function setUserMode(userId, mode) {
+    const idx = DB.users.findIndex(u => u.id === userId);
     if (idx === -1) return;
-
-    users[idx].mode = mode;
-
+    DB.users[idx].mode = mode;
     if (mode === 'free') {
-        const current = Array.isArray(users[idx].tools) ? users[idx].tools : [];
-        users[idx].tools = current.length > 0 ? [current[0]] : [];
+        const current = Array.isArray(DB.users[idx].tools) ? DB.users[idx].tools : [];
+        DB.users[idx].tools = current.length > 0 ? [current[0]] : [];
     }
-
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    await saveDB();
     loadUsers();
 }
 
-function onToolToggle(userId, toolIndex, checkbox) {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const idx = users.findIndex(u => u.id === userId);
+async function onToolToggle(userId, toolIndex, checkbox) {
+    const idx = DB.users.findIndex(u => u.id === userId);
     if (idx === -1) return;
 
-    const mode = users[idx].mode || 'free';
-    let tools = Array.isArray(users[idx].tools) ? [...users[idx].tools] : [];
+    const mode = DB.users[idx].mode || 'free';
+    let tools = Array.isArray(DB.users[idx].tools) ? [...DB.users[idx].tools] : [];
     const toolName = ALL_TOOLS[toolIndex];
 
     if (checkbox.checked) {
@@ -770,81 +821,69 @@ function onToolToggle(userId, toolIndex, checkbox) {
         tools = tools.filter(t => t !== toolName);
     }
 
-    users[idx].tools = tools;
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    DB.users[idx].tools = tools;
+    await saveDB();
 }
 
-function updateUser(userId, status) {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const idx = users.findIndex(u => u.id === userId);
+async function updateUser(userId, status) {
+    const idx = DB.users.findIndex(u => u.id === userId);
     if (idx === -1) return;
 
-    const mode = users[idx].mode || 'free';
+    const mode = DB.users[idx].mode || 'free';
     const selected = [];
-
     ALL_TOOLS.forEach((t, i) => {
         const cb = document.getElementById('tool-' + userId + '-' + i);
         if (cb && cb.checked) selected.push(t);
     });
 
     if (mode === 'free' && selected.length > 1) {
-        users[idx].tools = [selected[0]];
+        DB.users[idx].tools = [selected[0]];
     } else {
-        users[idx].tools = selected;
+        DB.users[idx].tools = selected;
     }
 
-    users[idx].status = status;
+    DB.users[idx].status = status;
+    if (status === 'Blocked') DB.users[idx].tools = [];
 
-    if (status === 'Blocked') {
-        users[idx].tools = [];
-    }
-
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
-    alert(status === 'Blocked' 
-        ? '⛔ ইউজার ব্লক করা হয়েছে + সব চেকার বন্ধ!' 
+    await saveDB();
+    alert(status === 'Blocked'
+        ? '⛔ ইউজার ব্লক করা হয়েছে + সব চেকার বন্ধ!'
         : '✅ ইউজার আপডেট সফল! Status: ' + status);
     loadUsers();
 }
 
-function setPending(userId) {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const idx = users.findIndex(u => u.id === userId);
+async function setPending(userId) {
+    const idx = DB.users.findIndex(u => u.id === userId);
     if (idx === -1) return;
-    users[idx].status = 'Pending';
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    DB.users[idx].status = 'Pending';
+    await saveDB();
     alert('ইউজার Pending করা হয়েছে');
     loadUsers();
 }
 
-// ========== DELETE USER ==========
-function deleteUser(userId) {
-    let users = JSON.parse(localStorage.getItem('a_tuls_users') || '[]');
-    const user = users.find(u => u.id === userId);
+async function deleteUser(userId) {
+    const user = DB.users.find(u => u.id === userId);
     const userName = user ? (user.name || user.email || 'Unknown') : 'Unknown';
 
     if (!confirm('⚠️ আপনি কি নিশ্চিত?\n\n"' + userName + '" কে সাইট থেকে সম্পূর্ণ ডিলিট করতে চান?\n\nএই কাজ আর ফিরে পাওয়া যাবে না!')) {
         return;
     }
 
-    users = users.filter(u => u.id !== userId);
-    localStorage.setItem('a_tuls_users', JSON.stringify(users));
+    DB.users = DB.users.filter(u => u.id !== userId);
+    await saveDB();
     alert('🗑️ ইউজার সম্পূর্ণ ডিলিট করা হয়েছে!');
     loadUsers();
 }
 
-// ========== INITIAL LOAD ==========
-loadGlobalTools();
-loadUsers();
-updateInfoVisibilityUI();
-setDashColor(selectedDashColor);
-document.getElementById('themeSelect').value = selectedDashColor;
+/* ========== INIT ========== */
+loadDB();
 
 setInterval(function() {
     const search = document.getElementById('userSearch');
     if (search && search.value.trim() === '') {
-        loadUsers();
+        loadDB();
     }
-}, 4000);
+}, 8000);
 </script>
 </body>
 </html>

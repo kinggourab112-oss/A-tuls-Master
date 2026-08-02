@@ -546,32 +546,35 @@ body {
         </a>
 
         <div class="menu-label">Email Tools</div>
-        <a class="menu-item" href="Duplicate Email Checker .html">
+        <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
             <i class="fas fa-copy"></i> Duplicate Checker
         </a>
-        <a class="menu-item" href="Email Data Formatter.html">
+        <a class="menu-item" href="Email Data Formatter.html" data-tool="Data Formatter">
             <i class="fas fa-align-left"></i> Data Formatter
         </a>
-        <a class="menu-item" href="emaill report .html">
+        <a class="menu-item" href="emaill report .html" data-tool="Report Generator">
             <i class="fas fa-file-alt"></i> Report Generator
         </a>
-        <a class="menu-item" href="esey emaill vawucer.html">
+        <a class="menu-item" href="esey emaill vawucer.html" data-tool="Email Validator">
             <i class="fas fa-check-double"></i> Email Validator
         </a>
-        <a class="menu-item" href="parshnol emaill vaault.html">
+        <a class="menu-item" href="parshnol emaill vaault.html" data-tool="Email Vault">
             <i class="fas fa-vault"></i> Email Vault
+        </a>
+        <a class="menu-item" href="gmail-format-fixer.html" data-tool="Gmail format fixer">
+            <i class="fas fa-envelope-circle-check"></i> Gmail format fixer
         </a>
 
         <div class="menu-label">Generators</div>
-        <a class="menu-item" href="name and recovery ganaretod.html">
+        <a class="menu-item" href="name and recovery ganaretod.html" data-tool="Names & Recovery">
             <i class="fas fa-users"></i> Names & Recovery
         </a>
-        <a class="menu-item" href="pasword ganaratod.html">
+        <a class="menu-item" href="pasword ganaratod.html" data-tool="Password Generator">
             <i class="fas fa-key"></i> Password Generator
         </a>
 
         <div class="menu-label">Utility</div>
-        <a class="menu-item" href="ip time zoone farat.html">
+        <a class="menu-item" href="ip time zoone farat.html" data-tool="IP TimeZone Finder">
             <i class="fas fa-globe"></i> IP TimeZone Finder
         </a>
     </div>
@@ -621,7 +624,7 @@ body {
         </div>
 
         <div class="grid" id="toolsGrid">
-            <a class="card" href="Duplicate Email Checker .html">
+            <a class="card" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
                 <div class="icon" style="background:rgba(13,148,136,0.18);color:#0d9488;">
                     <i class="fas fa-copy"></i>
                 </div>
@@ -629,7 +632,7 @@ body {
                 <p>Find & remove duplicate emails from your list instantly</p>
             </a>
 
-            <a class="card" href="Email Data Formatter.html">
+            <a class="card" href="Email Data Formatter.html" data-tool="Data Formatter">
                 <div class="icon" style="background:rgba(37,99,235,0.18);color:#2563eb;">
                     <i class="fas fa-align-left"></i>
                 </div>
@@ -637,7 +640,7 @@ body {
                 <p>Format email:password data in clean structure</p>
             </a>
 
-            <a class="card" href="emaill report .html">
+            <a class="card" href="emaill report .html" data-tool="Report Generator">
                 <div class="icon" style="background:rgba(219,39,119,0.18);color:#db2777;">
                     <i class="fas fa-file-alt"></i>
                 </div>
@@ -645,7 +648,7 @@ body {
                 <p>Generate Found / Good reports with price calculation</p>
             </a>
 
-            <a class="card" href="esey emaill vawucer.html">
+            <a class="card" href="esey emaill vawucer.html" data-tool="Email Validator">
                 <div class="icon" style="background:rgba(5,150,105,0.18);color:#059669;">
                     <i class="fas fa-check-double"></i>
                 </div>
@@ -653,7 +656,7 @@ body {
                 <p>Validate emails with password & recovery support</p>
             </a>
 
-            <a class="card" href="parshnol emaill vaault.html">
+            <a class="card" href="parshnol emaill vaault.html" data-tool="Email Vault">
                 <div class="icon" style="background:rgba(217,119,6,0.18);color:#d97706;">
                     <i class="fas fa-vault"></i>
                 </div>
@@ -661,7 +664,7 @@ body {
                 <p>Securely store & manage your email lists privately</p>
             </a>
 
-            <a class="card" href="name and recovery ganaretod.html">
+            <a class="card" href="name and recovery ganaretod.html" data-tool="Names & Recovery">
                 <div class="icon" style="background:rgba(79,70,229,0.18);color:#4f46e5;">
                     <i class="fas fa-users"></i>
                 </div>
@@ -669,7 +672,7 @@ body {
                 <p>Generate unique names with recovery emails</p>
             </a>
 
-            <a class="card" href="pasword ganaratod.html">
+            <a class="card" href="pasword ganaratod.html" data-tool="Password Generator">
                 <div class="icon" style="background:rgba(220,38,38,0.18);color:#dc2626;">
                     <i class="fas fa-key"></i>
                 </div>
@@ -677,7 +680,15 @@ body {
                 <p>Generate up to 1000 strong passwords at once</p>
             </a>
 
-            <a class="card" href="ip time zoone farat.html">
+            <a class="card" href="gmail-format-fixer.html" data-tool="Gmail format fixer">
+                <div class="icon" style="background:rgba(16,185,129,0.18);color:#10b981;">
+                    <i class="fas fa-envelope-circle-check"></i>
+                </div>
+                <h3>Gmail format fixer</h3>
+                <p>Email & password separate + side-by-side format</p>
+            </a>
+
+            <a class="card" href="ip time zoone farat.html" data-tool="IP TimeZone Finder">
                 <div class="icon" style="background:rgba(8,145,178,0.18);color:#0891b2;">
                     <i class="fas fa-globe"></i>
                 </div>
@@ -688,18 +699,13 @@ body {
     </div>
 </main>
 
+
 <script>
-// ========== AUTH ==========
-const role = localStorage.getItem('a_tuls_role');
-const user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
+/* ========== JSONBin Config ========== */
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
-if (role !== 'user' && role !== 'admin') {
-    location.href = 'index.html';
-}
-
-document.getElementById('userName').textContent = user.name || 'User';
-
-// ========== THEME NAMES ==========
 const THEME_NAMES = {
     'dark-ocean': 'Dark Ocean',
     'neon-night': 'Neon Night',
@@ -708,65 +714,153 @@ const THEME_NAMES = {
     'emerald-light': 'Emerald Light'
 };
 
-// ========== APPLY FULL THEME ==========
-function applyTheme() {
-    const theme = localStorage.getItem('a_tuls_dash_color')
-               || localStorage.getItem('a_tuls_theme')
-               || 'dark-ocean';
+const role = localStorage.getItem('a_tuls_role');
+let user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
 
+if (role !== 'user' && role !== 'admin') {
+    location.href = 'index.html';
+}
+
+document.getElementById('userName').textContent = user.name || 'User';
+
+async function fetchDB() {
+    const res = await fetch(BIN_URL + '/latest', {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!res.ok) throw new Error('DB load failed');
+    const data = await res.json();
+    return data.record || { users: [], settings: {} };
+}
+
+function applyTheme(theme) {
     const valid = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
     const finalTheme = valid.includes(theme) ? theme : 'dark-ocean';
-
     document.documentElement.setAttribute('data-theme', finalTheme);
     document.body.setAttribute('data-theme', finalTheme);
-
     const tag = document.getElementById('themeTag');
     if (tag) tag.textContent = THEME_NAMES[finalTheme] || finalTheme;
 }
 
-applyTheme();
+function updateAdminInfo(visible) {
+    const box = document.getElementById('adminInfoBox');
+    if (box) box.style.display = visible !== false ? 'block' : 'none';
+}
 
-// Live update from admin
-window.addEventListener('storage', function(e) {
-    if (e.key === 'a_tuls_dash_color' || e.key === 'a_tuls_theme' || e.key === 'a_tuls_theme_updated_at') {
-        applyTheme();
+function updateNotice(notice) {
+    const el = document.getElementById('adminNotice');
+    if (!el) return;
+    if (notice) {
+        el.style.display = 'flex';
+        el.innerHTML = '<i class="fas fa-bell"></i> <strong>Admin Notice:</strong> ' + notice;
+    } else {
+        el.style.display = 'none';
+        el.innerHTML = '';
     }
-    if (e.key === 'a_tuls_admin_info_visible') updateAdminInfo();
-    if (e.key === 'a_tuls_global_notice') {
-        const notice = localStorage.getItem('a_tuls_global_notice');
-        const el = document.getElementById('adminNotice');
-        if (el) {
-            if (notice) {
-                el.style.display = 'flex';
-                el.innerHTML = '<i class="fas fa-bell"></i> <strong>Admin Notice:</strong> ' + notice;
-            } else {
-                el.style.display = 'none';
-                el.innerHTML = '';
+}
+
+async function syncFromCloud() {
+    try {
+        const db = await fetchDB();
+        const settings = db.settings || {};
+
+        // Theme
+        applyTheme(settings.theme || 'dark-ocean');
+
+        // Admin info visibility
+        updateAdminInfo(settings.adminInfoVisible !== false);
+
+        // Notice
+        updateNotice(settings.notice || '');
+
+        // Refresh current user status from cloud
+        if (user && user.email && db.users) {
+            const fresh = db.users.find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
+            if (fresh) {
+                if (fresh.status === 'Blocked') {
+                    alert('আপনার একাউন্ট ব্লক করা হয়েছে।');
+                    localStorage.removeItem('a_tuls_role');
+                    localStorage.removeItem('a_tuls_user');
+                    location.href = 'index.html';
+                    return;
+                }
+                if (fresh.status === 'Pending') {
+                    localStorage.setItem('a_tuls_role', 'pending');
+                    localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
+                    location.href = 'pending.html';
+                    return;
+                }
+                user = fresh;
+                localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
+                document.getElementById('userName').textContent = user.name || 'User';
             }
         }
+
+        // Tool permission filter (admin control)
+        filterToolsByPermission(user, settings);
+
+        // Site live check
+        if (settings.siteLive === false && role !== 'admin') {
+            alert('সাইট সাময়িক বন্ধ আছে।');
+            localStorage.removeItem('a_tuls_role');
+            localStorage.removeItem('a_tuls_user');
+            location.href = 'index.html';
+        }
+    } catch (e) {
+        console.error('Cloud sync error', e);
+        applyTheme('dark-ocean');
     }
-});
-
-setInterval(applyTheme, 2000);
-
-// ========== NOTICE ==========
-const notice = localStorage.getItem('a_tuls_global_notice');
-if (notice) {
-    const el = document.getElementById('adminNotice');
-    el.style.display = 'flex';
-    el.innerHTML = '<i class="fas fa-bell"></i> <strong>Admin Notice:</strong> ' + notice;
 }
 
-// ========== ADMIN INFO ==========
-function updateAdminInfo() {
-    const visible = localStorage.getItem('a_tuls_admin_info_visible') !== '0';
-    const box = document.getElementById('adminInfoBox');
-    if (box) box.style.display = visible ? 'block' : 'none';
-}
-updateAdminInfo();
-setInterval(updateAdminInfo, 3000);
+function filterToolsByPermission(userObj, settings) {
+    const cards = document.querySelectorAll('#toolsGrid .card[data-tool]');
+    const menuItems = document.querySelectorAll('.sidebar-menu .menu-item[data-tool]');
 
-// ========== LOGOUT / SIDEBAR ==========
+    // Admin sees everything
+    if (role === 'admin') {
+        cards.forEach(c => c.style.display = '');
+        menuItems.forEach(m => m.style.display = '');
+        return;
+    }
+
+    const globalTools = (settings && Array.isArray(settings.globalTools) && settings.globalTools.length)
+        ? settings.globalTools
+        : null; // null = all allowed globally
+
+    const userTools = (userObj && Array.isArray(userObj.tools)) ? userObj.tools : [];
+    const mode = (userObj && userObj.mode) || 'free';
+
+    cards.forEach(card => {
+        const toolName = card.getAttribute('data-tool');
+        let allowed = true;
+
+        // Global tools gate
+        if (globalTools && !globalTools.includes(toolName)) {
+            allowed = false;
+        }
+
+        // Per-user tools: if user has tools list, only show those
+        // Free mode with empty tools = hide all until admin assigns
+        if (userTools.length > 0) {
+            if (!userTools.includes(toolName)) allowed = false;
+        } else if (mode === 'free') {
+            // Free + no tools assigned yet → hide all (admin must assign 1)
+            allowed = false;
+        }
+        // Premium + empty tools → show all (global still applies)
+
+        card.style.display = allowed ? '' : 'none';
+    });
+
+    // Sidebar menu items with data-tool
+    menuItems.forEach(item => {
+        const toolName = item.getAttribute('data-tool');
+        const matchingCard = document.querySelector('#toolsGrid .card[data-tool="' + toolName + '"]');
+        if (matchingCard) {
+            item.style.display = matchingCard.style.display;
+        }
+    });
+}
+
 function logout() {
     localStorage.removeItem('a_tuls_role');
     localStorage.removeItem('a_tuls_user');
@@ -782,6 +876,10 @@ function closeSidebar() {
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('show');
 }
+
+// Initial + live sync every 5s
+syncFromCloud();
+setInterval(syncFromCloud, 5000);
 </script>
 </body>
 </html>

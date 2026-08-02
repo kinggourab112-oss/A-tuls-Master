@@ -24,7 +24,8 @@ body {
     font-size:36px; color:#00f0ff;
 }
 h1 { font-size:1.6rem; margin-bottom:12px; }
-p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:28px; }
+p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:20px; }
+.status { font-size:13px; color:#00f0ff; margin-bottom:24px; }
 .btn {
     display:inline-flex; align-items:center; gap:8px;
     padding:14px 28px; border-radius:14px; border:none;
@@ -40,9 +41,63 @@ p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:28px; }
     <p>আপনার রেজিস্ট্রেশন সফল হয়েছে।<br>
     অ্যাডমিন আপনার অ্যাকাউন্ট অ্যাপ্রুভ করলে আপনি সব টুল ব্যবহার করতে পারবেন।<br><br>
     অনুগ্রহ করে অপেক্ষা করুন।</p>
+    <div class="status" id="statusText">স্ট্যাটাস চেক হচ্ছে...</div>
     <button class="btn" onclick="location.href='index.html'">
         <i class="fas fa-arrow-left"></i> Back to Login
     </button>
 </div>
+
+<script>
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+
+const role = localStorage.getItem('a_tuls_role');
+const user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
+
+if (role === 'user' || role === 'admin') {
+    location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
+}
+
+async function checkStatus() {
+    try {
+        const res = await fetch(BIN_URL + '/latest', {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const db = data.record || {};
+        const users = db.users || [];
+        const fresh = users.find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
+
+        if (!fresh) {
+            document.getElementById('statusText').textContent = 'অ্যাকাউন্ট পাওয়া যায়নি। আবার রেজিস্টার করুন।';
+            return;
+        }
+
+        if (fresh.status === 'Approved') {
+            localStorage.setItem('a_tuls_role', 'user');
+            localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
+            document.getElementById('statusText').textContent = '✅ অ্যাপ্রুভড! ড্যাশবোর্ডে যাচ্ছে...';
+            setTimeout(() => location.href = 'dashboard.html', 800);
+            return;
+        }
+
+        if (fresh.status === 'Blocked') {
+            document.getElementById('statusText').textContent = '⛔ অ্যাকাউন্ট ব্লক করা হয়েছে।';
+            localStorage.removeItem('a_tuls_role');
+            localStorage.removeItem('a_tuls_user');
+            return;
+        }
+
+        document.getElementById('statusText').textContent = 'অপেক্ষা করুন... (অটো চেক চলছে)';
+    } catch (e) {
+        document.getElementById('statusText').textContent = 'নেটওয়ার্ক চেক করুন...';
+    }
+}
+
+checkStatus();
+setInterval(checkStatus, 5000);
+</script>
 </body>
 </html>
