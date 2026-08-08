@@ -568,6 +568,9 @@ body {
         <a class="menu-item active" href="dashboard.html">
             <i class="fas fa-th-large"></i> Dashboard
         </a>
+        <a class="menu-item" id="adminPanelMenu" href="admin.html" style="display:none;">
+            <i class="fas fa-user-shield"></i> Admin Panel
+        </a>
         <a class="menu-item" href="#myProfile" onclick="showProfileSection();return false;">
             <i class="fas fa-user-circle"></i> My Profile
         </a>
@@ -627,6 +630,9 @@ body {
             <div class="page-title">Dashboard</div>
         </div>
         <div class="topbar-right">
+            <a id="adminPanelBtn" href="admin.html" class="logout-btn" style="display:none;background:var(--badge-bg);color:var(--badge-tx);border:1px solid var(--border);text-decoration:none;">
+                <i class="fas fa-user-shield"></i> Admin Panel
+            </a>
             <div class="user-badge">
                 <i class="fas fa-user"></i>
                 <span id="userName">User</span>
@@ -641,9 +647,10 @@ body {
 
     <div class="admin-info-box" id="adminInfoBox">
         <div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>
+        <div><i class="fas fa-user"></i> Name: <strong>Admin Gourab</strong></div>
+        <div><i class="fas fa-id-badge"></i> Admin ID: <strong>gourabmon112233@gmail.com</strong></div>
         <div><i class="fab fa-telegram"></i> Telegram: <strong>+8801944035239</strong></div>
-        <div><i class="fab fa-facebook"></i> Facebook: <a href="#" target="_blank">Gourab Official</a></div>
-        <div><i class="fas fa-envelope"></i> Email: gourabmon112233@gmail.com</div>
+        <div><i class="fab fa-facebook"></i> Facebook: Gourab Official</div>
         <div style="margin-top:4px;opacity:0.7;font-size:12px;">Developed by Gourab • 01944035239</div>
     </div>
 
@@ -880,7 +887,15 @@ if (role !== 'user' && role !== 'admin') {
     location.href = 'index.html';
 }
 
-document.getElementById('userName').textContent = user.name || 'User';
+document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin' : 'User');
+
+// Admin হলে Dashboard + Admin Panel দুটো অপশন দেখাও
+if (role === 'admin') {
+    const apMenu = document.getElementById('adminPanelMenu');
+    const apBtn = document.getElementById('adminPanelBtn');
+    if (apMenu) apMenu.style.display = '';
+    if (apBtn) apBtn.style.display = 'inline-flex';
+}
 
 /* ========== DEVICE FINGERPRINT ========== */
 function getBrowserName() {
@@ -1101,19 +1116,24 @@ function applyTheme(theme) {
 function updateAdminInfo(visible) {
     const box = document.getElementById('adminInfoBox');
     if (!box) return;
+    // HIDE ON DASH → শুধু এই বক্স লুকানো; SHOW → সবাই দেখবে
     box.style.display = visible !== false ? 'block' : 'none';
     const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
-    const tg = info.telegram || '+8801944035239';
-    const fb = info.facebook || 'Gourab Official';
-    const em = info.email || 'gourabmon112233@gmail.com';
-    const extra = info.extra || 'Developed by Gourab • 01944035239';
-    const an = info.name || 'Admin Gourab';
+    const tg = escapeHtmlLocal(info.telegram || '+8801944035239');
+    const fbRaw = (info.facebook || 'Gourab Official').trim();
+    const fb = escapeHtmlLocal(fbRaw);
+    const em = escapeHtmlLocal(info.email || 'gourabmon112233@gmail.com');
+    const extra = escapeHtmlLocal(info.extra || 'Developed by Gourab • 01944035239');
+    const an = escapeHtmlLocal(info.name || 'Admin Gourab');
+    const fbHtml = /^https?:\/\//i.test(fbRaw)
+        ? '<a href="' + escapeHtmlLocal(fbRaw) + '" target="_blank" rel="noopener">' + fb + '</a>'
+        : fb;
     box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
         + '<div><i class="fas fa-user"></i> Name: <strong>' + an + '</strong></div>'
         + '<div><i class="fas fa-id-badge"></i> Admin ID: <strong>' + em + '</strong></div>'
         + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
-        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fb + '</div>'
-        + '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>';
+        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fbHtml + '</div>'
+        + (extra ? '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>' : '');
 }
 
 function updateNotice(notice) {
@@ -1328,6 +1348,18 @@ function setActiveMenu(which) {
 }
 
 function loadProfileForm() {
+    // Admin → settings.adminInfo থেকে লোড
+    if (role === 'admin') {
+        const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
+        document.getElementById('profileName').value = info.name || 'Admin Gourab';
+        document.getElementById('profilePhone').value = info.telegram || '';
+        document.getElementById('profileBio').value = info.facebook || '';
+        document.getElementById('profileMessage').value = info.extra || '';
+        document.getElementById('profileShowOnHome').checked = true;
+        profilePhotoData = info.photo || '';
+        updatePhotoUI();
+        return;
+    }
     const u = user || {};
     const pr = u.profile || {};
     document.getElementById('profileName').value = u.name || '';
@@ -1392,13 +1424,36 @@ async function clearMyNote() {
 }
 
 async function saveMyProfile() {
-    if (role === 'admin') {
-        alert('Admin প্রোফাইল আলাদা — ইউজার অ্যাকাউন্ট দিয়ে লগইন করুন।');
-        return;
-    }
-    if (!user || !user.email) return;
     try {
         if (!DB) DB = await fetchDB();
+
+        // Admin → settings.adminInfo সেভ (সবার ড্যাশবোর্ডে দেখা যাবে)
+        if (role === 'admin') {
+            if (!DB.settings) DB.settings = {};
+            const prev = DB.settings.adminInfo || {};
+            DB.settings.adminInfo = {
+                name: document.getElementById('profileName').value.trim() || 'Admin Gourab',
+                telegram: document.getElementById('profilePhone').value.trim() || prev.telegram || '',
+                facebook: document.getElementById('profileBio').value.trim() || prev.facebook || '',
+                email: prev.email || 'gourabmon112233@gmail.com',
+                extra: document.getElementById('profileMessage').value.trim() || '',
+                photo: profilePhotoData || prev.photo || ''
+            };
+            document.getElementById('userName').textContent = DB.settings.adminInfo.name;
+            await saveDB();
+            updateAdminInfo(DB.settings.adminInfoVisible !== false);
+            const msg = document.getElementById('profileSaveMsg');
+            if (msg) {
+                msg.style.display = 'block';
+                msg.style.color = 'var(--primary)';
+                msg.textContent = '✅ Admin প্রোফাইল সেভ হয়েছে! সবাই দেখতে পারবে।';
+                setTimeout(() => { msg.style.display = 'none'; }, 3000);
+            }
+            try { renderCommunity(false); } catch (e) {}
+            return;
+        }
+
+        if (!user || !user.email) return;
         const idx = DB.users.findIndex(u =>
             (u.email || '').toLowerCase() === (user.email || '').toLowerCase()
         );
@@ -1424,7 +1479,7 @@ async function saveMyProfile() {
         msg.style.color = 'var(--primary)';
         msg.textContent = '✅ প্রোফাইল সেভ হয়েছে!';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
-        renderCommunity();
+        try { renderCommunity(false); } catch (e) { try { renderCommunity(); } catch (e2) {} }
     } catch (e) {
         alert('সেভ ব্যর্থ: ' + e.message);
     }
@@ -1520,9 +1575,8 @@ async function renderCommunity(fullList) {
         }
 
         let html = '';
-        if (settings.adminInfoVisible !== false) {
-            html += memberCard(null, true);
-        }
+        // Members-এ Admin কার্ড সবসময় দেখাবে (HIDE শুধু উপরের Admin Information বক্সে)
+        html += memberCard(null, true);
 
         let users = (DB.users || []).filter(u => {
             const pr = u.profile || {};
