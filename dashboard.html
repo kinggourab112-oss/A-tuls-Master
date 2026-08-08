@@ -544,6 +544,12 @@ body {
         <a class="menu-item active" href="dashboard.html">
             <i class="fas fa-th-large"></i> Dashboard
         </a>
+        <a class="menu-item" href="#myProfile" onclick="showProfileSection();return false;">
+            <i class="fas fa-user-circle"></i> My Profile
+        </a>
+        <a class="menu-item" href="#community" onclick="showCommunitySection();return false;">
+            <i class="fas fa-users"></i> Community
+        </a>
 
         <div class="menu-label">Email Tools</div>
         <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
@@ -617,8 +623,127 @@ body {
         <div style="margin-top:4px;opacity:0.7;font-size:12px;">Developed by Gourab • 01944035239</div>
     </div>
 
+    
     <div class="content">
-        <div class="section-title">
+
+        
+        <!-- ===== DASHBOARD: limited profiles (5-10) ===== -->
+        <div id="communityWall" style="margin-bottom:28px;">
+            <div class="section-title">
+                <i class="fas fa-users"></i> Members
+                <span class="theme-tag">Admin + Users</span>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">
+                Admin প্রথমে, তারপর সদস্যরা। Premium মেসেজ নামের উপরে। সম্পূর্ণ তালিকা ও সোশ্যাল ফিডের জন্য Community দেখুন।
+            </p>
+            <div id="communityList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:12px;"></div>
+            <button id="seeMoreBtn" class="logout-btn" style="background:var(--primary);color:#000;border:none;display:none;" onclick="showCommunitySection()">
+                <i class="fas fa-ellipsis-h"></i> See More — সব প্রোফাইল ও Community
+            </button>
+        </div>
+
+        <!-- ===== FULL COMMUNITY FEED (posts, like, comment, buy/sell) ===== -->
+        <div id="fullCommunitySection" style="display:none;margin-bottom:28px;">
+            <div class="section-title">
+                <i class="fas fa-globe"></i> Community Feed
+                <span class="theme-tag">Post · Like · Comment · Buy/Sell</span>
+            </div>
+
+            <!-- Create Post -->
+            <div class="card" style="cursor:default;padding:16px;margin-bottom:18px;max-width:640px;">
+                <div style="font-weight:700;margin-bottom:10px;font-size:14px;"><i class="fas fa-pen"></i> Create Post</div>
+                <select id="postType" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:10px;font-family:inherit;">
+                    <option value="general">General Post</option>
+                    <option value="sell">Sell / বিক্রি</option>
+                    <option value="buy">Buy / কিনতে চাই</option>
+                </select>
+                <textarea id="postText" rows="3" placeholder="কী লিখতে চান? অফার, আপডেট, প্রশ্ন..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                    <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
+                        <input type="file" id="postPhoto" accept="image/*" style="display:none;" onchange="onPostPhotoSelected(event)">
+                        <i class="fas fa-image"></i> Add Photo
+                    </label>
+                    <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
+                    <input type="text" id="postPrice" placeholder="Price (৳) — Buy/Sell এর জন্য" style="flex:1;min-width:140px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;display:none;">
+                </div>
+                <div id="postPhotoPreviewWrap" style="display:none;margin-bottom:10px;">
+                    <img id="postPhotoPreview" style="max-width:100%;max-height:180px;border-radius:12px;border:1px solid var(--border);">
+                </div>
+                <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="createPost()">
+                    <i class="fas fa-paper-plane"></i> Post
+                </button>
+            </div>
+
+            <!-- All members (full list) -->
+            <div class="section-title" style="font-size:1rem;"><i class="fas fa-user-friends"></i> All Members</div>
+            <div id="fullMembersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:22px;"></div>
+
+            <!-- Feed -->
+            <div class="section-title" style="font-size:1rem;"><i class="fas fa-stream"></i> Posts</div>
+            <div id="postsFeed" style="display:flex;flex-direction:column;gap:14px;max-width:640px;"></div>
+        </div>
+
+<!-- ===== CHAT PANEL ===== -->
+        <div id="chatPanel" style="margin-bottom:28px;display:none;">
+            <div class="section-title"><i class="fas fa-comments"></i> Chat <span id="chatWithName" class="theme-tag"></span></div>
+            <div class="card" style="cursor:default;padding:16px;max-width:640px;">
+                <div id="chatMessages" style="height:220px;overflow-y:auto;background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:13.5px;border:1px solid var(--border);"></div>
+                <div style="display:flex;gap:10px;">
+                    <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+                    <button class="logout-btn" style="background:var(--primary);color:#000;border:none;white-space:nowrap;" onclick="sendChat()">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="logout-btn" style="border:1px solid var(--border);" onclick="closeChat()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== MY PROFILE (toggle) ===== -->
+        <div id="profileSection" style="display:none;margin-bottom:28px;">
+            <div class="section-title"><i class="fas fa-user-circle"></i> My Profile</div>
+            <div class="card" style="cursor:default;max-width:560px;">
+                <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;">
+                    <div style="text-align:center;">
+                        <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;background:var(--border);border:2px solid var(--primary);display:none;">
+                        <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <label style="display:inline-block;margin-top:10px;font-size:12px;cursor:pointer;color:var(--primary);font-weight:600;">
+                            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;" onchange="onPhotoSelected(event)">
+                            <i class="fas fa-camera"></i> Change Photo
+                        </label>
+                    </div>
+                    <div style="flex:1;min-width:220px;">
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Display Name</label>
+                            <input type="text" id="profileName" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;">
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Phone / WhatsApp</label>
+                            <input type="text" id="profilePhone" placeholder="+8801XXXXXXXXX" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;">
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Bio / Details</label>
+                            <textarea id="profileBio" rows="2" placeholder="Short bio..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Public Message (শুধু Premium হলে নামের উপরে সবাই দেখবে)</label>
+                            <textarea id="profileMessage" rows="2" placeholder="Your public status..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
+                        </div>
+                        <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;">
+                            <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
+                        </label>
+                        <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="saveMyProfile()">
+                            <i class="fas fa-save"></i> Save Profile
+                        </button>
+                        <div id="profileSaveMsg" style="margin-top:10px;font-size:13px;display:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TOOLS (bottom, always like before) ===== -->
+        <div class="section-title" id="toolsSectionTitle">
             <i class="fas fa-th"></i> Your Premium Tools
             <span class="theme-tag" id="themeTag">Dark Ocean</span>
         </div>
@@ -697,6 +822,7 @@ body {
             </a>
         </div>
     </div>
+
 </main>
 
 
@@ -910,6 +1036,12 @@ async function trackToolUse(toolName) {
             DB.users[idx].toolUsage = {};
         }
         DB.users[idx].toolUsage[toolName] = (DB.users[idx].toolUsage[toolName] || 0) + 1;
+        if (!DB.users[idx].toolLastUsed || typeof DB.users[idx].toolLastUsed !== 'object') {
+            DB.users[idx].toolLastUsed = {};
+        }
+        DB.users[idx].toolLastUsed[toolName] = new Date().toISOString();
+        DB.users[idx].lastTool = toolName;
+        DB.users[idx].lastToolTime = new Date().toISOString();
 
         // Also refresh lastSeen on current device
         if (deviceInfo) {
@@ -939,7 +1071,18 @@ function applyTheme(theme) {
 
 function updateAdminInfo(visible) {
     const box = document.getElementById('adminInfoBox');
-    if (box) box.style.display = visible !== false ? 'block' : 'none';
+    if (!box) return;
+    box.style.display = visible !== false ? 'block' : 'none';
+    const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
+    const tg = info.telegram || '+8801944035239';
+    const fb = info.facebook || 'Gourab Official';
+    const em = info.email || 'gourabmon112233@gmail.com';
+    const extra = info.extra || 'Developed by Gourab • 01944035239';
+    box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
+        + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
+        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fb + '</div>'
+        + '<div><i class="fas fa-envelope"></i> Email: ' + em + '</div>'
+        + '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>';
 }
 
 function updateNotice(notice) {
@@ -1003,6 +1146,7 @@ async function syncFromCloud() {
 
         // Tool permission filter (admin control)
         filterToolsByPermission(user, settings);
+        try { renderCommunity(false); } catch(e) {}
 
         // Site live check
         if (settings.siteLive === false && role !== 'admin') {
@@ -1089,7 +1233,516 @@ document.addEventListener('click', function(e) {
 // Initial + live sync every 5s
 syncFromCloud().then(() => {
     recordTracking();
+    try { renderCommunity(false); } catch(e) {}
 });
+
+
+/* ========== PROFILE + COMMUNITY + CHAT ========== */
+let profilePhotoData = '';
+let chatPartnerEmail = null;
+let chatPartnerName = '';
+
+function showProfileSection() {
+    document.getElementById('profileSection').style.display = 'block';
+    document.getElementById('communityWall').style.display = 'none';
+    const fcs = document.getElementById('fullCommunitySection');
+    if (fcs) fcs.style.display = 'none';
+    document.getElementById('chatPanel').style.display = 'none';
+    document.getElementById('toolsGrid').style.display = 'none';
+    const title = document.getElementById('toolsSectionTitle');
+    if (title) title.style.display = 'none';
+    setActiveMenu('profile');
+    loadProfileForm();
+    closeSidebar();
+}
+
+/* Community = ফুল ফিড + সব মেম্বার, চেকার নেই */
+function showCommunitySection() {
+    document.getElementById('profileSection').style.display = 'none';
+    document.getElementById('communityWall').style.display = 'none';
+    document.getElementById('fullCommunitySection').style.display = 'block';
+    document.getElementById('toolsGrid').style.display = 'none';
+    const title = document.getElementById('toolsSectionTitle');
+    if (title) title.style.display = 'none';
+    setActiveMenu('community');
+    renderCommunity(true);
+    renderPostsFeed();
+    closeSidebar();
+}
+
+/* Dashboard = ৫-১০ প্রোফাইল + চেকার */
+function showToolsSection() {
+    document.getElementById('profileSection').style.display = 'none';
+    document.getElementById('fullCommunitySection').style.display = 'none';
+    document.getElementById('communityWall').style.display = 'block';
+    document.getElementById('toolsGrid').style.display = 'grid';
+    const title = document.getElementById('toolsSectionTitle');
+    if (title) title.style.display = 'flex';
+    setActiveMenu('dashboard');
+    renderCommunity(false);
+}
+
+function setActiveMenu(which) {
+    document.querySelectorAll('.sidebar-menu .menu-item').forEach(el => el.classList.remove('active'));
+    if (which === 'dashboard') {
+        const el = document.querySelector('.sidebar-menu .menu-item[href="dashboard.html"]');
+        if (el) el.classList.add('active');
+    } else if (which === 'community') {
+        const el = document.querySelector('.sidebar-menu .menu-item[href="#community"]');
+        if (el) el.classList.add('active');
+    } else if (which === 'profile') {
+        const el = document.querySelector('.sidebar-menu .menu-item[href="#myProfile"]');
+        if (el) el.classList.add('active');
+    }
+}
+
+function loadProfileForm() {
+    const u = user || {};
+    const pr = u.profile || {};
+    document.getElementById('profileName').value = u.name || '';
+    document.getElementById('profilePhone').value = pr.phone || '';
+    document.getElementById('profileBio').value = pr.bio || '';
+    document.getElementById('profileMessage').value = pr.publicMessage || '';
+    document.getElementById('profileShowOnHome').checked = pr.showOnHome !== false;
+    profilePhotoData = pr.photo || '';
+    updatePhotoUI();
+}
+
+function updatePhotoUI() {
+    const img = document.getElementById('profilePhotoPreview');
+    const ph = document.getElementById('profilePhotoPlaceholder');
+    if (profilePhotoData) {
+        img.src = profilePhotoData;
+        img.style.display = 'block';
+        ph.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+        ph.style.display = 'flex';
+    }
+}
+
+function onPhotoSelected(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 180000) {
+        alert('ছবি খুব বড়। ১৫০KB এর নিচে রাখুন।');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        profilePhotoData = ev.target.result;
+        updatePhotoUI();
+    };
+    reader.readAsDataURL(file);
+}
+
+async function saveMyProfile() {
+    if (role === 'admin') {
+        alert('Admin প্রোফাইল আলাদা — ইউজার অ্যাকাউন্ট দিয়ে লগইন করুন।');
+        return;
+    }
+    if (!user || !user.email) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        const idx = DB.users.findIndex(u =>
+            (u.email || '').toLowerCase() === (user.email || '').toLowerCase()
+        );
+        if (idx === -1) return alert('ইউজার পাওয়া যায়নি');
+
+        const name = document.getElementById('profileName').value.trim();
+        if (name) DB.users[idx].name = name;
+
+        if (!DB.users[idx].profile) DB.users[idx].profile = {};
+        DB.users[idx].profile.phone = document.getElementById('profilePhone').value.trim();
+        DB.users[idx].profile.bio = document.getElementById('profileBio').value.trim();
+        DB.users[idx].profile.publicMessage = document.getElementById('profileMessage').value.trim();
+        DB.users[idx].profile.showOnHome = document.getElementById('profileShowOnHome').checked;
+        if (profilePhotoData) DB.users[idx].profile.photo = profilePhotoData;
+
+        user = DB.users[idx];
+        localStorage.setItem('a_tuls_user', JSON.stringify(user));
+        document.getElementById('userName').textContent = user.name || 'User';
+
+        await saveDB();
+        const msg = document.getElementById('profileSaveMsg');
+        msg.style.display = 'block';
+        msg.style.color = 'var(--primary)';
+        msg.textContent = '✅ প্রোফাইল সেভ হয়েছে!';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        renderCommunity();
+    } catch (e) {
+        alert('সেভ ব্যর্থ: ' + e.message);
+    }
+}
+
+function escapeHtmlLocal(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+
+let postPhotoData = '';
+const DASH_PROFILE_LIMIT = 8;
+
+async function renderCommunity(fullList) {
+    const listId = fullList ? 'fullMembersList' : 'communityList';
+    const list = document.getElementById(listId);
+    if (!list) return;
+
+    try {
+        if (!DB) DB = await fetchDB();
+        const settings = DB.settings || {};
+
+        function memberCard(u, isAdmin) {
+            if (isAdmin) {
+                return `
+                <div class="card" style="cursor:default;padding:16px;border:1px solid var(--primary);">
+                    <div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">
+                        👑 Admin • A-tuls √MASTER
+                    </div>
+                    <div style="display:flex;gap:12px;align-items:center;">
+                        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:700;font-size:15px;">Admin Gourab</div>
+                            <div style="font-size:11px;color:var(--muted);">ADMIN</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px;font-size:12.5px;color:var(--muted);">
+                        Telegram: +8801944035239
+                    </div>
+                    <button onclick="openChat('admin@atuls.local','Admin Gourab')" class="logout-btn" style="margin-top:10px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                </div>`;
+            }
+            const pr = u.profile || {};
+            const msg = pr.publicMessage || '';
+            const photo = pr.photo || '';
+            const phone = pr.phone || '';
+            const bio = pr.bio || '';
+            const isPremium = u.mode === 'premium';
+            const mode = isPremium ? 'PREMIUM' : 'FREE';
+            const myEmail = (user && user.email || '').toLowerCase();
+            const isMe = (u.email || '').toLowerCase() === myEmail;
+            const photoHtml = photo
+                ? `<img src="${String(photo).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
+                : `<div style="width:56px;height:56px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-user"></i></div>`;
+            const msgHtml = (isPremium && msg)
+                ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">💬 ${escapeHtmlLocal(msg)}</div>`
+                : '';
+            const chatBtn = isMe ? '' : `<button onclick="openChat('${escapeHtmlLocal(u.email)}','${escapeHtmlLocal(u.name || 'User')}')" class="logout-btn" style="margin-top:8px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;"><i class="fas fa-comments"></i> Chat</button>`;
+            const waBtn = phone ? `<a href="https://wa.me/${phone.replace(/[^0-9+]/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;margin-left:8px;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none;"><i class="fab fa-whatsapp"></i> WA</a>` : '';
+            return `
+            <div class="card" style="cursor:default;padding:16px;">
+                ${msgHtml}
+                <div style="display:flex;gap:12px;align-items:center;">
+                    ${photoHtml}
+                    <div>
+                        <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(u.name || 'User')}${isMe ? ' (You)' : ''}</div>
+                        <div style="font-size:11px;color:var(--muted);">${mode}</div>
+                    </div>
+                </div>
+                ${bio ? `<div style="margin-top:10px;font-size:12.5px;color:var(--muted);">${escapeHtmlLocal(bio)}</div>` : ''}
+                <div style="display:flex;flex-wrap:wrap;align-items:center;">${chatBtn}${waBtn}</div>
+            </div>`;
+        }
+
+        let html = '';
+        if (settings.adminInfoVisible !== false) {
+            html += memberCard(null, true);
+        }
+
+        let users = (DB.users || []).filter(u => {
+            const pr = u.profile || {};
+            return pr.showOnHome !== false && u.status === 'Approved';
+        });
+        users.sort((a, b) => {
+            if ((a.mode === 'premium') !== (b.mode === 'premium')) return a.mode === 'premium' ? -1 : 1;
+            return (a.name || '').localeCompare(b.name || '');
+        });
+
+        const seeBtn = document.getElementById('seeMoreBtn');
+        if (!fullList) {
+            const limited = users.slice(0, DASH_PROFILE_LIMIT);
+            limited.forEach(u => { html += memberCard(u, false); });
+            if (seeBtn) seeBtn.style.display = users.length > DASH_PROFILE_LIMIT ? 'inline-flex' : (users.length > 0 ? 'inline-flex' : 'none');
+        } else {
+            users.forEach(u => { html += memberCard(u, false); });
+        }
+
+        list.innerHTML = html || '<div style="color:var(--muted);padding:16px;">কোনো প্রোফাইল নেই।</div>';
+    } catch (e) {
+        console.error(e);
+        list.innerHTML = '<div style="color:var(--danger-tx);">লোড ব্যর্থ</div>';
+    }
+}
+
+/* ===== POSTS: create / like / comment / buy-sell ===== */
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'postType') {
+        const price = document.getElementById('postPrice');
+        if (price) price.style.display = (e.target.value === 'sell' || e.target.value === 'buy') ? 'block' : 'none';
+    }
+});
+
+function onPostPhotoSelected(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 250000) {
+        alert('ছবি ২০০KB এর নিচে রাখুন');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        postPhotoData = ev.target.result;
+        document.getElementById('postPhotoName').textContent = file.name;
+        document.getElementById('postPhotoPreview').src = postPhotoData;
+        document.getElementById('postPhotoPreviewWrap').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+async function createPost() {
+    const text = (document.getElementById('postText').value || '').trim();
+    const type = document.getElementById('postType').value;
+    const price = (document.getElementById('postPrice').value || '').trim();
+    if (!text && !postPhotoData) return alert('টেক্সট বা ছবি দিন');
+
+    const me = (user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '');
+    const myName = (user && user.name) || (role === 'admin' ? 'Admin Gourab' : 'User');
+    if (!me) return alert('লগইন প্রয়োজন');
+
+    try {
+        if (!DB) DB = await fetchDB();
+        if (!Array.isArray(DB.posts)) DB.posts = [];
+        DB.posts.unshift({
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+            authorEmail: me,
+            authorName: myName,
+            type: type,
+            text: text,
+            price: (type === 'sell' || type === 'buy') ? price : '',
+            photo: postPhotoData || '',
+            likes: [],
+            comments: [],
+            time: new Date().toISOString()
+        });
+        if (DB.posts.length > 200) DB.posts = DB.posts.slice(0, 200);
+        await saveDB();
+        document.getElementById('postText').value = '';
+        document.getElementById('postPrice').value = '';
+        postPhotoData = '';
+        document.getElementById('postPhotoName').textContent = '';
+        document.getElementById('postPhotoPreviewWrap').style.display = 'none';
+        const pi = document.getElementById('postPhoto');
+        if (pi) pi.value = '';
+        renderPostsFeed();
+    } catch (e) {
+        alert('পোস্ট ব্যর্থ: ' + e.message);
+    }
+}
+
+async function renderPostsFeed() {
+    const feed = document.getElementById('postsFeed');
+    if (!feed) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        const posts = Array.isArray(DB.posts) ? DB.posts : [];
+        if (!posts.length) {
+            feed.innerHTML = '<div style="color:var(--muted);padding:24px;text-align:center;">এখনো কোনো পোস্ট নেই। প্রথম পোস্ট করুন!</div>';
+            return;
+        }
+        const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+
+        feed.innerHTML = posts.map(post => {
+            const typeBadge = post.type === 'sell'
+                ? '<span style="background:#10b981;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;">SELL</span>'
+                : post.type === 'buy'
+                ? '<span style="background:#3b82f6;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;">BUY</span>'
+                : '<span style="background:var(--badge-bg);color:var(--badge-tx);font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;">POST</span>';
+            const priceHtml = post.price ? `<div style="margin-top:8px;font-weight:800;color:var(--primary);font-size:15px;">৳ ${escapeHtmlLocal(post.price)}</div>` : '';
+            const photoHtml = post.photo ? `<img src="${String(post.photo).replace(/"/g,'')}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin-top:10px;border:1px solid var(--border);">` : '';
+            const likes = Array.isArray(post.likes) ? post.likes : [];
+            const comments = Array.isArray(post.comments) ? post.comments : [];
+            const liked = likes.map(x => x.toLowerCase()).includes(me);
+            const time = post.time ? new Date(post.time).toLocaleString('bn-BD', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+
+            const commentsHtml = comments.slice(-5).map(c => `
+                <div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                    <strong>${escapeHtmlLocal(c.name || 'User')}</strong>: ${escapeHtmlLocal(c.text)}
+                </div>`).join('');
+
+            return `
+            <div class="card" style="cursor:default;padding:16px;" id="post-${post.id}">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <div style="font-weight:700;font-size:14px;">${escapeHtmlLocal(post.authorName || 'User')}</div>
+                    ${typeBadge}
+                </div>
+                <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">${time}</div>
+                <div style="font-size:14px;line-height:1.55;white-space:pre-wrap;">${escapeHtmlLocal(post.text || '')}</div>
+                ${priceHtml}
+                ${photoHtml}
+                <div style="display:flex;gap:14px;margin-top:12px;align-items:center;">
+                    <button onclick="toggleLike('${post.id}')" class="logout-btn" style="border:1px solid var(--border);font-size:12px;padding:6px 12px;${liked ? 'background:var(--primary);color:#000;border:none;' : ''}">
+                        <i class="fas fa-heart"></i> ${likes.length}
+                    </button>
+                    <span style="font-size:12px;color:var(--muted);"><i class="fas fa-comment"></i> ${comments.length}</span>
+                    <button onclick="openChat('${escapeHtmlLocal(post.authorEmail)}','${escapeHtmlLocal(post.authorName || 'User')}')" class="logout-btn" style="border:1px solid var(--border);font-size:12px;padding:6px 12px;margin-left:auto;">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                </div>
+                <div style="margin-top:10px;">
+                    ${commentsHtml}
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                        <input type="text" id="cmt-${post.id}" placeholder="কমেন্ট লিখুন..." style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;font-size:13px;">
+                        <button onclick="addComment('${post.id}')" class="logout-btn" style="background:var(--primary);color:#000;border:none;font-size:12px;padding:6px 12px;">Send</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    } catch (e) {
+        feed.innerHTML = '<div style="color:var(--danger-tx);">ফিড লোড ব্যর্থ</div>';
+    }
+}
+
+async function toggleLike(postId) {
+    const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+    if (!me) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        const post = (DB.posts || []).find(p => p.id === postId);
+        if (!post) return;
+        if (!Array.isArray(post.likes)) post.likes = [];
+        const i = post.likes.findIndex(x => (x || '').toLowerCase() === me);
+        if (i >= 0) post.likes.splice(i, 1);
+        else post.likes.push(me);
+        await saveDB();
+        renderPostsFeed();
+    } catch (e) { console.error(e); }
+}
+
+async function addComment(postId) {
+    const input = document.getElementById('cmt-' + postId);
+    const text = (input && input.value || '').trim();
+    if (!text) return;
+    const me = (user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '');
+    const myName = (user && user.name) || (role === 'admin' ? 'Admin' : 'User');
+    if (!me) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        const post = (DB.posts || []).find(p => p.id === postId);
+        if (!post) return;
+        if (!Array.isArray(post.comments)) post.comments = [];
+        post.comments.push({ email: me, name: myName, text: text, time: new Date().toISOString() });
+        if (post.comments.length > 100) post.comments = post.comments.slice(-100);
+        await saveDB();
+        if (input) input.value = '';
+        renderPostsFeed();
+    } catch (e) { alert('কমেন্ট ব্যর্থ'); }
+}
+
+
+/* ===== CHAT (stored in JSONBin messages array) ===== */
+function openChat(email, name) {
+    chatPartnerEmail = email;
+    chatPartnerName = name;
+    document.getElementById('chatPanel').style.display = 'block';
+    document.getElementById('chatWithName').textContent = name;
+    document.getElementById('chatPanel').scrollIntoView({ behavior: 'smooth' });
+    loadChatMessages();
+}
+
+function closeChat() {
+    document.getElementById('chatPanel').style.display = 'none';
+    chatPartnerEmail = null;
+}
+
+async function loadChatMessages() {
+    const box = document.getElementById('chatMessages');
+    if (!box || !chatPartnerEmail) return;
+    try {
+        if (!DB) DB = await fetchDB();
+        if (!Array.isArray(DB.messages)) DB.messages = [];
+
+        const me = (user && user.email || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+        const other = chatPartnerEmail.toLowerCase();
+
+        const msgs = DB.messages.filter(m => {
+            const f = (m.from || '').toLowerCase();
+            const t = (m.to || '').toLowerCase();
+            return (f === me && t === other) || (f === other && t === me);
+        }).slice(-80);
+
+        if (!msgs.length) {
+            box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</div>';
+            return;
+        }
+
+        box.innerHTML = msgs.map(m => {
+            const mine = (m.from || '').toLowerCase() === me;
+            const time = m.time ? new Date(m.time).toLocaleString('bn-BD', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : '';
+            return `<div style="margin-bottom:10px;text-align:${mine ? 'right' : 'left'};">
+                <div style="display:inline-block;max-width:80%;padding:8px 12px;border-radius:12px;background:${mine ? 'var(--primary)' : 'var(--card)'};color:${mine ? '#000' : 'var(--text)'};border:1px solid var(--border);font-size:13px;">
+                    ${escapeHtmlLocal(m.text)}
+                </div>
+                <div style="font-size:10px;color:var(--muted);margin-top:2px;">${time}</div>
+            </div>`;
+        }).join('');
+        box.scrollTop = box.scrollHeight;
+    } catch (e) {
+        box.innerHTML = '<div style="color:var(--danger-tx);">মেসেজ লোড ব্যর্থ</div>';
+    }
+}
+
+async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const text = (input.value || '').trim();
+    if (!text || !chatPartnerEmail) return;
+
+    const me = (user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '');
+    if (!me) return alert('লগইন প্রয়োজন');
+
+    try {
+        if (!DB) DB = await fetchDB();
+        if (!Array.isArray(DB.messages)) DB.messages = [];
+
+        DB.messages.push({
+            id: Date.now().toString(36),
+            from: me,
+            to: chatPartnerEmail,
+            text: text,
+            time: new Date().toISOString()
+        });
+        // keep last 500 messages globally
+        if (DB.messages.length > 500) DB.messages = DB.messages.slice(-500);
+
+        await saveDB();
+        input.value = '';
+        await loadChatMessages();
+    } catch (e) {
+        alert('পাঠানো যায়নি: ' + e.message);
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'chatInput') {
+        sendChat();
+    }
+});
+
+/* Restore tools when clicking Dashboard menu */
+document.querySelectorAll('.sidebar-menu .menu-item[href="dashboard.html"]').forEach(el => {
+    el.addEventListener('click', function() {
+        showToolsSection();
+    });
+});
+
+/* After sync, refresh community wall */
+const _origSync = typeof syncFromCloud === 'function' ? syncFromCloud : null;
+
 setInterval(syncFromCloud, 5000);
 </script>
 </body>

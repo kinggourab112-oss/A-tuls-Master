@@ -330,6 +330,15 @@
     </style>
 </head>
 <body>
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'user' && r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
     <div class="container">
         <div class="header">
             <div class="badge"><i class="fas fa-crown"></i> PREMIUM VERSION</div>

@@ -204,6 +204,15 @@
     </style>
 </head>
 <body>
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'user' && r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
 
     <div class="container">
         <h2><i class="fa-solid fa-envelope-circle-check"></i> Gmail format fixer</h2>

@@ -436,6 +436,15 @@ select, input[type="text"], input[type="search"] {
 </style>
 </head>
 <body>
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
 <div class="container">
     <div class="header">
         <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -531,17 +540,27 @@ select, input[type="text"], input[type="search"] {
 
     <!-- Global Default Tools -->
     <div class="card">
-        <div class="card-title"><i class="fas fa-sliders-h"></i> Main Checker Dashboard Control</div>
+        <div class="card-title"><i class="fas fa-sliders-h"></i> Checker ON/OFF (Global Block)</div>
         <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">
-            এখানে যে চেকারগুলো ON থাকবে, সেগুলোই ইউজারদের মূল ড্যাশবোর্ডে দেখা যাবে (Admin অনুমতি সাপেক্ষে)।
+            OFF = সাইট থেকে সেই চেকার ব্লক (কেউ দেখবে না)। ON = গ্লোবাল অনুমতি (ইউজার-লেভেল পারমিশন আলাদা)।
         </p>
         <div class="tools-grid" id="globalToolsGrid"></div>
         <button class="btn-sm btn-cyan" style="width:100%;" onclick="saveGlobalTools()">SAVE GLOBAL TOOLS</button>
     </div>
 
-    <!-- Admin Information + Show/Hide -->
+    <!-- Live Checker Activity -->
     <div class="card">
-        <div class="card-title"><i class="fas fa-user-shield"></i> Admin Information</div>
+        <div class="card-title"><i class="fas fa-radar"></i> Live Checker Activity</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">
+            কোন ইউজার কোন চেকার কখন চালাচ্ছে — লাইভ ট্র্যাকিং।
+        </p>
+        <div id="liveCheckerActivity" style="max-height:280px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadLiveCheckerActivity()">REFRESH ACTIVITY</button>
+    </div>
+
+    <!-- Admin Information + Show/Hide + EDIT -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-user-shield"></i> Admin Information (Edit)</div>
         
         <div class="grid-2" style="margin-bottom:14px;">
             <button class="btn-sm btn-cyan" id="btnShowInfo" onclick="setAdminInfoVisible(true)">
@@ -555,12 +574,24 @@ select, input[type="text"], input[type="search"] {
             Status: Loading...
         </p>
 
-        <div class="admin-info">
-            <div><i class="fab fa-telegram" style="color:var(--cyan);"></i> Telegram: <strong>+8801944035239</strong></div>
-            <div style="margin-top:6px;"><i class="fab fa-facebook" style="color:#3b82f6;"></i> Facebook: <a href="#" target="_blank">Gourab Official</a></div>
-            <div style="margin-top:6px;"><i class="fas fa-envelope"></i> Email: gourabmon112233@gmail.com</div>
-            <div style="margin-top:8px;font-size:12px;color:var(--muted);">Developed by Gourab • 01944035239</div>
-        </div>
+        <input type="text" id="admTelegram" placeholder="Telegram number" style="margin-bottom:8px;">
+        <input type="text" id="admFacebook" placeholder="Facebook name / link" style="margin-bottom:8px;">
+        <input type="text" id="admEmail" placeholder="Public email" style="margin-bottom:8px;">
+        <input type="text" id="admExtra" placeholder="Extra line (e.g. Developed by ...)" style="margin-bottom:10px;">
+        <button class="btn-sm btn-cyan" style="width:100%;" onclick="saveAdminInfoEdit()">
+            <i class="fas fa-save"></i> SAVE ADMIN INFO
+        </button>
+    </div>
+
+
+    <!-- Community Profiles Preview -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-users"></i> Community Profiles & Public Messages</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">
+            ইউজাররা যে পাবলিক মেসেজ দিয়েছে সেগুলো এখানে দেখা যাবে। নামের উপরে মেসেজ শো হয়।
+        </p>
+        <div id="adminCommunityList" style="max-height:320px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadAdminCommunity()">REFRESH COMMUNITY</button>
     </div>
 
     <!-- Live User Management -->
@@ -654,6 +685,12 @@ async function loadDB() {
         if (DB.settings.siteLive === undefined) DB.settings.siteLive = true;
         if (!DB.settings.notice) DB.settings.notice = '';
         if (!DB.settings.globalTools) DB.settings.globalTools = [...ALL_TOOLS];
+        if (!DB.settings.adminInfo) DB.settings.adminInfo = {
+            telegram: '+8801944035239',
+            facebook: 'Gourab Official',
+            email: 'gourabmon112233@gmail.com',
+            extra: 'Developed by Gourab • 01944035239'
+        };
 
         // Ensure every user has tracking fields
         DB.users.forEach(u => {
@@ -675,6 +712,7 @@ async function loadDB() {
         if (sel) sel.value = selectedDashColor;
         const noticeInput = document.getElementById('noticeInput');
         if (noticeInput) noticeInput.value = DB.settings.notice || '';
+        try { loadAdminInfoFields(); loadLiveCheckerActivity(); } catch(e) {}
     } catch (e) {
         console.error(e);
         alert('ক্লাউড ডেটা লোড ব্যর্থ! নেট চেক করুন।');
@@ -1153,6 +1191,71 @@ async function unblockDevice(userId, fingerprint) {
 }
 
 /* ========== INIT ========== */
+
+function loadLiveCheckerActivity() {
+    const box = document.getElementById('liveCheckerActivity');
+    if (!box || !DB) return;
+    const rows = [];
+    (DB.users || []).forEach(u => {
+        if (u.status !== 'Approved') return;
+        const usage = u.toolUsage || {};
+        const lastMap = u.toolLastUsed || {};
+        const lastTool = u.lastTool || '';
+        const lastTime = u.lastToolTime || '';
+        Object.keys(usage).forEach(tool => {
+            rows.push({
+                name: u.name || u.email,
+                email: u.email,
+                tool: tool,
+                count: usage[tool] || 0,
+                time: lastMap[tool] || lastTime || u.lastLogin || ''
+            });
+        });
+        if (lastTool && !usage[lastTool]) {
+            rows.push({ name: u.name || u.email, email: u.email, tool: lastTool, count: 1, time: lastTime });
+        }
+    });
+    rows.sort((a, b) => String(b.time).localeCompare(String(a.time)));
+    if (!rows.length) {
+        box.innerHTML = '<div class="empty-msg">এখনো কোনো চেকার ব্যবহারের রেকর্ড নেই</div>';
+        return;
+    }
+    box.innerHTML = rows.slice(0, 40).map(r => `
+        <div class="track-item" style="flex-direction:column;align-items:flex-start;">
+            <div><strong style="color:var(--text)">${escapeHtml(r.name)}</strong>
+                <span style="color:var(--cyan);font-size:12px;"> → ${escapeHtml(r.tool)}</span>
+                <span class="usage-chip" style="margin-left:6px;">${r.count}x</span>
+            </div>
+            <div class="track-meta">${formatTime(r.time)} • ${escapeHtml(r.email || '')}</div>
+        </div>
+    `).join('');
+}
+
+function loadAdminInfoFields() {
+    const info = (DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
+    const tg = document.getElementById('admTelegram');
+    const fb = document.getElementById('admFacebook');
+    const em = document.getElementById('admEmail');
+    const ex = document.getElementById('admExtra');
+    if (tg) tg.value = info.telegram || '+8801944035239';
+    if (fb) fb.value = info.facebook || 'Gourab Official';
+    if (em) em.value = info.email || 'gourabmon112233@gmail.com';
+    if (ex) ex.value = info.extra || 'Developed by Gourab • 01944035239';
+}
+
+async function saveAdminInfoEdit() {
+    if (!DB.settings) DB.settings = {};
+    DB.settings.adminInfo = {
+        telegram: (document.getElementById('admTelegram').value || '').trim(),
+        facebook: (document.getElementById('admFacebook').value || '').trim(),
+        email: (document.getElementById('admEmail').value || '').trim(),
+        extra: (document.getElementById('admExtra').value || '').trim()
+    };
+    await saveDB();
+    alert('✅ Admin Information সেভ হয়েছে! ইউজার ড্যাশবোর্ডে দেখা যাবে।');
+}
+
+
 loadDB();
 
 setInterval(function() {

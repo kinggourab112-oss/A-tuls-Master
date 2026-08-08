@@ -111,6 +111,15 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body class="p-3 md:p-8 flex flex-col items-center min-h-screen pt-4 pb-16 relative">
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'user' && r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
 
     <!-- Cloudflare Turnstile Overlay -->
     <div id="cf-overlay" class="fixed inset-0 bg-[#05070c] z-[9999] flex flex-col items-center justify-center font-sans text-gray-200 transition-opacity duration-300">

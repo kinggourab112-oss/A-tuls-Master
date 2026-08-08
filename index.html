@@ -468,7 +468,14 @@ async function doRegister() {
             }],
             toolUsage: {},
             lastLogin: deviceInfo.lastSeen,
-            totalSessions: 1
+            totalSessions: 1,
+            profile: {
+                photo: '',
+                bio: '',
+                phone: '',
+                publicMessage: '',
+                showOnHome: true
+            }
         };
 
         db.users.push(newUser);

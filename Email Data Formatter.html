@@ -368,6 +368,15 @@
     </style>
 </head>
 <body>
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'user' && r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
 
@@ -508,7 +517,7 @@
                     lines.forEach(line => {
                         const parts = line.split(/[:|\s]+/).filter(p => p);
                         if (parts.length >= 2) {
-                            result.push(`\( {parts[0]}: \){parts[1]}`);
+                            result.push(parts[0] + ':' + parts[1]);
                         }
                     });
                 } 
@@ -517,9 +526,9 @@
                     lines.forEach(line => {
                         const parts = line.split(/[:|\s]+/).filter(p => p);
                         if (parts.length >= 3) {
-                            result.push(`\( {parts[0]}: \){parts[1]}:${parts[2]}`);
+                            result.push(parts[0] + ':' + parts[1] + ':' + parts[2]);
                         } else if (parts.length === 2) {
-                            result.push(`\( {parts[0]}: \){parts[1]}:`);
+                            result.push(parts[0] + ':' + parts[1] + ':');
                         }
                     });
                 }
@@ -527,7 +536,7 @@
                     // Email\nPassword\nEmail\nPassword...
                     for (let i = 0; i < lines.length; i += 2) {
                         if (lines[i + 1]) {
-                            result.push(`\( {lines[i]}: \){lines[i + 1]}`);
+                            result.push(lines[i] + ':' + lines[i + 1]);
                         }
                     }
                 }
@@ -536,7 +545,7 @@
                     for (let i = 0; i < lines.length; i += 3) {
                         if (lines[i + 1]) {
                             const recovery = lines[i + 2] || '';
-                            result.push(`\( {lines[i]}: \){lines[i + 1]}:${recovery}`);
+                            result.push(lines[i] + ':' + lines[i + 1] + ':' + recovery);
                         }
                     }
                 }

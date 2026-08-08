@@ -356,6 +356,15 @@
     </style>
 </head>
 <body>
+<script>
+(function(){
+  var r = localStorage.getItem('a_tuls_role');
+  if (r !== 'user' && r !== 'admin') {
+    location.replace('index.html');
+  }
+})();
+</script>
+
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
 
