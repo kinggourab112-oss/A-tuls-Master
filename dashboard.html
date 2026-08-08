@@ -1128,7 +1128,13 @@ function updateAdminInfo(visible) {
     const fbHtml = /^https?:\/\//i.test(fbRaw)
         ? '<a href="' + escapeHtmlLocal(fbRaw) + '" target="_blank" rel="noopener">' + fb + '</a>'
         : fb;
+    // Admin photo — সবাই দেখবে
+    const photo = info.photo || '';
+    const photoHtml = photo
+        ? '<img src="' + String(photo).replace(/"/g, '') + '" alt="Admin" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);margin-bottom:10px;display:block;">'
+        : '';
     box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
+        + photoHtml
         + '<div><i class="fas fa-user"></i> Name: <strong>' + an + '</strong></div>'
         + '<div><i class="fas fa-id-badge"></i> Admin ID: <strong>' + em + '</strong></div>'
         + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
@@ -1512,15 +1518,18 @@ async function renderCommunity(fullList) {
                 const adminTg = ai.telegram || '+8801944035239';
                 const adminFb = ai.facebook || 'Gourab Official';
                 const adminExtra = ai.extra || '';
+                const adminPhoto = ai.photo || '';
+                // Admin photo — সবাই Members-এ দেখবে
+                const adminPhotoHtml = adminPhoto
+                    ? `<img src="${String(adminPhoto).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
+                    : `<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;"><i class="fas fa-user-shield"></i></div>`;
                 return `
                 <div class="card" style="cursor:default;padding:16px;border:1px solid var(--primary);">
                     <div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">
                         👑 OFFICIAL ADMIN
                     </div>
                     <div style="display:flex;gap:12px;align-items:center;">
-                        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
+                        ${adminPhotoHtml}
                         <div>
                             <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(adminName)}</div>
                             <div style="font-size:11px;color:var(--muted);">ADMIN ID</div>
