@@ -176,11 +176,36 @@ input:focus { border-color: var(--cyan); }
 
     <div id="siteBlockedBox" style="display:none;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🚫</div>
-        <h2 style="font-size:1.5rem;color:#ff3b5c;margin-bottom:12px;">SITE BLOCKED</h2>
+        <h2 style="font-size:1.5rem;color:#ff3b5c;margin-bottom:12px;">SITE OFF / BLOCKED</h2>
         <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="siteBlockMsg">
             এই সাইট বর্তমানে Admin কর্তৃক বন্ধ করা হয়েছে।
         </p>
         <p style="font-size:13px;color:#64748b;">পরে আবার চেষ্টা করুন।</p>
+        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:14px;" onclick="location.reload()">Refresh</button>
+    </div>
+
+    <div id="wrongPassBox" style="display:none;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">🔑</div>
+        <h2 style="font-size:1.35rem;color:#ff3b5c;margin-bottom:12px;">Wrong Password</h2>
+        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;">
+            ভুল ইমেইল বা পাসওয়ার্ড দিয়েছেন। আবার চেষ্টা করুন।
+        </p>
+        <button class="btn" style="margin-top:14px;" onclick="backToLoginFromError()"><i class="fas fa-arrow-left"></i> Back to Login</button>
+        <div style="margin-top:12px;">
+            <a href="#" onclick="showForgot();return false;" style="color:#00f0ff;font-size:13px;font-weight:600;">Forgot Password?</a>
+        </div>
+    </div>
+
+    <div id="accountBlockedBox" style="display:none;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">⛔</div>
+        <h2 style="font-size:1.35rem;color:#ff3b5c;margin-bottom:12px;">Account Blocked</h2>
+        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;">
+            আপনার একাউন্ট Admin কর্তৃক ব্লক করা হয়েছে। লগইন সম্ভব নয়।
+        </p>
+        <a href="https://wa.me/8801944035239" target="_blank" class="btn" style="text-decoration:none;margin-top:14px;">
+            <i class="fas fa-phone"></i> Contact Admin
+        </a>
+        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:10px;" onclick="backToLoginFromError()">Back</button>
     </div>
 
     <div id="registerForm">
@@ -327,10 +352,19 @@ function showForgot() {
 }
 
 function hideAllForms() {
-    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox'].forEach(id => {
+    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox','wrongPassBox','accountBlockedBox'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
+}
+
+function backToLoginFromError() {
+    hideAllForms();
+    const tabs = document.querySelector('.tabs');
+    if (tabs) tabs.style.display = 'flex';
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('loginTab').classList.add('active');
+    document.getElementById('regTab').classList.remove('active');
 }
 
 async function submitForgot() {
@@ -457,13 +491,36 @@ async function doLogin() {
         return;
     }
 
-    // Admin direct login (no cloud needed)
+    // Admin login — ডিভাইস ট্র্যাক + Dashboard (Admin Panel লিংক সেখানে)
     if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-        localStorage.setItem('a_tuls_role', 'admin');
-        localStorage.setItem('a_tuls_user', JSON.stringify({
-            name: 'Admin Gourab', email: ADMIN_EMAIL, status: 'Approved', mode: 'premium'
-        }));
-        window.location.href = 'admin.html';
+        btn.disabled = true;
+        loading.style.display = 'block';
+        try {
+            const deviceInfo = await collectDeviceInfo();
+            try {
+                const db = await fetchDB();
+                if (!db.settings) db.settings = {};
+                if (!Array.isArray(db.settings.adminDevices)) db.settings.adminDevices = [];
+                const di = db.settings.adminDevices.findIndex(d => d.fingerprint === deviceInfo.fingerprint);
+                if (di >= 0) {
+                    db.settings.adminDevices[di] = { ...db.settings.adminDevices[di], ...deviceInfo };
+                } else {
+                    db.settings.adminDevices.push(deviceInfo);
+                    if (db.settings.adminDevices.length > 20) {
+                        db.settings.adminDevices = db.settings.adminDevices.slice(-20);
+                    }
+                }
+                await saveDB(db);
+            } catch (e) { console.error('Admin device track', e); }
+            localStorage.setItem('a_tuls_role', 'admin');
+            localStorage.setItem('a_tuls_user', JSON.stringify({
+                name: 'Admin Gourab', email: ADMIN_EMAIL, status: 'Approved', mode: 'premium'
+            }));
+            window.location.href = 'dashboard.html';
+        } finally {
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
         return;
     }
 
@@ -487,8 +544,9 @@ async function doLogin() {
         const userIdx = users.findIndex(u => (u.email || '').toLowerCase() === email && u.password === pass);
 
         if (userIdx === -1) {
-            msg.className = 'msg error';
-            msg.textContent = 'ভুল ইমেইল বা পাসওয়ার্ড!';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('wrongPassBox').style.display = 'block';
             return;
         }
 
@@ -518,8 +576,9 @@ async function doLogin() {
         }
 
         if (user.status === 'Blocked') {
-            msg.className = 'msg error';
-            msg.textContent = 'আপনার একাউন্ট ব্লক করা হয়েছে।';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('accountBlockedBox').style.display = 'block';
             return;
         }
 

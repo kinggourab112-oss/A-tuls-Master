@@ -613,6 +613,16 @@ select, input[type="text"], input[type="search"] {
         <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadDeviceRequests()">REFRESH</button>
     </div>
 
+    <!-- Admin Login Devices -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-laptop"></i> Admin Login Devices</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">
+            Admin অ্যাকাউন্ট কয়টা ডিভাইস/ব্রাউজার থেকে লগইন করেছে — এখানে দেখা যাবে।
+        </p>
+        <div id="adminDevicesList" style="max-height:220px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadAdminDevices()">REFRESH DEVICES</button>
+    </div>
+
     <!-- Live User Management -->
     <div class="card">
         <div class="card-title"><i class="fas fa-users"></i> Live User Management + Ultra Tracking</div>
@@ -732,7 +742,7 @@ async function loadDB() {
         if (sel) sel.value = selectedDashColor;
         const noticeInput = document.getElementById('noticeInput');
         if (noticeInput) noticeInput.value = DB.settings.notice || '';
-        try { loadAdminInfoFields(); loadLiveCheckerActivity(); loadPasswordRequests(); loadDeviceRequests(); } catch(e) {}
+        try { loadAdminInfoFields(); loadLiveCheckerActivity(); loadPasswordRequests(); loadDeviceRequests(); loadAdminDevices(); } catch(e) {}
     } catch (e) {
         console.error(e);
         alert('ক্লাউড ডেটা লোড ব্যর্থ! নেট চেক করুন।');
@@ -1272,6 +1282,25 @@ function loadAdminInfoFields() {
     if (fb) fb.value = info.facebook || 'Gourab Official';
     if (em) em.value = info.email || 'gourabmon112233@gmail.com';
     if (ex) ex.value = info.extra || 'Developed by Gourab • 01944035239';
+}
+
+function loadAdminDevices() {
+    const box = document.getElementById('adminDevicesList');
+    if (!box || !DB) return;
+    const list = (DB.settings && Array.isArray(DB.settings.adminDevices)) ? DB.settings.adminDevices : [];
+    if (!list.length) {
+        box.innerHTML = '<div class="empty-msg">এখনো কোনো Admin ডিভাইস ট্র্যাক হয়নি (একবার Dashboard-এ লগইন করুন)</div>';
+        return;
+    }
+    const sorted = list.slice().sort((a, b) => String(b.lastSeen || '').localeCompare(String(a.lastSeen || '')));
+    box.innerHTML = '<div style="font-size:12px;color:var(--cyan);margin-bottom:8px;">মোট ডিভাইস: <strong>' + sorted.length + '</strong></div>' +
+        sorted.map(d => `
+        <div class="track-item" style="flex-direction:column;align-items:flex-start;">
+            <div><strong style="color:var(--text)">${escapeHtml(d.browser || 'Unknown')}</strong> • ${escapeHtml(d.os || '')}</div>
+            <div class="track-meta">${escapeHtml(d.deviceType || 'Desktop')} • IP: ${escapeHtml(d.ip || 'N/A')}</div>
+            <div class="track-meta">Last: ${formatTime(d.lastSeen)}</div>
+        </div>
+    `).join('');
 }
 
 async function saveAdminInfoEdit() {
