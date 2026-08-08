@@ -127,16 +127,69 @@ input:focus { border-color: var(--cyan); }
 
     <div id="loginForm">
         <input type="email" id="loginEmail" placeholder="Email address">
-        <input type="password" id="loginPass" placeholder="Password">
+        <div style="position:relative;margin-bottom:12px;">
+            <input type="password" id="loginPass" placeholder="Password" style="margin-bottom:0;padding-right:48px;">
+            <button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#8b9cb3;cursor:pointer;font-size:16px;"><i class="fas fa-eye"></i></button>
+        </div>
+        <div style="text-align:right;margin-bottom:10px;">
+            <a href="#" onclick="showForgot();return false;" style="color:#00f0ff;font-size:13px;font-weight:600;">Forgot Password?</a>
+        </div>
         <button class="btn" id="loginBtn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
         <div class="msg" id="loginMsg"></div>
         <div class="loading" id="loginLoading">লোড হচ্ছে...</div>
     </div>
 
+    <div id="forgotForm" style="display:none;">
+        <p style="font-size:13px;color:#8b9cb3;margin-bottom:12px;text-align:center;">পাসওয়ার্ড ভুলে গেলে নিচের তথ্য দিন। Admin কনফার্ম করলে নতুন পাসওয়ার্ড সেট করতে পারবেন।</p>
+        <input type="email" id="forgotEmail" placeholder="Your Gmail / Email">
+        <input type="text" id="forgotReason" placeholder="কেন পাসওয়ার্ড ভুলে গেছেন?">
+        <label style="font-size:12px;color:#8b9cb3;display:block;margin-bottom:6px;">Photo (optional proof)</label>
+        <input type="file" id="forgotPhoto" accept="image/*" style="margin-bottom:12px;color:#8b9cb3;font-size:13px;">
+        <button class="btn" onclick="submitForgot()"><i class="fas fa-paper-plane"></i> Send Request to Admin</button>
+        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:8px;" onclick="showLogin()">Back to Login</button>
+        <div class="msg" id="forgotMsg"></div>
+    </div>
+
+    <div id="resetForm" style="display:none;">
+        <p style="font-size:13px;color:#00ff9d;margin-bottom:12px;text-align:center;">Admin approve করেছে! নতুন পাসওয়ার্ড সেট করুন।</p>
+        <input type="email" id="resetEmail" placeholder="Your Email" readonly>
+        <div style="position:relative;margin-bottom:12px;">
+            <input type="password" id="resetPass" placeholder="New Password" style="margin-bottom:0;padding-right:48px;">
+            <button type="button" onclick="togglePass('resetPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#8b9cb3;cursor:pointer;font-size:16px;"><i class="fas fa-eye"></i></button>
+        </div>
+        <button class="btn" onclick="submitReset()"><i class="fas fa-key"></i> Set New Password</button>
+        <div class="msg" id="resetMsg"></div>
+    </div>
+
+    <div id="devicePendingBox" style="display:none;">
+        <p style="font-size:14px;color:#ffc800;text-align:center;margin-bottom:12px;line-height:1.5;">
+            🔒 নতুন ব্রাউজার/ডিভাইস থেকে লগইন!<br>
+            Admin-এর কনফার্মেশন অপেক্ষা করুন।
+        </p>
+        <p style="font-size:13px;color:#8b9cb3;text-align:center;margin-bottom:14px;" id="devicePendingText">স্ট্যাটাস চেক হচ্ছে...</p>
+        <a id="callAdminBtn" href="https://wa.me/8801944035239" target="_blank" class="btn" style="text-decoration:none;margin-bottom:10px;">
+            <i class="fas fa-phone"></i> Call / WhatsApp Admin
+        </a>
+        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;" onclick="location.reload()">Refresh Status</button>
+        <div class="msg" id="deviceMsg"></div>
+    </div>
+
+    <div id="siteBlockedBox" style="display:none;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">🚫</div>
+        <h2 style="font-size:1.5rem;color:#ff3b5c;margin-bottom:12px;">SITE BLOCKED</h2>
+        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="siteBlockMsg">
+            এই সাইট বর্তমানে Admin কর্তৃক বন্ধ করা হয়েছে।
+        </p>
+        <p style="font-size:13px;color:#64748b;">পরে আবার চেষ্টা করুন।</p>
+    </div>
+
     <div id="registerForm">
         <input type="text" id="regName" placeholder="Full Name">
         <input type="email" id="regEmail" placeholder="Email address">
-        <input type="password" id="regPass" placeholder="Password">
+        <div style="position:relative;margin-bottom:12px;">
+            <input type="password" id="regPass" placeholder="Password" style="margin-bottom:0;padding-right:48px;">
+            <button type="button" onclick="togglePass('regPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#8b9cb3;cursor:pointer;font-size:16px;"><i class="fas fa-eye"></i></button>
+        </div>
         <button class="btn" id="regBtn" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
         <div class="msg" id="regMsg"></div>
         <div class="loading" id="regLoading">সেভ হচ্ছে...</div>
@@ -252,14 +305,137 @@ async function saveDB(db) {
     return await res.json();
 }
 
-function showLogin() {
-    document.getElementById('loginForm').style.display = 'block';
+
+function togglePass(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'password') {
+        el.type = 'text';
+        btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    } else {
+        el.type = 'password';
+        btn.innerHTML = '<i class="fas fa-eye"></i>';
+    }
+}
+
+function showForgot() {
+    document.getElementById('loginForm').style.display = 'none';
     document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('forgotForm').style.display = 'block';
+    document.getElementById('resetForm').style.display = 'none';
+    document.getElementById('devicePendingBox').style.display = 'none';
+}
+
+function hideAllForms() {
+    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+}
+
+async function submitForgot() {
+    const email = (document.getElementById('forgotEmail').value || '').trim().toLowerCase();
+    const reason = (document.getElementById('forgotReason').value || '').trim();
+    const msg = document.getElementById('forgotMsg');
+    if (!email || !reason) {
+        msg.className = 'msg error'; msg.textContent = 'ইমেইল ও কারণ দিন'; return;
+    }
+    let photo = '';
+    const file = document.getElementById('forgotPhoto').files[0];
+    if (file) {
+        photo = await compressImage(file, 400, 0.7);
+    }
+    try {
+        const db = await fetchDB();
+        if (!Array.isArray(db.passwordRequests)) db.passwordRequests = [];
+        const user = (db.users || []).find(u => (u.email || '').toLowerCase() === email);
+        if (!user) {
+            msg.className = 'msg error'; msg.textContent = 'এই ইমেইল রেজিস্টার্ড নয়'; return;
+        }
+        db.passwordRequests = db.passwordRequests.filter(r => r.email !== email || r.status !== 'pending');
+        db.passwordRequests.push({
+            id: Date.now().toString(36),
+            email, reason, photo,
+            name: user.name || '',
+            status: 'pending',
+            time: new Date().toISOString()
+        });
+        await saveDB(db);
+        msg.className = 'msg success';
+        msg.textContent = 'রিকোয়েস্ট পাঠানো হয়েছে! Admin approve করলে নতুন পাসওয়ার্ড সেট করতে পারবেন।';
+    } catch (e) {
+        msg.className = 'msg error'; msg.textContent = 'নেটওয়ার্ক এরর';
+    }
+}
+
+async function compressImage(file, maxW, quality) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            const scale = Math.min(1, maxW / img.width);
+            const c = document.createElement('canvas');
+            c.width = Math.round(img.width * scale);
+            c.height = Math.round(img.height * scale);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            URL.revokeObjectURL(url);
+            resolve(c.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve('');
+        img.src = url;
+    });
+}
+
+async function checkResetApproval(email) {
+    try {
+        const db = await fetchDB();
+        const req = (db.passwordRequests || []).find(r => r.email === email && r.status === 'approved');
+        if (req) {
+            hideAllForms();
+            document.getElementById('resetForm').style.display = 'block';
+            document.getElementById('resetEmail').value = email;
+            return true;
+        }
+    } catch(e) {}
+    return false;
+}
+
+async function submitReset() {
+    const email = (document.getElementById('resetEmail').value || '').trim().toLowerCase();
+    const pass = document.getElementById('resetPass').value;
+    const msg = document.getElementById('resetMsg');
+    if (!pass || pass.length < 4) {
+        msg.className = 'msg error'; msg.textContent = 'পাসওয়ার্ড কমপক্ষে ৪ অক্ষর'; return;
+    }
+    try {
+        const db = await fetchDB();
+        const idx = (db.users || []).findIndex(u => (u.email || '').toLowerCase() === email);
+        if (idx < 0) { msg.className = 'msg error'; msg.textContent = 'ইউজার পাওয়া যায়নি'; return; }
+        db.users[idx].password = pass;
+        if (Array.isArray(db.passwordRequests)) {
+            db.passwordRequests.forEach(r => {
+                if (r.email === email && r.status === 'approved') r.status = 'completed';
+            });
+        }
+        await saveDB(db);
+        msg.className = 'msg success'; msg.textContent = 'পাসওয়ার্ড আপডেট হয়েছে! লগইন করুন।';
+        setTimeout(() => { showLogin(); }, 1200);
+    } catch(e) {
+        msg.className = 'msg error'; msg.textContent = 'সেভ ব্যর্থ';
+    }
+}
+
+const MAX_DEVICES = 3;
+
+
+function showLogin() {
+    hideAllForms();
+    document.getElementById('loginForm').style.display = 'block';
     document.getElementById('loginTab').classList.add('active');
     document.getElementById('regTab').classList.remove('active');
 }
 function showRegister() {
-    document.getElementById('loginForm').style.display = 'none';
+    hideAllForms();
     document.getElementById('registerForm').style.display = 'block';
     document.getElementById('regTab').classList.add('active');
     document.getElementById('loginTab').classList.remove('active');
@@ -297,10 +473,13 @@ async function doLogin() {
     try {
         const db = await fetchDB();
 
-        // Site live check
+        // Site live check - BIG page
         if (db.settings && db.settings.siteLive === false) {
-            msg.className = 'msg error';
-            msg.textContent = 'সাইট সাময়িক বন্ধ আছে। পরে চেষ্টা করুন।';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('siteBlockedBox').style.display = 'block';
+            const bm = document.getElementById('siteBlockMsg');
+            if (bm) bm.textContent = db.settings.blockMessage || 'এই সাইট বর্তমানে Admin কর্তৃক বন্ধ / ব্লক করা হয়েছে।';
             return;
         }
 
@@ -344,13 +523,69 @@ async function doLogin() {
             return;
         }
 
-        // Record login tracking
+        // Check approved reset
+        await checkResetApproval(email);
+
+        // Device management: max 3 + new device needs admin approval
+        if (!Array.isArray(user.pendingDevices)) user.pendingDevices = [];
+        if (!Array.isArray(user.approvedDevices)) {
+            user.approvedDevices = (user.devices || []).map(d => d.fingerprint);
+        }
+
         const existingDev = user.devices.findIndex(d => d.fingerprint === deviceInfo.fingerprint);
+        const isKnown = existingDev >= 0 || user.approvedDevices.includes(deviceInfo.fingerprint);
+
+        if (!isKnown) {
+            // New browser — request admin approval
+            const alreadyPending = user.pendingDevices.find(d => d.fingerprint === deviceInfo.fingerprint);
+            if (!alreadyPending) {
+                user.pendingDevices.push({ ...deviceInfo, status: 'pending', requestedAt: new Date().toISOString() });
+            }
+            // Also global list for admin
+            if (!Array.isArray(db.deviceRequests)) db.deviceRequests = [];
+            if (!db.deviceRequests.find(r => r.email === email && r.fingerprint === deviceInfo.fingerprint && r.status === 'pending')) {
+                db.deviceRequests.push({
+                    id: Date.now().toString(36),
+                    email, name: user.name || '',
+                    fingerprint: deviceInfo.fingerprint,
+                    browser: deviceInfo.browser, os: deviceInfo.os, ip: deviceInfo.ip,
+                    status: 'pending', time: new Date().toISOString()
+                });
+            }
+            db.users[userIdx] = user;
+            await saveDB(db);
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('devicePendingBox').style.display = 'block';
+            document.getElementById('devicePendingText').textContent = 'Admin-এর অনুমতির অপেক্ষায়... (' + (deviceInfo.browser || '') + ')';
+            // update call link from admin info
+            try {
+                const tg = (db.settings && db.settings.adminInfo && db.settings.adminInfo.telegram) || '8801944035239';
+                document.getElementById('callAdminBtn').href = 'https://wa.me/' + String(tg).replace(/[^0-9]/g,'');
+            } catch(e) {}
+            return;
+        }
+
+        // Max 3 approved devices — only allow if fingerprint is in first 3 approved or already known
+        if (user.approvedDevices.length >= MAX_DEVICES && !user.approvedDevices.includes(deviceInfo.fingerprint)) {
+            msg.className = 'msg error';
+            msg.textContent = '⛔ সর্বোচ্চ ৩টি ব্রাউজার/ডিভাইস অনুমোদিত। পুরনো ডিভাইস থেকে লগইন করুন বা Admin-কে যোগাযোগ করুন।';
+            return;
+        }
+
+        // Record login tracking
         if (existingDev >= 0) {
             user.devices[existingDev] = { ...user.devices[existingDev], ...deviceInfo };
         } else {
             user.devices.push(deviceInfo);
+            if (!user.approvedDevices.includes(deviceInfo.fingerprint)) {
+                user.approvedDevices.push(deviceInfo.fingerprint);
+            }
             if (user.devices.length > 15) user.devices = user.devices.slice(-15);
+        }
+        // Keep only max 3 approved if somehow more
+        if (user.approvedDevices.length > MAX_DEVICES) {
+            user.approvedDevices = user.approvedDevices.slice(0, MAX_DEVICES);
         }
 
         user.loginHistory.push({
@@ -458,6 +693,8 @@ async function doRegister() {
             created: new Date().toISOString(),
             // Ultra Tracking fields
             devices: [deviceInfo],
+            approvedDevices: [deviceInfo.fingerprint],
+            pendingDevices: [],
             blockedDevices: [],
             loginHistory: [{
                 time: deviceInfo.lastSeen,

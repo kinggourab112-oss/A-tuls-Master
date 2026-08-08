@@ -484,6 +484,8 @@ select, input[type="text"], input[type="search"] {
             <button class="btn-sm btn-green" onclick="setSiteStatus(true)"><i class="fas fa-play"></i> LIVE ON</button>
             <button class="btn-sm btn-red" onclick="setSiteStatus(false)"><i class="fas fa-power-off"></i> KILL SITE</button>
         </div>
+        <input type="text" id="blockMsgInput" placeholder="Block page message (সাইট বন্ধ হলে বড় করে দেখাবে)" style="margin-top:10px;">
+        <button class="btn-sm btn-outline" style="width:100%;margin-top:8px;" onclick="saveBlockMessage()">SAVE BLOCK MESSAGE</button>
     </div>
 
     <!-- Theme & Registration -->
@@ -574,6 +576,7 @@ select, input[type="text"], input[type="search"] {
             Status: Loading...
         </p>
 
+        <input type="text" id="admName" placeholder="Admin display name" style="margin-bottom:8px;">
         <input type="text" id="admTelegram" placeholder="Telegram number" style="margin-bottom:8px;">
         <input type="text" id="admFacebook" placeholder="Facebook name / link" style="margin-bottom:8px;">
         <input type="text" id="admEmail" placeholder="Public email" style="margin-bottom:8px;">
@@ -592,6 +595,22 @@ select, input[type="text"], input[type="search"] {
         </p>
         <div id="adminCommunityList" style="max-height:320px;overflow-y:auto;"></div>
         <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadAdminCommunity()">REFRESH COMMUNITY</button>
+    </div>
+
+
+    <!-- Password Reset Requests -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-key"></i> Password Reset Requests</div>
+        <div id="passwordReqList" style="max-height:260px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadPasswordRequests()">REFRESH</button>
+    </div>
+
+    <!-- New Device Login Requests -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-mobile-alt"></i> New Browser / Device Requests</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">ইউজার নতুন ব্রাউজার থেকে লগইন করতে চাইলে এখানে approve করুন। Max 3 device/user.</p>
+        <div id="deviceReqList" style="max-height:260px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:10px;" onclick="loadDeviceRequests()">REFRESH</button>
     </div>
 
     <!-- Live User Management -->
@@ -686,6 +705,7 @@ async function loadDB() {
         if (!DB.settings.notice) DB.settings.notice = '';
         if (!DB.settings.globalTools) DB.settings.globalTools = [...ALL_TOOLS];
         if (!DB.settings.adminInfo) DB.settings.adminInfo = {
+            name: 'Admin Gourab',
             telegram: '+8801944035239',
             facebook: 'Gourab Official',
             email: 'gourabmon112233@gmail.com',
@@ -712,7 +732,7 @@ async function loadDB() {
         if (sel) sel.value = selectedDashColor;
         const noticeInput = document.getElementById('noticeInput');
         if (noticeInput) noticeInput.value = DB.settings.notice || '';
-        try { loadAdminInfoFields(); loadLiveCheckerActivity(); } catch(e) {}
+        try { loadAdminInfoFields(); loadLiveCheckerActivity(); loadPasswordRequests(); loadDeviceRequests(); } catch(e) {}
     } catch (e) {
         console.error(e);
         alert('ক্লাউড ডেটা লোড ব্যর্থ! নেট চেক করুন।');
@@ -739,8 +759,17 @@ function logout() {
 /* ========== SITE / REG ========== */
 async function setSiteStatus(live) {
     DB.settings.siteLive = !!live;
+    const bm = document.getElementById('blockMsgInput');
+    if (bm && bm.value.trim()) DB.settings.blockMessage = bm.value.trim();
     await saveDB();
-    alert(live ? '✅ Site is now LIVE' : '⛔ Site Killed');
+    alert(live ? '✅ Site is now LIVE' : '⛔ Site Killed — ইউজাররা বড় BLOCK পেজ দেখবে');
+}
+async function saveBlockMessage() {
+    const bm = document.getElementById('blockMsgInput');
+    if (!DB.settings) DB.settings = {};
+    DB.settings.blockMessage = (bm && bm.value.trim()) || 'এই সাইট বর্তমানে Admin কর্তৃক বন্ধ / ব্লক করা হয়েছে।';
+    await saveDB();
+    alert('Block message saved');
 }
 
 async function setRegStatus(open) {
@@ -1237,6 +1266,8 @@ function loadAdminInfoFields() {
     const fb = document.getElementById('admFacebook');
     const em = document.getElementById('admEmail');
     const ex = document.getElementById('admExtra');
+    const nm = document.getElementById('admName');
+    if (nm) nm.value = info.name || 'Admin Gourab';
     if (tg) tg.value = info.telegram || '+8801944035239';
     if (fb) fb.value = info.facebook || 'Gourab Official';
     if (em) em.value = info.email || 'gourabmon112233@gmail.com';
@@ -1246,6 +1277,7 @@ function loadAdminInfoFields() {
 async function saveAdminInfoEdit() {
     if (!DB.settings) DB.settings = {};
     DB.settings.adminInfo = {
+        name: (document.getElementById('admName') && document.getElementById('admName').value || 'Admin Gourab').trim(),
         telegram: (document.getElementById('admTelegram').value || '').trim(),
         facebook: (document.getElementById('admFacebook').value || '').trim(),
         email: (document.getElementById('admEmail').value || '').trim(),
@@ -1253,6 +1285,107 @@ async function saveAdminInfoEdit() {
     };
     await saveDB();
     alert('✅ Admin Information সেভ হয়েছে! ইউজার ড্যাশবোর্ডে দেখা যাবে।');
+}
+
+
+
+function loadPasswordRequests() {
+    const box = document.getElementById('passwordReqList');
+    if (!box || !DB) return;
+    const list = (DB.passwordRequests || []).filter(r => r.status === 'pending' || r.status === 'approved');
+    if (!list.length) {
+        box.innerHTML = '<div class="empty-msg">কোনো পাসওয়ার্ড রিকোয়েস্ট নেই</div>';
+        return;
+    }
+    box.innerHTML = list.slice().reverse().map(r => `
+        <div class="track-item" style="flex-direction:column;align-items:flex-start;">
+            <div><strong style="color:var(--text)">${escapeHtml(r.name || '')}</strong> — ${escapeHtml(r.email)}</div>
+            <div class="track-meta">কারণ: ${escapeHtml(r.reason || '')}</div>
+            <div class="track-meta">${formatTime(r.time)} • Status: ${r.status}</div>
+            ${r.photo ? '<img src="'+r.photo+'" style="max-width:100%;max-height:80px;border-radius:8px;margin-top:6px;">' : ''}
+            <div class="track-actions" style="margin-top:8px;">
+                ${r.status === 'pending' ? `<button class="btn-xs btn-xs-green" onclick="approvePasswordReq('${r.id}')">APPROVE</button>
+                <button class="btn-xs btn-xs-red" onclick="rejectPasswordReq('${r.id}')">REJECT</button>` : '<span style="color:var(--green);font-size:12px;">Approved — user can reset</span>'}
+            </div>
+        </div>
+    `).join('');
+}
+
+async function approvePasswordReq(id) {
+    const r = (DB.passwordRequests || []).find(x => x.id === id);
+    if (!r) return;
+    r.status = 'approved';
+    await saveDB();
+    alert('Approved! ইউজার এখন Forgot Password থেকে নতুন পাসওয়ার্ড সেট করতে পারবে।');
+    loadPasswordRequests();
+}
+
+async function rejectPasswordReq(id) {
+    const r = (DB.passwordRequests || []).find(x => x.id === id);
+    if (!r) return;
+    r.status = 'rejected';
+    await saveDB();
+    loadPasswordRequests();
+}
+
+function loadDeviceRequests() {
+    const box = document.getElementById('deviceReqList');
+    if (!box || !DB) return;
+    const list = (DB.deviceRequests || []).filter(r => r.status === 'pending');
+    if (!list.length) {
+        box.innerHTML = '<div class="empty-msg">কোনো নতুন ডিভাইস রিকোয়েস্ট নেই</div>';
+        return;
+    }
+    box.innerHTML = list.slice().reverse().map(r => `
+        <div class="track-item" style="flex-direction:column;align-items:flex-start;">
+            <div><strong style="color:var(--text)">${escapeHtml(r.name || '')}</strong> — ${escapeHtml(r.email)}</div>
+            <div class="track-meta">${escapeHtml(r.browser || '')} • ${escapeHtml(r.os || '')} • IP: ${escapeHtml(r.ip || '')}</div>
+            <div class="track-meta">${formatTime(r.time)}</div>
+            <div class="track-actions" style="margin-top:8px;">
+                <button class="btn-xs btn-xs-green" onclick="approveDeviceReq('${r.id}')">APPROVE DEVICE</button>
+                <button class="btn-xs btn-xs-red" onclick="rejectDeviceReq('${r.id}')">REJECT</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function approveDeviceReq(id) {
+    const r = (DB.deviceRequests || []).find(x => x.id === id);
+    if (!r) return;
+    const idx = DB.users.findIndex(u => (u.email || '').toLowerCase() === (r.email || '').toLowerCase());
+    if (idx >= 0) {
+        const u = DB.users[idx];
+        if (!Array.isArray(u.approvedDevices)) u.approvedDevices = [];
+        if (!Array.isArray(u.devices)) u.devices = [];
+        if (u.approvedDevices.length >= 3 && !u.approvedDevices.includes(r.fingerprint)) {
+            alert('এই ইউজারের ইতিমধ্যে ৩টি ডিভাইস আছে। আগে পুরনো ডিভাইস আনব্লক/রিমুভ করুন।');
+            return;
+        }
+        if (!u.approvedDevices.includes(r.fingerprint)) u.approvedDevices.push(r.fingerprint);
+        if (!u.devices.find(d => d.fingerprint === r.fingerprint)) {
+            u.devices.push({ fingerprint: r.fingerprint, browser: r.browser, os: r.os, ip: r.ip, lastSeen: new Date().toISOString(), deviceType: 'Desktop' });
+        }
+        if (Array.isArray(u.pendingDevices)) {
+            u.pendingDevices = u.pendingDevices.filter(d => d.fingerprint !== r.fingerprint);
+        }
+    }
+    r.status = 'approved';
+    await saveDB();
+    alert('ডিভাইস approve হয়েছে!');
+    loadDeviceRequests();
+    loadUsers();
+}
+
+async function rejectDeviceReq(id) {
+    const r = (DB.deviceRequests || []).find(x => x.id === id);
+    if (!r) return;
+    r.status = 'rejected';
+    const idx = DB.users.findIndex(u => (u.email || '').toLowerCase() === (r.email || '').toLowerCase());
+    if (idx >= 0 && Array.isArray(DB.users[idx].pendingDevices)) {
+        DB.users[idx].pendingDevices = DB.users[idx].pendingDevices.filter(d => d.fingerprint !== r.fingerprint);
+    }
+    await saveDB();
+    loadDeviceRequests();
 }
 
 

@@ -11,17 +11,17 @@
    THEME 1: DARK OCEAN (Default)
 ===================================================== */
 :root, [data-theme="dark-ocean"] {
-    --primary: #00f0ff;
-    --primary2: #7b2fff;
-    --bg: #060a12;
-    --bg2: #0c1220;
-    --card: rgba(255,255,255,0.04);
-    --border: rgba(255,255,255,0.08);
-    --text: #e8f7ff;
-    --muted: #8b9cb3;
-    --side1: #0a1628;
-    --side2: #060a12;
-    --top: rgba(12,18,32,0.95);
+    --primary: #38bdf8;
+    --primary2: #c084fc;
+    --bg: #0b1424;
+    --bg2: #152238;
+    --card: rgba(56,189,248,0.08);
+    --border: rgba(56,189,248,0.22);
+    --text: #f8fafc;
+    --muted: #a5b4c8;
+    --side1: #0e1a32;
+    --side2: #0a1220;
+    --top: rgba(15,25,45,0.92);
     --notice-bg: rgba(0,240,255,0.1);
     --notice-bd: rgba(0,240,255,0.3);
     --notice-tx: #00f0ff;
@@ -41,17 +41,17 @@
    THEME 2: NEON NIGHT
 ===================================================== */
 [data-theme="neon-night"] {
-    --primary: #b026ff;
-    --primary2: #00f0ff;
-    --bg: #05010f;
-    --bg2: #12001f;
-    --card: rgba(176,38,255,0.07);
-    --border: rgba(176,38,255,0.25);
-    --text: #f5eaff;
-    --muted: #a78bba;
-    --side1: #1a0033;
-    --side2: #0a0018;
-    --top: rgba(18,0,31,0.96);
+    --primary: #f0abfc;
+    --primary2: #67e8f9;
+    --bg: #10041f;
+    --bg2: #1e0a3a;
+    --card: rgba(240,171,252,0.14);
+    --border: rgba(240,171,252,0.4);
+    --text: #fdf4ff;
+    --muted: #e9d5ff;
+    --side1: #2a0850;
+    --side2: #120428;
+    --top: rgba(28,8,48,0.94);
     --notice-bg: rgba(176,38,255,0.14);
     --notice-bd: rgba(176,38,255,0.4);
     --notice-tx: #d4a5ff;
@@ -70,17 +70,17 @@
    THEME 3: GOLD PREMIUM
 ===================================================== */
 [data-theme="gold-premium"] {
-    --primary: #ffc800;
-    --primary2: #ff8c00;
-    --bg: #0f0c00;
-    --bg2: #1a1400;
-    --card: rgba(255,200,0,0.06);
-    --border: rgba(255,200,0,0.22);
-    --text: #fff8e0;
-    --muted: #b8a66a;
-    --side1: #2a2000;
-    --side2: #120e00;
-    --top: rgba(26,20,0,0.96);
+    --primary: #fcd34d;
+    --primary2: #fb923c;
+    --bg: #1c160a;
+    --bg2: #2e2412;
+    --card: rgba(252,211,77,0.14);
+    --border: rgba(252,211,77,0.4);
+    --text: #fffef5;
+    --muted: #e7d29a;
+    --side1: #3d2e08;
+    --side2: #1a1408;
+    --top: rgba(35,28,12,0.94);
     --notice-bg: rgba(255,200,0,0.12);
     --notice-bd: rgba(255,200,0,0.35);
     --notice-tx: #ffc800;
@@ -99,17 +99,17 @@
    THEME 4: CYBER PUNK
 ===================================================== */
 [data-theme="cyber-punk"] {
-    --primary: #ff2d95;
-    --primary2: #00f0ff;
-    --bg: #0a0014;
-    --bg2: #1a0030;
-    --card: rgba(255,45,149,0.07);
-    --border: rgba(0,240,255,0.22);
-    --text: #e8f7ff;
-    --muted: #9b8bb8;
-    --side1: #2a0040;
-    --side2: #0d001a;
-    --top: rgba(26,0,48,0.96);
+    --primary: #ff6bcb;
+    --primary2: #5eead4;
+    --bg: #160028;
+    --bg2: #2a0050;
+    --card: rgba(255,107,203,0.14);
+    --border: rgba(94,234,212,0.4);
+    --text: #f8fafc;
+    --muted: #ddd6fe;
+    --side1: #3b0066;
+    --side2: #160028;
+    --top: rgba(32,0,56,0.94);
     --notice-bg: rgba(0,240,255,0.1);
     --notice-bd: rgba(255,45,149,0.4);
     --notice-tx: #00f0ff;
@@ -130,14 +130,14 @@
 [data-theme="emerald-light"] {
     --primary: #0d9488;
     --primary2: #059669;
-    --bg: #f1f5f9;
-    --bg2: #e2e8f0;
+    --bg: #f0fdfa;
+    --bg2: #ccfbf1;
     --card: #ffffff;
-    --border: #e2e8f0;
-    --text: #0f172a;
-    --muted: #64748b;
+    --border: #5eead4;
+    --text: #042f2e;
+    --muted: #0f766e;
     --side1: #0f766e;
-    --side2: #134e4a;
+    --side2: #115e59;
     --top: #ffffff;
     --notice-bg: #ecfdf5;
     --notice-bd: #a7f3d0;
@@ -151,6 +151,30 @@
     --radius: 18px;
     --card-hover: translateY(-5px);
     --side-w: 270px;
+}
+
+
+/* ===== Theme polish ===== */
+.card {
+    backdrop-filter: blur(12px);
+}
+.card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+[data-theme="emerald-light"] .card:hover {
+    box-shadow: 0 12px 32px rgba(20,184,166,0.18);
+}
+.sidebar {
+    box-shadow: 8px 0 40px rgba(0,0,0,0.35);
+}
+.topbar {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+.page-title {
+    letter-spacing: -0.5px;
+}
+.icon {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; font-family: var(--font, 'Plus Jakarta Sans', sans-serif); }
@@ -733,9 +757,14 @@ body {
                         <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;">
                             <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
                         </label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="saveMyProfile()">
                             <i class="fas fa-save"></i> Save Profile
                         </button>
+                        <button class="logout-btn" style="border:1px solid var(--danger-bd);color:var(--danger-tx);" onclick="clearMyNote()">
+                            <i class="fas fa-trash"></i> Delete Note
+                        </button>
+                        </div>
                         <div id="profileSaveMsg" style="margin-top:10px;font-size:13px;display:none;"></div>
                     </div>
                 </div>
@@ -1078,10 +1107,12 @@ function updateAdminInfo(visible) {
     const fb = info.facebook || 'Gourab Official';
     const em = info.email || 'gourabmon112233@gmail.com';
     const extra = info.extra || 'Developed by Gourab • 01944035239';
+    const an = info.name || 'Admin Gourab';
     box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
+        + '<div><i class="fas fa-user"></i> Name: <strong>' + an + '</strong></div>'
+        + '<div><i class="fas fa-id-badge"></i> Admin ID: <strong>' + em + '</strong></div>'
         + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
         + '<div><i class="fab fa-facebook"></i> Facebook: ' + fb + '</div>'
-        + '<div><i class="fas fa-envelope"></i> Email: ' + em + '</div>'
         + '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>';
 }
 
@@ -1324,16 +1355,40 @@ function updatePhotoUI() {
 function onPhotoSelected(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (file.size > 180000) {
-        alert('ছবি খুব বড়। ১৫০KB এর নিচে রাখুন।');
+    if (!file.type.startsWith('image/')) {
+        alert('শুধু ছবি আপলোড করুন');
         return;
     }
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-        profilePhotoData = ev.target.result;
+    // Any size OK — auto compress + square crop center
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+        const out = 400; // profile square
+        const c = document.createElement('canvas');
+        c.width = out; c.height = out;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, out, out);
+        // compress until reasonable (<400KB data url roughly)
+        let q = 0.85;
+        profilePhotoData = c.toDataURL('image/jpeg', q);
+        while (profilePhotoData.length > 350000 && q > 0.4) {
+            q -= 0.1;
+            profilePhotoData = c.toDataURL('image/jpeg', q);
+        }
+        URL.revokeObjectURL(url);
         updatePhotoUI();
     };
-    reader.readAsDataURL(file);
+    img.onerror = function() { alert('ছবি লোড ব্যর্থ'); };
+    img.src = url;
+}
+
+async function clearMyNote() {
+    if (!confirm('পাবলিক নোট/মেসেজ মুছে ফেলবেন?')) return;
+    document.getElementById('profileMessage').value = '';
+    await saveMyProfile();
 }
 
 async function saveMyProfile() {
@@ -1396,26 +1451,40 @@ async function renderCommunity(fullList) {
 
         function memberCard(u, isAdmin) {
             if (isAdmin) {
+                const ai = (settings.adminInfo) ? settings.adminInfo : {};
+                const adminId = ai.email || 'gourabmon112233@gmail.com';
+                const adminName = ai.name || 'Admin Gourab';
+                const adminTg = ai.telegram || '+8801944035239';
+                const adminFb = ai.facebook || 'Gourab Official';
+                const adminExtra = ai.extra || '';
                 return `
                 <div class="card" style="cursor:default;padding:16px;border:1px solid var(--primary);">
                     <div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">
-                        👑 Admin • A-tuls √MASTER
+                        👑 OFFICIAL ADMIN
                     </div>
                     <div style="display:flex;gap:12px;align-items:center;">
                         <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;">
                             <i class="fas fa-user-shield"></i>
                         </div>
                         <div>
-                            <div style="font-weight:700;font-size:15px;">Admin Gourab</div>
-                            <div style="font-size:11px;color:var(--muted);">ADMIN</div>
+                            <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(adminName)}</div>
+                            <div style="font-size:11px;color:var(--muted);">ADMIN ID</div>
                         </div>
                     </div>
-                    <div style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-                        Telegram: +8801944035239
+                    <div style="margin-top:10px;font-size:12.5px;line-height:1.7;color:var(--muted);">
+                        <div><i class="fas fa-id-badge" style="color:var(--primary);width:16px;"></i> <strong style="color:var(--text);">ID:</strong> ${escapeHtmlLocal(adminId)}</div>
+                        <div><i class="fab fa-telegram" style="color:var(--primary);width:16px;"></i> ${escapeHtmlLocal(adminTg)}</div>
+                        <div><i class="fab fa-facebook" style="color:var(--primary);width:16px;"></i> ${escapeHtmlLocal(adminFb)}</div>
+                        ${adminExtra ? '<div style="margin-top:4px;">' + escapeHtmlLocal(adminExtra) + '</div>' : ''}
                     </div>
-                    <button onclick="openChat('admin@atuls.local','Admin Gourab')" class="logout-btn" style="margin-top:10px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;">
-                        <i class="fas fa-comments"></i> Chat
-                    </button>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                        <button onclick="openChat('admin@atuls.local','${escapeHtmlLocal(adminName)}')" class="logout-btn" style="background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;">
+                            <i class="fas fa-comments"></i> Chat Admin
+                        </button>
+                        <a href="https://wa.me/${String(adminTg).replace(/[^0-9]/g,'')}" target="_blank" class="logout-btn" style="text-decoration:none;border:1px solid var(--border);font-size:12px;padding:7px 12px;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
                 </div>`;
             }
             const pr = u.profile || {};
@@ -1491,18 +1560,28 @@ document.addEventListener('change', function(e) {
 function onPostPhotoSelected(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (file.size > 250000) {
-        alert('ছবি ২০০KB এর নিচে রাখুন');
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-        postPhotoData = ev.target.result;
+    if (!file.type.startsWith('image/')) { alert('শুধু ছবি'); return; }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+        const maxW = 900;
+        const scale = Math.min(1, maxW / img.width);
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * scale);
+        c.height = Math.round(img.height * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        let q = 0.8;
+        postPhotoData = c.toDataURL('image/jpeg', q);
+        while (postPhotoData.length > 500000 && q > 0.4) {
+            q -= 0.1;
+            postPhotoData = c.toDataURL('image/jpeg', q);
+        }
+        URL.revokeObjectURL(url);
         document.getElementById('postPhotoName').textContent = file.name;
         document.getElementById('postPhotoPreview').src = postPhotoData;
         document.getElementById('postPhotoPreviewWrap').style.display = 'block';
     };
-    reader.readAsDataURL(file);
+    img.src = url;
 }
 
 async function createPost() {
@@ -1570,10 +1649,14 @@ async function renderPostsFeed() {
             const liked = likes.map(x => x.toLowerCase()).includes(me);
             const time = post.time ? new Date(post.time).toLocaleString('bn-BD', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
 
-            const commentsHtml = comments.slice(-5).map(c => `
-                <div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                    <strong>${escapeHtmlLocal(c.name || 'User')}</strong>: ${escapeHtmlLocal(c.text)}
-                </div>`).join('');
+            const commentsHtml = comments.slice(-8).map((c, ci) => {
+                const realIdx = comments.length <= 8 ? ci : (comments.length - 8 + ci);
+                const canDel = ((c.email || '').toLowerCase() === me) || role === 'admin';
+                return `<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+                    <div><strong>${escapeHtmlLocal(c.name || 'User')}</strong>: ${escapeHtmlLocal(c.text)}</div>
+                    ${canDel ? `<button onclick="deleteComment('${post.id}',${realIdx})" style="background:none;border:none;color:var(--danger-tx);cursor:pointer;font-size:11px;flex-shrink:0;" title="Delete"><i class="fas fa-times"></i></button>` : ''}
+                </div>`;
+            }).join('');
 
             return `
             <div class="card" style="cursor:default;padding:16px;" id="post-${post.id}">
@@ -1585,7 +1668,7 @@ async function renderPostsFeed() {
                 <div style="font-size:14px;line-height:1.55;white-space:pre-wrap;">${escapeHtmlLocal(post.text || '')}</div>
                 ${priceHtml}
                 ${photoHtml}
-                <div style="display:flex;gap:14px;margin-top:12px;align-items:center;">
+                <div style="display:flex;gap:14px;margin-top:12px;align-items:center;flex-wrap:wrap;">
                     <button onclick="toggleLike('${post.id}')" class="logout-btn" style="border:1px solid var(--border);font-size:12px;padding:6px 12px;${liked ? 'background:var(--primary);color:#000;border:none;' : ''}">
                         <i class="fas fa-heart"></i> ${likes.length}
                     </button>
@@ -1593,6 +1676,7 @@ async function renderPostsFeed() {
                     <button onclick="openChat('${escapeHtmlLocal(post.authorEmail)}','${escapeHtmlLocal(post.authorName || 'User')}')" class="logout-btn" style="border:1px solid var(--border);font-size:12px;padding:6px 12px;margin-left:auto;">
                         <i class="fas fa-comments"></i> Chat
                     </button>
+                    ${(post.authorEmail || '').toLowerCase() === me || role === 'admin' ? `<button onclick="deletePost('${post.id}')" class="logout-btn" style="border:1px solid var(--danger-bd);color:var(--danger-tx);font-size:12px;padding:6px 12px;"><i class="fas fa-trash"></i> Delete</button>` : ''}
                 </div>
                 <div style="margin-top:10px;">
                     ${commentsHtml}
@@ -1607,6 +1691,49 @@ async function renderPostsFeed() {
         feed.innerHTML = '<div style="color:var(--danger-tx);">ফিড লোড ব্যর্থ</div>';
     }
 }
+
+
+async function deletePost(postId) {
+    if (!confirm('এই পোস্ট ডিলিট করবেন?')) return;
+    const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+    try {
+        if (!DB) DB = await fetchDB();
+        const post = (DB.posts || []).find(p => p.id === postId);
+        if (!post) return;
+        const author = (post.authorEmail || '').toLowerCase();
+        if (author !== me && role !== 'admin') {
+            alert('শুধু নিজের পোস্ট ডিলিট করতে পারবেন');
+            return;
+        }
+        DB.posts = DB.posts.filter(p => p.id !== postId);
+        await saveDB();
+        renderPostsFeed();
+    } catch (e) {
+        alert('ডিলিট ব্যর্থ');
+    }
+}
+
+async function deleteComment(postId, cmtIndex) {
+    if (!confirm('কমেন্ট ডিলিট করবেন?')) return;
+    const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+    try {
+        if (!DB) DB = await fetchDB();
+        const post = (DB.posts || []).find(p => p.id === postId);
+        if (!post || !Array.isArray(post.comments)) return;
+        const c = post.comments[cmtIndex];
+        if (!c) return;
+        if ((c.email || '').toLowerCase() !== me && role !== 'admin') {
+            alert('শুধু নিজের কমেন্ট ডিলিট করতে পারবেন');
+            return;
+        }
+        post.comments.splice(cmtIndex, 1);
+        await saveDB();
+        renderPostsFeed();
+    } catch (e) {
+        alert('ডিলিট ব্যর্থ');
+    }
+}
+
 
 async function toggleLike(postId) {
     const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
