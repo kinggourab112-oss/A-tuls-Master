@@ -188,7 +188,7 @@
         }
 
         .main-textarea { height: 200px; }
-        .output-textarea { height: 140px; background: #f8fafc !important; }
+        .output-textarea { height: 180px; background: #f8fafc !important; white-space: pre; line-height: 1.7; }
 
         .btn-row-sm {
             display: flex;
@@ -526,7 +526,7 @@
                             Main Email List <span class="required">*</span>
                         </div>
                         <div class="textarea-container">
-                            <textarea id="mainEmails" class="main-textarea" placeholder="email@gmail.com    password&#10;email2@gmail.com   pass123"></textarea>
+                            <textarea id="mainEmails" class="main-textarea" placeholder="email@gmail.com:password&#10;email2@gmail.com:pass123 extra info&#10;email3@gmail.com password recovery@mail.com"></textarea>
                         </div>
                         <div class="btn-row-sm">
                             <button class="btn btn-sm btn-paste" id="pasteMain"><i class="fas fa-paste"></i> Paste</button>
@@ -540,7 +540,7 @@
                             Report Email List <span class="required">*</span>
                         </div>
                         <div class="textarea-container">
-                            <textarea id="reportEmails" class="main-textarea" placeholder="email@gmail.com    password&#10;email2@gmail.com   pass123"></textarea>
+                            <textarea id="reportEmails" class="main-textarea" placeholder="email@gmail.com:password&#10;email2@gmail.com:pass123 extra info&#10;email3@gmail.com password recovery@mail.com"></textarea>
                         </div>
                         <div class="btn-row-sm">
                             <button class="btn btn-sm btn-paste" id="pasteReport"><i class="fas fa-paste"></i> Paste</button>
@@ -692,10 +692,22 @@
         function extractEmail(line) {
             const trimmed = line.trim();
             if (!trimmed) return null;
-            const parts = trimmed.split(/[\s\t:]+/);
-            const email = parts[0].toLowerCase();
-            if (email.includes('@')) return email;
+            // Support email first, or email anywhere early in the line
+            const parts = trimmed.split(/[\s\t:|]+/);
+            for (const p of parts) {
+                if (p.includes('@') && p.includes('.')) return p.toLowerCase();
+            }
             return null;
+        }
+
+        /*
+         * Keep original line EXACTLY as pasted (email + password + recovery + VERIFY etc.)
+         * Only add line numbers: 1- 2- 3-
+         * No reformatting / no colon change
+         */
+        function formatNumberedLines(lines) {
+            if (!lines || !lines.length) return 'None';
+            return lines.map((line, i) => (i + 1) + '- ' + line.trim()).join('\n');
         }
 
         document.getElementById('pasteMain').onclick = async () => {
@@ -765,9 +777,9 @@
             goodCount.textContent = good.length;
             unknownCount.textContent = unknown.length;
 
-            outputFound.value = found.length ? found.join('\n') : 'None';
-            outputGood.value = good.length ? good.join('\n') : 'None';
-            outputUnknown.value = unknown.length ? unknown.join('\n') : 'None';
+            outputFound.value = formatNumberedLines(found);
+            outputGood.value = formatNumberedLines(good);
+            outputUnknown.value = formatNumberedLines(unknown);
 
             unknownBox.style.display = unknown.length > 0 ? 'block' : 'none';
             resultsSection.style.display = 'block';
