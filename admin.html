@@ -433,13 +433,72 @@ select, input[type="text"], input[type="search"] {
 @media (max-width: 520px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* User category tabs */
+.user-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.user-tab {
+    padding: 12px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.3);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+.user-tab:hover { border-color: var(--cyan); color: var(--text); }
+.user-tab.active {
+    background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(123,47,255,0.15));
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+.user-tab .tab-count {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-top: 2px;
+    color: var(--text);
+}
+.user-tab.active .tab-count { color: var(--cyan); }
+.user-tab[data-filter="premium"].active { border-color: var(--gold); color: var(--gold); }
+.user-tab[data-filter="premium"].active .tab-count { color: var(--gold); }
+.user-tab[data-filter="pending"].active { border-color: var(--gold); color: #ffc800; }
+.user-tab[data-filter="blocked"].active { border-color: var(--red); color: var(--red); }
+.user-tab[data-filter="blocked"].active .tab-count { color: var(--red); }
+@media (max-width: 520px) {
+    .user-tabs { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 <script>
+/* STRICT AUTH — Admin page শুধু admin role + valid session */
 (function(){
-  var r = localStorage.getItem('a_tuls_role');
-  if (r !== 'admin') {
+  try {
+    var r = localStorage.getItem('a_tuls_role');
+    var u = localStorage.getItem('a_tuls_user');
+    if (r !== 'admin' || !u) {
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      location.replace('index.html');
+      return;
+    }
+    var last = parseInt(localStorage.getItem('a_tuls_last_activity') || localStorage.getItem('a_tuls_last_active') || '0', 10);
+    if (last && (Date.now() - last > 10 * 60 * 1000)) {
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      location.replace('index.html');
+      return;
+    }
+    try { localStorage.setItem('a_tuls_last_activity', String(Date.now())); } catch(e) {}
+  } catch (e) {
     location.replace('index.html');
   }
 })();
@@ -632,13 +691,31 @@ select, input[type="text"], input[type="search"] {
     <!-- Live User Management -->
     <div class="card">
         <div class="card-title"><i class="fas fa-users"></i> Live User Management + Ultra Tracking</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">
+            ১ম ট্যাব: Premium • ২য়: Free • ৩য়: Pending • ৪র্থ: Blocked — ট্যাব বদলে লিস্ট দেখুন, সব কাজ (Approve / Block / Tools / Device) একইভাবে চলবে।
+        </p>
+
+        <div class="user-tabs" id="userTabs">
+            <button type="button" class="user-tab active" data-filter="premium" onclick="setUserFilter('premium')">
+                👑 Premium<span class="tab-count" id="tabCountPremium">0</span>
+            </button>
+            <button type="button" class="user-tab" data-filter="free" onclick="setUserFilter('free')">
+                Free<span class="tab-count" id="tabCountFree">0</span>
+            </button>
+            <button type="button" class="user-tab" data-filter="pending" onclick="setUserFilter('pending')">
+                Pending<span class="tab-count" id="tabCountPending">0</span>
+            </button>
+            <button type="button" class="user-tab" data-filter="blocked" onclick="setUserFilter('blocked')">
+                Blocked<span class="tab-count" id="tabCountBlocked">0</span>
+            </button>
+        </div>
         
         <div class="search-bar">
             <input type="search" id="userSearch" placeholder="নাম বা ইমেইল দিয়ে সার্চ করুন..." oninput="loadUsers()">
         </div>
 
         <div id="userList">
-            <!-- Users will load here -->
+            <!-- Users will load here by category -->
         </div>
     </div>
 
@@ -806,14 +883,17 @@ function applyUIFromDB() {
 /* ========== AUTH ========== */
 const role = localStorage.getItem('a_tuls_role');
 if (role !== 'admin') {
-    alert('শুধুমাত্র অ্যাডমিন এই পেজ দেখতে পারবে!');
-    location.href = 'index.html';
+    localStorage.removeItem('a_tuls_role');
+    localStorage.removeItem('a_tuls_user');
+    location.replace('index.html');
 }
 
 function logout() {
     localStorage.removeItem('a_tuls_role');
     localStorage.removeItem('a_tuls_user');
-    location.href = 'index.html';
+    localStorage.removeItem('a_tuls_last_activity');
+    localStorage.removeItem('a_tuls_last_active');
+    location.replace('index.html');
 }
 
 /* ========== SITE / REG ========== */
@@ -951,11 +1031,45 @@ function formatTime(ts) {
     }
 }
 
+/* Current tab: premium | free | pending | blocked */
+let currentUserFilter = 'premium';
+
+function setUserFilter(filter) {
+    currentUserFilter = filter || 'premium';
+    document.querySelectorAll('.user-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === currentUserFilter);
+    });
+    loadUsers();
+}
+
+function matchUserCategory(u, filter) {
+    const status = u.status || 'Pending';
+    const mode = (u.mode || 'free').toLowerCase();
+    if (filter === 'premium') return status === 'Approved' && mode === 'premium';
+    if (filter === 'free') return status === 'Approved' && mode !== 'premium';
+    if (filter === 'pending') return status === 'Pending';
+    if (filter === 'blocked') return status === 'Blocked';
+    return true;
+}
+
+function updateTabCounts(allUsers) {
+    const list = allUsers || [];
+    const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+    set('tabCountPremium', list.filter(u => matchUserCategory(u, 'premium')).length);
+    set('tabCountFree', list.filter(u => matchUserCategory(u, 'free')).length);
+    set('tabCountPending', list.filter(u => matchUserCategory(u, 'pending')).length);
+    set('tabCountBlocked', list.filter(u => matchUserCategory(u, 'blocked')).length);
+}
+
 function loadUsers() {
     let users = DB.users || [];
     const search = (document.getElementById('userSearch')?.value || '').toLowerCase().trim();
 
     updateStats(DB.users || []);
+    updateTabCounts(DB.users || []);
+
+    // Category filter first (Premium / Free / Pending / Blocked)
+    users = users.filter(u => matchUserCategory(u, currentUserFilter));
 
     if (search) {
         users = users.filter(u =>
@@ -964,11 +1078,15 @@ function loadUsers() {
         );
     }
 
+    // Stable sort by name
+    users.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'bn'));
+
     const list = document.getElementById('userList');
     if (!list) return;
 
     if (users.length === 0) {
-        list.innerHTML = '<div class="empty-msg">কোনো ইউজার এখনো নেই / সার্চ রেজাল্ট খালি</div>';
+        const labels = { premium: 'Premium', free: 'Free', pending: 'Pending', blocked: 'Blocked' };
+        list.innerHTML = '<div class="empty-msg">এই ক্যাটাগরিতে (' + (labels[currentUserFilter] || '') + ') কোনো ইউজার নেই / সার্চ খালি</div>';
         return;
     }
 

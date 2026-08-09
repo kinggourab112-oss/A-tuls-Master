@@ -733,6 +733,34 @@ body {
   var ok = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
   document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
 })();
+/* STRICT AUTH GUARD — যেকোনো লিংক দিয়ে সরাসরি Dashboard-এ ঢোকা বন্ধ। আগে লগইন লাগবে। */
+(function(){
+  try {
+    var role = localStorage.getItem('a_tuls_role');
+    var userRaw = localStorage.getItem('a_tuls_user');
+    var okRoles = { user: 1, admin: 1 };
+    if (!role || !okRoles[role] || !userRaw) {
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      location.replace('index.html');
+      return;
+    }
+    // Idle session (10 min)
+    var last = parseInt(localStorage.getItem('a_tuls_last_activity') || localStorage.getItem('a_tuls_last_active') || '0', 10);
+    var IDLE_MS = 10 * 60 * 1000;
+    if (last && (Date.now() - last > IDLE_MS)) {
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      localStorage.removeItem('a_tuls_last_activity');
+      localStorage.removeItem('a_tuls_last_active');
+      location.replace('index.html');
+      return;
+    }
+    try { localStorage.setItem('a_tuls_last_activity', String(Date.now())); } catch(e) {}
+  } catch (e) {
+    location.replace('index.html');
+  }
+})();
 </script>
 </head>
 <body>
@@ -1068,9 +1096,32 @@ let saving = false;
 let deviceInfo = null;
 let trackingDone = false;
 
+/* Double-check auth (head guard + body) — pending/empty → login only */
 if (role !== 'user' && role !== 'admin') {
-    location.href = 'index.html';
+    localStorage.removeItem('a_tuls_role');
+    localStorage.removeItem('a_tuls_user');
+    location.replace('index.html');
+} else if (!user || (!user.email && role !== 'admin')) {
+    localStorage.removeItem('a_tuls_role');
+    localStorage.removeItem('a_tuls_user');
+    location.replace('index.html');
 }
+
+/* Activity touch for idle logout */
+(function(){
+  function touch(){ try { localStorage.setItem('a_tuls_last_activity', String(Date.now())); } catch(e){} }
+  ['click','keydown','mousemove','scroll','touchstart'].forEach(function(ev){
+    document.addEventListener(ev, touch, { passive: true });
+  });
+  setInterval(function(){
+    var last = parseInt(localStorage.getItem('a_tuls_last_activity') || '0', 10);
+    if (last && (Date.now() - last > 10 * 60 * 1000)) {
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      location.replace('index.html');
+    }
+  }, 30000);
+})();
 
 document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin' : 'User');
 
