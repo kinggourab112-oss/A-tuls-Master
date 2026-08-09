@@ -704,7 +704,7 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
             <textarea id="postText" rows="3" placeholder="Write something..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
                 <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="postPhoto" accept="image/*" style="display:none;" onchange="onPostPhotoSelected(event)">
+                    <input type="file" id="postPhoto" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,.jpg,.jpeg,.png,.webp,.gif,.bmp" style="display:none;" onchange="onPostPhotoSelected(event)">
                     <i class="fas fa-image"></i> Add Photo
                 </label>
                 <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
@@ -729,7 +729,7 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
                 <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);display:none;margin:0 auto;">
                 <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;"><i class="fas fa-user"></i></div>
                 <label style="display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="profilePhotoInput" accept="image/*,.jpg,.jpeg,.png,.webp,.gif" style="display:none;" onchange="onPhotoSelected(event)">
+                    <input type="file" id="profilePhotoInput" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,image/heic,image/heif,image/avif,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif" style="display:none;" onchange="onPhotoSelected(event)">
                     <i class="fas fa-camera"></i> Upload Photo
                 </label>
             </div>
@@ -957,6 +957,8 @@ function setLanguage(code) {
 function applyLanguage() {
     const sel = document.getElementById('langSelect');
     if (sel) sel.value = currentLang;
+    const sel2 = document.getElementById('langSelectFloat');
+    if (sel2) sel2.value = currentLang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const k = el.getAttribute('data-i18n');
         if (k) el.textContent = t(k);
@@ -1222,7 +1224,7 @@ const BIN_ID = '6a6eb29dda38895dfeae700a';
 const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
 const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
-/* ========== DB HELPERS ========== */
+/* ========== DB HELPERS (safe merge — পুরনো ইউজার/ফটো হারাবে না) ========== */
 async function fetchDB() {
     const res = await fetch(BIN_URL + '/latest', {
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -1232,10 +1234,77 @@ async function fetchDB() {
     return data.record || { users: [], settings: {} };
 }
 
+function mergeUser(remoteU, localU) {
+    const out = Object.assign({}, remoteU || {}, localU || {});
+    out.profile = Object.assign({}, (remoteU && remoteU.profile) || {}, (localU && localU.profile) || {});
+    if (!(localU && localU.profile && localU.profile.photo) && remoteU && remoteU.profile && remoteU.profile.photo) {
+        out.profile.photo = remoteU.profile.photo;
+    }
+    out.toolUsage = Object.assign({}, (remoteU && remoteU.toolUsage) || {}, (localU && localU.toolUsage) || {});
+    out.toolLastUsed = Object.assign({}, (remoteU && remoteU.toolLastUsed) || {}, (localU && localU.toolLastUsed) || {});
+    const mergeArr = (a, b, key) => {
+        const map = {};
+        (a || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
+        (b || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
+        return Object.values(map);
+    };
+    out.devices = mergeArr(remoteU && remoteU.devices, localU && localU.devices, 'fingerprint');
+    out.blockedDevices = Array.from(new Set([].concat((remoteU && remoteU.blockedDevices) || [], (localU && localU.blockedDevices) || [])));
+    out.approvedDevices = Array.from(new Set([].concat((remoteU && remoteU.approvedDevices) || [], (localU && localU.approvedDevices) || [])));
+    const hist = [].concat((remoteU && remoteU.loginHistory) || [], (localU && localU.loginHistory) || []);
+    out.loginHistory = hist.slice(-40);
+    if (Array.isArray(localU && localU.tools)) out.tools = localU.tools;
+    else if (Array.isArray(remoteU && remoteU.tools)) out.tools = remoteU.tools;
+    return out;
+}
+
+function mergeById(remoteArr, localArr, idKey) {
+    const map = {};
+    (remoteArr || []).forEach(x => { if (x && x[idKey]) map[x[idKey]] = x; });
+    (localArr || []).forEach(x => {
+        if (!x || !x[idKey]) return;
+        map[x[idKey]] = Object.assign({}, map[x[idKey]] || {}, x);
+    });
+    return Object.values(map);
+}
+
+function mergeDB(remote, local) {
+    const r = remote || { users: [], settings: {} };
+    const l = local || { users: [], settings: {} };
+    const byEmail = {};
+    (r.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (k) byEmail[k] = u;
+    });
+    (l.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (!k) return;
+        byEmail[k] = mergeUser(byEmail[k], u);
+    });
+    const users = Object.values(byEmail);
+    const settings = Object.assign({}, r.settings || {}, l.settings || {});
+    if (r.settings && r.settings.adminInfo && settings.adminInfo) {
+        if (!settings.adminInfo.photo && r.settings.adminInfo.photo) {
+            settings.adminInfo.photo = r.settings.adminInfo.photo;
+        }
+    }
+    const posts = mergeById(r.posts, l.posts, 'id').sort((a, b) => String(b.time || '').localeCompare(String(a.time || ''))).slice(0, 200);
+    const messages = mergeById(r.messages, l.messages, 'id').sort((a, b) => String(a.time || '').localeCompare(String(b.time || ''))).slice(-500);
+    const passwordRequests = mergeById(r.passwordRequests, l.passwordRequests, 'id');
+    const deviceRequests = mergeById(r.deviceRequests, l.deviceRequests, 'id');
+    return { users, settings, posts, messages, passwordRequests, deviceRequests };
+}
+
 async function saveDB() {
     if (saving || !DB) return;
     saving = true;
     try {
+        let remote = { users: [], settings: {} };
+        try { remote = await fetchDB(); } catch (e) {}
+        if ((!DB.users || DB.users.length === 0) && remote.users && remote.users.length > 0) {
+            DB.users = remote.users;
+        }
+        DB = mergeDB(remote, DB);
         const res = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
@@ -1646,13 +1715,14 @@ function onPhotoSelected(e) {
         status.textContent = msg;
     };
 
-    // Accept almost any image; some Android give empty MIME
+    // সব ধরনের ছবি (JPG/PNG/WEBP/GIF/BMP/HEIC/Android empty MIME)
     const name = (file.name || '').toLowerCase();
     const type = (file.type || '').toLowerCase();
-    const looksImage = type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?)$/i.test(name) || type === '';
-    if (!looksImage && type && !type.startsWith('image/')) {
-        showStatus((typeof t === 'function' ? t('photo_only') : null) || 'Please select a photo', false);
-        return;
+    const looksImage = !type || type.startsWith('image/') || type === 'application/octet-stream'
+        || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?|jfif)$/i.test(name);
+    if (!looksImage) {
+        // শেষ চেষ্টা: ফাইলটা ইমেজ হিসেবে লোড করার চেষ্টা হবে নিচে
+        console.warn('Unusual file type, still trying:', type, name);
     }
 
     showStatus((typeof t === 'function' ? t('photo_processing') : null) || 'Processing photo...', null);
@@ -1881,7 +1951,7 @@ async function renderCommunity(fullList) {
             const photoHtml = photo
                 ? `<img src="${String(photo).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
                 : `<div style="width:56px;height:56px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-user"></i></div>`;
-            const msgHtml = (isPremium && msg)
+            const msgHtml = msg
                 ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">💬 ${escapeHtmlLocal(msg)}</div>`
                 : '';
             const chatBtn = isMe ? '' : `<button onclick="openChat('${escapeHtmlLocal(u.email)}','${escapeHtmlLocal(u.name || 'User')}')" class="logout-btn" style="margin-top:8px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;"><i class="fas fa-comments"></i> Chat</button>`;
@@ -1942,7 +2012,11 @@ document.addEventListener('change', function(e) {
 function onPostPhotoSelected(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) { alert('শুধু ছবি'); return; }
+    const _pt = (file.type || '').toLowerCase();
+    const _pn = (file.name || '').toLowerCase();
+    if (_pt && !_pt.startsWith('image/') && !/\.(jpe?g|png|webp|gif|bmp)$/i.test(_pn)) {
+        alert('Please select a photo'); return;
+    }
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = function() {
@@ -2252,7 +2326,24 @@ document.querySelectorAll('.sidebar-menu .menu-item[href="dashboard.html"]').for
 /* After sync, refresh community wall */
 const _origSync = typeof syncFromCloud === 'function' ? syncFromCloud : null;
 
-setInterval(syncFromCloud, 5000);
+setInterval(syncFromCloud, 12000);
 </script>
+
+<!-- Language always visible -->
+<div id="langToggleFloat" style="position:fixed;left:12px;bottom:14px;z-index:9998;">
+  <select onchange="setLanguage(this.value);var s=document.getElementById('langSelect');if(s)s.value=this.value;" id="langSelectFloat" style="padding:8px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:700;box-shadow:var(--shadow);backdrop-filter:blur(8px);">
+    <option value="en">🌐 EN</option>
+    <option value="bn">🌐 বাং</option>
+    <option value="hi">🌐 हिं</option>
+    <option value="ar">🌐 ع</option>
+    <option value="es">🌐 ES</option>
+    <option value="fr">🌐 FR</option>
+    <option value="tr">🌐 TR</option>
+    <option value="id">🌐 ID</option>
+    <option value="ur">🌐 اردو</option>
+    <option value="zh">🌐 中文</option>
+  </select>
+</div>
+
 </body>
 </html>
