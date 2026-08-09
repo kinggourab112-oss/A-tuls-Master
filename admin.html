@@ -443,7 +443,7 @@ select, input[type="text"], input[type="search"] {
   var ROLE_KEY = 'a_tuls_role';
   var USER_KEY = 'a_tuls_user';
   var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 30 * 60 * 1000; // 30 minutes
+  var MAX_IDLE = 10 * 60 * 1000; // 30 minutes
 
   function touch() {
     try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
@@ -511,7 +511,7 @@ select, input[type="text"], input[type="search"] {
   var ROLE_KEY = 'a_tuls_role';
   var USER_KEY = 'a_tuls_user';
   var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 30 * 60 * 1000; // 10 minutes
+  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
 
   function touch() {
     try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}

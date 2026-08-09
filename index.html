@@ -250,7 +250,7 @@ input:focus { border-color: var(--cyan); }
   try {
     var role = localStorage.getItem('a_tuls_role');
     var last = parseInt(localStorage.getItem('a_tuls_last_active') || '0', 10);
-    var maxIdle = 30 * 60 * 1000;
+    var maxIdle = 10 * 60 * 1000;
     if (role && last && (Date.now() - last) <= maxIdle) {
       if (role === 'admin' || role === 'user') location.replace('dashboard.html');
       else if (role === 'pending') location.replace('pending.html');

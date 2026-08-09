@@ -551,8 +551,292 @@ body {
   document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
 })();
 </script>
+
+<style>
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:linear-gradient(180deg,var(--side1,#0e1a32),var(--side2,#0a1220));z-index:100;overflow-y:auto;transform:translateX(-100%);transition:.25s;}
+.sidebar.open{transform:translateX(0);}
+@media(min-width:900px){.sidebar{transform:none;} .main{margin-left:270px;}}
+.sidebar-header{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sidebar-logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--primary,#38bdf8);}
+.sidebar-menu{padding:12px;}
+.menu-label{font-size:11px;text-transform:uppercase;color:var(--muted,#94a3b8);margin:14px 8px 8px;letter-spacing:.5px;}
+.menu-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:var(--text,#f0f9ff);text-decoration:none;font-size:13.5px;font-weight:600;margin-bottom:4px;}
+.menu-item:hover,.menu-item.active{background:rgba(56,189,248,.15);color:var(--primary,#38bdf8);}
+.sidebar-footer{padding:14px;font-size:11px;color:var(--muted);text-align:center;border-top:1px solid rgba(255,255,255,.06);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;}
+.overlay.open{display:block;}
+.main{min-height:100vh;padding:0 16px 40px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 0;position:sticky;top:0;z-index:50;background:var(--top,rgba(15,25,45,.92));backdrop-filter:blur(10px);}
+.topbar-left,.topbar-right{display:flex;align-items:center;gap:10px;}
+.menu-toggle{background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;}
+.page-title{font-size:1.15rem;font-weight:800;}
+.user-badge{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:6px 10px;border-radius:20px;background:var(--badge-bg,rgba(56,189,248,.12));}
+.logout-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border,rgba(255,255,255,.12));background:transparent;color:var(--text);font-weight:700;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.notice{background:var(--notice-bg,rgba(255,200,0,.12));border:1px solid var(--notice-bd,rgba(255,200,0,.3));color:var(--notice-tx,#ffc800);padding:12px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;}
+.admin-info-box{background:var(--card,rgba(255,255,255,.06));border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:18px;font-size:13px;line-height:1.7;}
+.admin-info-box .title{font-weight:800;color:var(--primary);margin-bottom:8px;}
+.section-title{font-size:1.05rem;font-weight:800;margin:18px 0 12px;display:flex;align-items:center;gap:8px;}
+.theme-tag{font-size:11px;padding:3px 8px;border-radius:8px;background:var(--badge-bg,rgba(56,189,248,.15));color:var(--primary);font-weight:700;}
+.card{background:var(--card,rgba(255,255,255,.06));border:1px solid var(--border,rgba(255,255,255,.1));border-radius:16px;padding:16px;text-decoration:none;color:var(--text);display:block;transition:.2s;}
+.card:hover{border-color:var(--primary);transform:translateY(-2px);}
+.card .icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2,#a78bfa));display:flex;align-items:center;justify-content:center;color:#000;margin-bottom:10px;font-size:18px;}
+.card-title{font-weight:800;font-size:14px;margin-bottom:4px;}
+.card-desc{font-size:12px;color:var(--muted);}
+body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family:'Plus Jakarta Sans',sans-serif;}
+</style>
+
 </head>
+
 <body>
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <i class="fas fa-cubes"></i>
+            <span>A-tuls √MASTER</span>
+        </div>
+    </div>
+    <div class="sidebar-menu">
+        <div class="menu-label">Main Menu</div>
+        <a class="menu-item active" href="dashboard.html">
+            <i class="fas fa-th-large"></i> Dashboard
+        </a>
+        <a class="menu-item" href="#myProfile" onclick="showProfileSection();return false;">
+            <i class="fas fa-user-circle"></i> My Profile
+        </a>
+        <a class="menu-item" href="#community" onclick="showCommunitySection();return false;">
+            <i class="fas fa-users"></i> Community
+        </a>
+        <div id="adminControlMenu" style="display:none;">
+            <div class="menu-label">Admin Control</div>
+            <a class="menu-item" href="admin.html" style="border:1px solid rgba(255,200,0,0.35);background:rgba(255,200,0,0.12);">
+                <i class="fas fa-user-shield"></i> Admin Panel
+            </a>
+        </div>
+        <div class="menu-label">Email Tools</div>
+        <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker" onclick="typeof trackToolUse==='function'&&trackToolUse('Duplicate Checker')">
+            <i class="fas fa-copy"></i> Duplicate Checker
+        </a>
+        <a class="menu-item" href="Email Data Formatter.html" data-tool="Data Formatter" onclick="typeof trackToolUse==='function'&&trackToolUse('Data Formatter')">
+            <i class="fas fa-align-left"></i> Data Formatter
+        </a>
+        <a class="menu-item" href="emaill report .html" data-tool="Report Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Report Generator')">
+            <i class="fas fa-file-alt"></i> Report Generator
+        </a>
+        <a class="menu-item" href="esey emaill vawucer.html" data-tool="Email Validator" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Validator')">
+            <i class="fas fa-check-double"></i> Email Validator
+        </a>
+        <a class="menu-item" href="parshnol emaill vaault.html" data-tool="Email Vault" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Vault')">
+            <i class="fas fa-vault"></i> Email Vault
+        </a>
+        <a class="menu-item" href="gmail-format-fixer.html" data-tool="Gmail format fixer" onclick="typeof trackToolUse==='function'&&trackToolUse('Gmail format fixer')">
+            <i class="fas fa-envelope"></i> Gmail format fixer
+        </a>
+        <div class="menu-label">Generators</div>
+        <a class="menu-item" href="name and recovery ganaretod.html" data-tool="Names & Recovery" onclick="typeof trackToolUse==='function'&&trackToolUse('Names & Recovery')">
+            <i class="fas fa-users"></i> Names & Recovery
+        </a>
+        <a class="menu-item" href="pasword ganaratod.html" data-tool="Password Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Password Generator')">
+            <i class="fas fa-key"></i> Password Generator
+        </a>
+        <div class="menu-label">Utility</div>
+        <a class="menu-item" href="ip time zoone farat.html" data-tool="IP TimeZone Finder" onclick="typeof trackToolUse==='function'&&trackToolUse('IP TimeZone Finder')">
+            <i class="fas fa-globe"></i> IP TimeZone Finder
+        </a>
+    </div>
+    <div class="sidebar-footer">A-tuls - √MASTER<br>Premium Tools Platform</div>
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<main class="main">
+    <div class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="page-title">Dashboard</div>
+        </div>
+        <div class="topbar-right">
+            <select id="langSelect" onchange="setLanguage(this.value)" title="Language" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;font-weight:600;max-width:120px;font-family:inherit;">
+                <option value="en">English</option>
+                <option value="bn">বাংলা</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="tr">Türkçe</option>
+                <option value="id">Indonesia</option>
+                <option value="ur">اردو</option>
+                <option value="zh">中文</option>
+            </select>
+            <div class="user-badge"><i class="fas fa-user"></i> <span id="userName">User</span></div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></button>
+        </div>
+    </div>
+
+    <div class="notice" id="adminNotice" style="display:none;"></div>
+
+    <div class="admin-info-box" id="adminInfoBox">
+        <div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>
+        <div><i class="fas fa-user"></i> Name: <strong>Admin Gourab</strong></div>
+        <div><i class="fas fa-id-badge"></i> Admin ID: <strong>gourabmon112233@gmail.com</strong></div>
+        <div><i class="fab fa-telegram"></i> Telegram: <strong>+8801944035239</strong></div>
+        <div><i class="fab fa-facebook"></i> Facebook: Gourab Official</div>
+    </div>
+
+    <!-- Members preview -->
+    <div id="communityWall" style="margin-bottom:28px;">
+        <div class="section-title"><i class="fas fa-users"></i> Members <span class="theme-tag">Admin + Users</span></div>
+        <div id="communityList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:12px;"></div>
+        <button id="seeMoreBtn" class="logout-btn" style="background:var(--primary);color:#000;border:none;display:none;" onclick="showCommunitySection()">
+            <i class="fas fa-ellipsis-h"></i> See More
+        </button>
+    </div>
+
+    <!-- Full community -->
+    <div id="fullCommunitySection" style="display:none;margin-bottom:28px;">
+        <div class="section-title"><i class="fas fa-globe"></i> Community Feed</div>
+        <div class="card" style="cursor:default;padding:16px;margin-bottom:18px;max-width:640px;">
+            <div style="font-weight:700;margin-bottom:10px;"><i class="fas fa-pen"></i> Create Post</div>
+            <select id="postType" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:10px;font-family:inherit;">
+                <option value="general">General</option>
+                <option value="sell">Sell</option>
+                <option value="buy">Buy</option>
+            </select>
+            <textarea id="postText" rows="3" placeholder="Write something..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
+                    <input type="file" id="postPhoto" accept="image/*" style="display:none;" onchange="onPostPhotoSelected(event)">
+                    <i class="fas fa-image"></i> Add Photo
+                </label>
+                <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
+                <input type="text" id="postPrice" placeholder="Price" style="flex:1;min-width:120px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;display:none;">
+            </div>
+            <div id="postPhotoPreviewWrap" style="display:none;margin-bottom:10px;">
+                <img id="postPhotoPreview" style="max-width:100%;max-height:180px;border-radius:12px;">
+            </div>
+            <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="createPost()"><i class="fas fa-paper-plane"></i> Post</button>
+        </div>
+        <div class="section-title" style="font-size:1rem;"><i class="fas fa-user-friends"></i> All Members</div>
+        <div id="fullMembersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:22px;"></div>
+        <div class="section-title" style="font-size:1rem;"><i class="fas fa-stream"></i> Posts</div>
+        <div id="postsFeed" style="display:flex;flex-direction:column;gap:14px;max-width:640px;"></div>
+    </div>
+
+    <!-- Profile -->
+    <div id="profileSection" style="display:none;margin-bottom:28px;">
+        <div class="section-title"><i class="fas fa-user-circle"></i> My Profile</div>
+        <div class="card" style="cursor:default;padding:18px;max-width:520px;">
+            <div style="text-align:center;margin-bottom:14px;">
+                <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);display:none;margin:0 auto;">
+                <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;"><i class="fas fa-user"></i></div>
+                <label style="display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;">
+                    <input type="file" id="profilePhotoInput" accept="image/*,.jpg,.jpeg,.png,.webp,.gif" style="display:none;" onchange="onPhotoSelected(event)">
+                    <i class="fas fa-camera"></i> Upload Photo
+                </label>
+            </div>
+            <label style="font-size:12px;color:var(--muted);">Display Name</label>
+            <input type="text" id="profileName" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+            <label style="font-size:12px;color:var(--muted);">Phone / Telegram</label>
+            <input type="text" id="profilePhone" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+            <label style="font-size:12px;color:var(--muted);">Bio / Facebook</label>
+            <input type="text" id="profileBio" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+            <label style="font-size:12px;color:var(--muted);">Public Message</label>
+            <textarea id="profileMessage" rows="2" placeholder="Your public status..." style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;"></textarea>
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
+            </label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="saveMyProfile()"><i class="fas fa-save"></i> Save Profile</button>
+                <button class="logout-btn" style="border:1px solid var(--danger-bd, #f66);color:var(--danger-tx, #f66);" onclick="clearMyNote()"><i class="fas fa-trash"></i> Delete Note</button>
+            </div>
+            <div id="profileSaveMsg" style="display:none;margin-top:12px;font-size:13px;font-weight:600;"></div>
+        </div>
+    </div>
+
+    <!-- Chat panel -->
+    <div id="chatPanel" style="display:none;margin-bottom:20px;" class="card">
+        <div class="section-title" style="font-size:1rem;"><i class="fas fa-comments"></i> Chat with <span id="chatWithName">User</span></div>
+        <div id="chatMessages" style="max-height:220px;overflow-y:auto;margin-bottom:10px;font-size:13px;"></div>
+        <div style="display:flex;gap:8px;">
+            <input type="text" id="chatInput" placeholder="Message..." style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+            <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="sendChat()">Send</button>
+            <button class="logout-btn" onclick="document.getElementById('chatPanel').style.display='none'">Close</button>
+        </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="section-title" id="toolsSectionTitle"><i class="fas fa-tools"></i> Tools</div>
+    <div class="tools-grid" id="toolsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">
+        <a class="card" href="Duplicate Email Checker .html" data-tool="Duplicate Checker" onclick="typeof trackToolUse==='function'&&trackToolUse('Duplicate Checker')">
+            <div class="icon"><i class="fas fa-copy"></i></div>
+            <div class="card-title" data-tool-name>Duplicate Checker</div>
+            <div class="card-desc">Find unique & duplicate emails</div>
+        </a>
+        <a class="card" href="Email Data Formatter.html" data-tool="Data Formatter" onclick="typeof trackToolUse==='function'&&trackToolUse('Data Formatter')">
+            <div class="icon"><i class="fas fa-align-left"></i></div>
+            <div class="card-title" data-tool-name>Data Formatter</div>
+            <div class="card-desc">Format email:password lists</div>
+        </a>
+        <a class="card" href="emaill report .html" data-tool="Report Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Report Generator')">
+            <div class="icon"><i class="fas fa-file-alt"></i></div>
+            <div class="card-title" data-tool-name>Report Generator</div>
+            <div class="card-desc">Found / Good / Unknown reports</div>
+        </a>
+        <a class="card" href="esey emaill vawucer.html" data-tool="Email Validator" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Validator')">
+            <div class="icon"><i class="fas fa-check-double"></i></div>
+            <div class="card-title" data-tool-name>Email Validator</div>
+            <div class="card-desc">Validate email lists</div>
+        </a>
+        <a class="card" href="parshnol emaill vaault.html" data-tool="Email Vault" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Vault')">
+            <div class="icon"><i class="fas fa-vault"></i></div>
+            <div class="card-title" data-tool-name>Email Vault</div>
+            <div class="card-desc">Save & manage lists</div>
+        </a>
+        <a class="card" href="gmail-format-fixer.html" data-tool="Gmail format fixer" onclick="typeof trackToolUse==='function'&&trackToolUse('Gmail format fixer')">
+            <div class="icon"><i class="fas fa-envelope"></i></div>
+            <div class="card-title" data-tool-name>Gmail format fixer</div>
+            <div class="card-desc">Fix Gmail formats</div>
+        </a>
+        <a class="card" href="name and recovery ganaretod.html" data-tool="Names & Recovery" onclick="typeof trackToolUse==='function'&&trackToolUse('Names & Recovery')">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="card-title" data-tool-name>Names & Recovery</div>
+            <div class="card-desc">Generate names & recovery</div>
+        </a>
+        <a class="card" href="pasword ganaratod.html" data-tool="Password Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Password Generator')">
+            <div class="icon"><i class="fas fa-key"></i></div>
+            <div class="card-title" data-tool-name>Password Generator</div>
+            <div class="card-desc">Strong passwords</div>
+        </a>
+        <a class="card" href="ip time zoone farat.html" data-tool="IP TimeZone Finder" onclick="typeof trackToolUse==='function'&&trackToolUse('IP TimeZone Finder')">
+            <div class="icon"><i class="fas fa-globe"></i></div>
+            <div class="card-title" data-tool-name>IP TimeZone Finder</div>
+            <div class="card-desc">IP, timezone & more</div>
+        </a>
+    </div>
+</main>
+
+
+
+<script>
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  var s=document.getElementById('sidebar');
+  var o=document.getElementById('overlay');
+  if(s) s.classList.remove('open');
+  if(o) o.classList.remove('open');
+}
+</script>
+
+<script>
+/* Early theme – no flash */
+(function(){
+  var t = localStorage.getItem('a_tuls_dash_color') || localStorage.getItem('a_tuls_theme') || 'dark-ocean';
+  var ok = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
+  document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
+})();
+</script>
 <script>
 
 
@@ -762,7 +1046,7 @@ setTimeout(applyLanguage, 800);
   var ROLE_KEY = 'a_tuls_role';
   var USER_KEY = 'a_tuls_user';
   var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 30 * 60 * 1000; // 30 minutes
+  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
 
   function touch() {
     try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
@@ -833,10 +1117,21 @@ if (role !== 'user' && role !== 'admin') {
     location.replace('index.html');
 } else {
     try {
-        // Keep session alive on open/refresh
-        localStorage.setItem('a_tuls_last_active', String(Date.now()));
-        if (typeof A_TULS_TOUCH === 'function') A_TULS_TOUCH();
-    } catch (e) { console.warn('session', e); }
+        var last = parseInt(localStorage.getItem('a_tuls_last_active') || '0', 10);
+        var maxIdle = 10 * 60 * 1000;
+        if (last && (Date.now() - last) > maxIdle) {
+            localStorage.removeItem('a_tuls_role');
+            localStorage.removeItem('a_tuls_user');
+            localStorage.removeItem('a_tuls_last_active');
+            location.replace('index.html');
+        } else {
+            localStorage.setItem('a_tuls_last_active', String(Date.now()));
+            if (typeof A_TULS_TOUCH === 'function') A_TULS_TOUCH();
+        }
+    } catch (e) {
+        location.replace('index.html');
+    }
+}
 }
 
 document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
