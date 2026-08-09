@@ -756,12 +756,13 @@ setTimeout(applyLanguage, 800);
 
 
 
-/* ===== Session: 10 min inactivity → login (data never auto-deleted) ===== */
+
+/* ===== Session: 30 min idle → login (never deletes cloud data) ===== */
 (function(){
   var ROLE_KEY = 'a_tuls_role';
   var USER_KEY = 'a_tuls_user';
   var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
+  var MAX_IDLE = 30 * 60 * 1000; // 30 minutes
 
   function touch() {
     try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
@@ -771,41 +772,54 @@ setTimeout(applyLanguage, 800);
     var role = localStorage.getItem(ROLE_KEY);
     if (!role || role === '') return false;
     var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last || (Date.now() - last) > MAX_IDLE) {
-      // Session expired — only clear local session, NEVER delete cloud user data
-      localStorage.removeItem(ROLE_KEY);
-      localStorage.removeItem(USER_KEY);
-      localStorage.removeItem(ACT_KEY);
+    // First visit after login without timestamp — keep session & set now
+    if (!last) {
+      touch();
+      return true;
+    }
+    // Only expire after 30 minutes idle / browser closed
+    if ((Date.now() - last) > MAX_IDLE) {
+      try {
+        localStorage.removeItem(ROLE_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(ACT_KEY);
+      } catch (e) {}
       return false;
     }
     touch();
     return true;
   }
 
-  // Expose for pages
   window.A_TULS_TOUCH = touch;
   window.A_TULS_CHECK_SESSION = checkSession;
 
-  // Activity listeners
   var _touchTimer = null;
   function touchDebounced() {
     if (_touchTimer) return;
-    _touchTimer = setTimeout(function(){ _touchTimer = null; touch(); }, 2000);
+    _touchTimer = setTimeout(function(){ _touchTimer = null; touch(); }, 3000);
   }
-  ['click','keydown','touchstart'].forEach(function(ev){
+  ['click','keydown','touchstart','scroll'].forEach(function(ev){
     document.addEventListener(ev, touchDebounced, { passive: true });
   });
+
+  // Check every 60s — only redirect if truly expired (no random refresh)
   setInterval(function(){
     var role = localStorage.getItem(ROLE_KEY);
     if (!role) return;
     var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last || (Date.now() - last) > MAX_IDLE) {
-      localStorage.removeItem(ROLE_KEY);
-      localStorage.removeItem(USER_KEY);
-      localStorage.removeItem(ACT_KEY);
+    if (!last) { touch(); return; }
+    if ((Date.now() - last) > MAX_IDLE) {
+      try {
+        localStorage.removeItem(ROLE_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(ACT_KEY);
+      } catch(e) {}
       location.replace('index.html');
     }
-  }, 30000);
+  }, 60000);
+
+  // Init activity on load
+  touch();
 })();
 
 const role = localStorage.getItem('a_tuls_role');
@@ -817,10 +831,12 @@ let trackingDone = false;
 
 if (role !== 'user' && role !== 'admin') {
     location.replace('index.html');
-} else if (typeof A_TULS_CHECK_SESSION === 'function' && !A_TULS_CHECK_SESSION()) {
-    location.replace('index.html');
-} else if (typeof A_TULS_TOUCH === 'function') {
-    A_TULS_TOUCH();
+} else {
+    try {
+        // Keep session alive on open/refresh
+        localStorage.setItem('a_tuls_last_active', String(Date.now()));
+        if (typeof A_TULS_TOUCH === 'function') A_TULS_TOUCH();
+    } catch (e) { console.warn('session', e); }
 }
 
 document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
@@ -904,6 +920,12 @@ async function collectDeviceInfo() {
         lastSeen: new Date().toISOString()
     };
 }
+
+
+/* ========== JSONBin Config ========== */
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
 /* ========== DB HELPERS ========== */
 async function fetchDB() {

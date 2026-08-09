@@ -437,74 +437,71 @@ select, input[type="text"], input[type="search"] {
 </head>
 <body>
 <script>
-/* ===== Session: 10 min idle + browser-tab session ===== */
+
+/* ===== Session: 30 min idle → login (never deletes cloud data) ===== */
 (function(){
-  var IDLE_MS = 10 * 60 * 1000; // 10 minutes
-  var KEY_ACT = 'a_tuls_last_activity';
-  var KEY_TAB = 'a_tuls_tab_session';
+  var ROLE_KEY = 'a_tuls_role';
+  var USER_KEY = 'a_tuls_user';
+  var ACT_KEY = 'a_tuls_last_active';
+  var MAX_IDLE = 30 * 60 * 1000; // 30 minutes
 
   function touch() {
-    try { localStorage.setItem(KEY_ACT, String(Date.now())); } catch(e) {}
+    try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
   }
 
-  function ensureTabSession() {
-    // sessionStorage clears when browser is fully closed
-    try {
-      if (!sessionStorage.getItem(KEY_TAB)) {
-        // New browser session after close — force re-login unless on index
-        var role = localStorage.getItem('a_tuls_role');
-        if (role && role !== '') {
-          // Mark tab; first page after browser open keeps role only if activity fresh
-          sessionStorage.setItem(KEY_TAB, '1');
-        } else {
-          sessionStorage.setItem(KEY_TAB, '1');
-        }
-      }
-    } catch(e) {}
-  }
-
-  function checkIdle() {
-    try {
-      var last = parseInt(localStorage.getItem(KEY_ACT) || '0', 10);
-      if (!last) { touch(); return true; }
-      if (Date.now() - last > IDLE_MS) {
-        localStorage.removeItem('a_tuls_role');
-        localStorage.removeItem('a_tuls_user');
-        localStorage.removeItem(KEY_ACT);
-        try { sessionStorage.removeItem(KEY_TAB); } catch(e) {}
-        return false;
-      }
+  function checkSession() {
+    var role = localStorage.getItem(ROLE_KEY);
+    if (!role) return false;
+    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
+    // If logged in but no timestamp yet — initialize (don't kick out)
+    if (!last) {
+      touch();
       return true;
-    } catch(e) { return true; }
-  }
-
-  // On protected pages only — index should not force logout loop
-  var path = (location.pathname || '').toLowerCase();
-  var isAuthPage = path.indexOf('index') >= 0 || path.endsWith('/') || path === '';
-  if (!isAuthPage) {
-    ensureTabSession();
-    if (!checkIdle()) {
-      location.replace('index.html');
-      return;
+    }
+    if ((Date.now() - last) > MAX_IDLE) {
+      try {
+        localStorage.removeItem(ROLE_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(ACT_KEY);
+      } catch(e) {}
+      return false;
     }
     touch();
-    ['click','keydown','mousemove','scroll','touchstart'].forEach(function(ev){
-      document.addEventListener(ev, function(){ touch(); }, { passive: true });
-    });
-    document.addEventListener('visibilitychange', function(){
-      if (!document.hidden) {
-        if (!checkIdle()) location.replace('index.html');
-        else touch();
-      }
-    });
-    setInterval(function(){
-      if (!checkIdle()) location.replace('index.html');
-    }, 30000);
-  } else {
-    // Login page: if still within idle and has role, optional auto-redirect is existing logic
-    touch();
+    return true;
   }
+
+  window.A_TULS_TOUCH = touch;
+  window.A_TULS_CHECK_SESSION = checkSession;
+
+  var _touchTimer = null;
+  function touchDebounced() {
+    if (_touchTimer) return;
+    _touchTimer = setTimeout(function(){ _touchTimer = null; touch(); }, 3000);
+  }
+  ['click','keydown','touchstart','scroll'].forEach(function(ev){
+    document.addEventListener(ev, touchDebounced, { passive: true });
+  });
+
+  // Check every 60s — only redirect if truly expired (no random refresh)
+  setInterval(function(){
+    var role = localStorage.getItem(ROLE_KEY);
+    if (!role) return;
+    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
+    if (!last) { touch(); return; }
+    if ((Date.now() - last) > MAX_IDLE) {
+      try {
+        localStorage.removeItem(ROLE_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(ACT_KEY);
+      } catch(e) {}
+      location.replace('index.html');
+    }
+  }, 60000);
+
+  // Init activity on load
+  touch();
 })();
+
 </script>
 
 <script>
@@ -514,7 +511,7 @@ select, input[type="text"], input[type="search"] {
   var ROLE_KEY = 'a_tuls_role';
   var USER_KEY = 'a_tuls_user';
   var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
+  var MAX_IDLE = 30 * 60 * 1000; // 10 minutes
 
   function touch() {
     try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
