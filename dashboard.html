@@ -655,17 +655,17 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
             <div class="page-title">Dashboard</div>
         </div>
         <div class="topbar-right">
-            <select id="langSelect" onchange="setLanguage(this.value)" title="Language" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;font-weight:600;max-width:120px;font-family:inherit;">
-                <option value="en">English</option>
-                <option value="bn">বাংলা</option>
-                <option value="hi">हिन्दी</option>
-                <option value="ar">العربية</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="tr">Türkçe</option>
-                <option value="id">Indonesia</option>
-                <option value="ur">اردو</option>
-                <option value="zh">中文</option>
+            <select id="langSelect" onchange="setLanguage(this.value)" title="Language" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;font-weight:600;max-width:130px;font-family:inherit;">
+                <option value="en">🌐 EN</option>
+                <option value="bn">🌐 বাং</option>
+                <option value="hi">🌐 हिं</option>
+                <option value="ar">🌐 ع</option>
+                <option value="es">🌐 ES</option>
+                <option value="fr">🌐 FR</option>
+                <option value="tr">🌐 TR</option>
+                <option value="id">🌐 ID</option>
+                <option value="ur">🌐 اردو</option>
+                <option value="zh">🌐 中文</option>
             </select>
             <div class="user-badge"><i class="fas fa-user"></i> <span id="userName">User</span></div>
             <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></button>
@@ -704,7 +704,7 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
             <textarea id="postText" rows="3" placeholder="Write something..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
                 <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="postPhoto" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,.jpg,.jpeg,.png,.webp,.gif,.bmp" style="display:none;" onchange="onPostPhotoSelected(event)">
+                    <input type="file" id="postPhoto" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif,.tif,.tiff" style="display:none;" onchange="onPostPhotoSelected(event)">
                     <i class="fas fa-image"></i> Add Photo
                 </label>
                 <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
@@ -729,7 +729,7 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
                 <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);display:none;margin:0 auto;">
                 <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;"><i class="fas fa-user"></i></div>
                 <label style="display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="profilePhotoInput" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,image/heic,image/heif,image/avif,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif" style="display:none;" onchange="onPhotoSelected(event)">
+                    <input type="file" id="profilePhotoInput" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif,.tif,.tiff" style="display:none;" onchange="onPhotoSelected(event)">
                     <i class="fas fa-camera"></i> Upload Photo
                 </label>
             </div>
@@ -849,7 +849,7 @@ const I18N = {
     admin_panel:'Admin Panel',
     tool_duplicate:'Duplicate Checker', tool_formatter:'Data Formatter', tool_report:'Report Generator',
     tool_validator:'Email Validator', tool_vault:'Email Vault', tool_gmail:'Gmail format fixer',
-    tool_names:'Names & Recovery', tool_password:'Password Generator', tool_ip:'IP TimeZone Finder',
+    tool_names:'Names & Recovery', tool_password:'Password Generator', tool_ip:'IP TimeZone Finder',tool_duplicate_d:'Find duplicate emails',tool_formatter_d:'Format email lists',tool_report_d:'Generate reports',tool_validator_d:'Validate emails',tool_vault_d:'Secure email storage',tool_gmail_d:'Fix Gmail formats',tool_names_d:'Generate names & recovery',tool_password_d:'Strong passwords',tool_ip_d:'IP, timezone & more',
     photo_only:'Please select a photo', photo_processing:'Processing photo...', photo_ready:'✅ Photo ready — Save Profile', photo_fail:'Photo failed'
   },
   bn: {
@@ -859,7 +859,7 @@ const I18N = {
     admin_panel:'অ্যাডমিন প্যানেল',
     tool_duplicate:'ডুপ্লিকেট চেকার', tool_formatter:'ডেটা ফরম্যাটার', tool_report:'রিপোর্ট জেনারেটর',
     tool_validator:'ইমেইল ভ্যালিডেটর', tool_vault:'ইমেইল ভল্ট', tool_gmail:'জিমেইল ফরম্যাট ফিক্সার',
-    tool_names:'নেমস ও রিকভারি', tool_password:'পাসওয়ার্ড জেনারেটর', tool_ip:'আইপি টাইমজোন ফাইন্ডার',
+    tool_names:'নেমস ও রিকভারি', tool_password:'পাসওয়ার্ড জেনারেটর', tool_ip:'আইপি টাইমজোন ফাইন্ডার',tool_duplicate_d:'ডুপ্লিকেট ইমেইল খুঁজুন',tool_formatter_d:'ইমেইল লিস্ট ফরম্যাট',tool_report_d:'রিপোর্ট তৈরি',tool_validator_d:'ইমেইল যাচাই',tool_vault_d:'নিরাপদ ইমেইল স্টোরেজ',tool_gmail_d:'Gmail ফরম্যাট ঠিক',tool_names_d:'নাম ও রিকভারি জেনারেট',tool_password_d:'শক্তিশালী পাসওয়ার্ড',tool_ip_d:'IP, টাইমজোন ও আরও',
     photo_only:'শুধু ছবি সিলেক্ট করুন', photo_processing:'ছবি প্রসেস হচ্ছে...', photo_ready:'✅ ছবি রেডি — Save চাপুন', photo_fail:'ছবি ব্যর্থ'
   },
   hi: {
@@ -869,7 +869,7 @@ const I18N = {
     admin_panel:'एडमिन पैनल',
     tool_duplicate:'डुप्लिकेट चेकर', tool_formatter:'डेटा फ़ॉर्मेटर', tool_report:'रिपोर्ट जेनरेटर',
     tool_validator:'ईमेल वैलिडेटर', tool_vault:'ईमेल वॉल्ट', tool_gmail:'जिमेल फ़ॉर्मेट फिक्सर',
-    tool_names:'नाम और रिकवरी', tool_password:'पासवर्ड जेनरेटर', tool_ip:'आईपी टाइमज़ोन',
+    tool_names:'नाम और रिकवरी', tool_password:'पासवर्ड जेनरेटर', tool_ip:'आईपी टाइमज़ोन',tool_duplicate_d:'डुप्लिकेट ईमेल खोजें',tool_formatter_d:'ईमेल सूची फॉर्मेट',tool_report_d:'रिपोर्ट बनाएं',tool_validator_d:'ईमेल सत्यापन',tool_vault_d:'सुरक्षित ईमेल स्टोरेज',tool_gmail_d:'Gmail फॉर्मेट ठीक',tool_names_d:'नाम और रिकवरी',tool_password_d:'मजबूत पासवर्ड',tool_ip_d:'IP, टाइमज़ोन आदि',
     photo_only:'कृपया फ़ोटो चुनें', photo_processing:'प्रोसेस हो रहा...', photo_ready:'✅ तैयार — सेव करें', photo_fail:'फ़ोटो असफल'
   },
   ar: {
@@ -879,7 +879,7 @@ const I18N = {
     admin_panel:'لوحة الأدمن',
     tool_duplicate:'فاحص التكرار', tool_formatter:'منسق البيانات', tool_report:'مولد التقارير',
     tool_validator:'التحقق من البريد', tool_vault:'خزنة البريد', tool_gmail:'مصلح جيميل',
-    tool_names:'الأسماء والاستعادة', tool_password:'مولد كلمات المرور', tool_ip:'IP والمنطقة الزمنية',
+    tool_names:'الأسماء والاستعادة', tool_password:'مولد كلمات المرور', tool_ip:'IP والمنطقة الزمنية',tool_duplicate_d:'البحث عن البريد المكرر',tool_formatter_d:'تنسيق قوائم البريد',tool_report_d:'إنشاء التقارير',tool_validator_d:'التحقق من البريد',tool_vault_d:'تخزين آمن للبريد',tool_gmail_d:'إصلاح تنسيق Gmail',tool_names_d:'أسماء واستعادة',tool_password_d:'كلمات مرور قوية',tool_ip_d:'IP والمنطقة الزمنية',
     photo_only:'اختر صورة', photo_processing:'جاري المعالجة...', photo_ready:'✅ جاهز — احفظ', photo_fail:'فشل'
   },
   es: {
@@ -889,7 +889,7 @@ const I18N = {
     admin_panel:'Panel Admin',
     tool_duplicate:'Checker duplicados', tool_formatter:'Formateador', tool_report:'Generador reportes',
     tool_validator:'Validador email', tool_vault:'Bóveda email', tool_gmail:'Gmail fixer',
-    tool_names:'Nombres y recovery', tool_password:'Generador contraseñas', tool_ip:'IP zona horaria',
+    tool_names:'Nombres y recovery', tool_password:'Generador contraseñas', tool_ip:'IP zona horaria',tool_duplicate_d:'Buscar emails duplicados',tool_formatter_d:'Formatear listas',tool_report_d:'Generar reportes',tool_validator_d:'Validar emails',tool_vault_d:'Almacenamiento seguro',tool_gmail_d:'Arreglar formato Gmail',tool_names_d:'Nombres y recuperación',tool_password_d:'Contraseñas fuertes',tool_ip_d:'IP, zona horaria',
     photo_only:'Seleccione foto', photo_processing:'Procesando...', photo_ready:'✅ Listo — Guardar', photo_fail:'Error foto'
   },
   fr: {
@@ -899,7 +899,7 @@ const I18N = {
     admin_panel:'Panneau Admin',
     tool_duplicate:'Vérif. doublons', tool_formatter:'Formateur', tool_report:'Rapports',
     tool_validator:'Validateur', tool_vault:'Coffre email', tool_gmail:'Correcteur Gmail',
-    tool_names:'Noms et recovery', tool_password:'Mots de passe', tool_ip:'IP fuseau horaire',
+    tool_names:'Noms et recovery', tool_password:'Mots de passe', tool_ip:'IP fuseau horaire',tool_duplicate_d:'Trouver emails doublons',tool_formatter_d:'Formater listes',tool_report_d:'Générer rapports',tool_validator_d:'Valider emails',tool_vault_d:'Stockage sécurisé',tool_gmail_d:'Corriger format Gmail',tool_names_d:'Noms et récupération',tool_password_d:'Mots de passe forts',tool_ip_d:'IP, fuseau horaire',
     photo_only:'Choisir photo', photo_processing:'Traitement...', photo_ready:'✅ Prêt — Enregistrer', photo_fail:'Échec'
   },
   tr: {
@@ -909,7 +909,7 @@ const I18N = {
     admin_panel:'Admin Panel',
     tool_duplicate:'Kopya kontrol', tool_formatter:'Veri biçimleyici', tool_report:'Rapor üretici',
     tool_validator:'E-posta doğrula', tool_vault:'E-posta kasası', tool_gmail:'Gmail düzeltici',
-    tool_names:'İsim ve recovery', tool_password:'Şifre üretici', tool_ip:'IP saat dilimi',
+    tool_names:'İsim ve recovery', tool_password:'Şifre üretici', tool_ip:'IP saat dilimi',tool_duplicate_d:'Yinelenen e-postaları bul',tool_formatter_d:'Liste biçimlendir',tool_report_d:'Rapor oluştur',tool_validator_d:'E-posta doğrula',tool_vault_d:'Güvenli depolama',tool_gmail_d:'Gmail format düzelt',tool_names_d:'İsim ve kurtarma',tool_password_d:'Güçlü şifreler',tool_ip_d:'IP, saat dilimi',
     photo_only:'Foto seçin', photo_processing:'İşleniyor...', photo_ready:'✅ Hazır — Kaydet', photo_fail:'Hata'
   },
   id: {
@@ -919,7 +919,7 @@ const I18N = {
     admin_panel:'Panel Admin',
     tool_duplicate:'Cek duplikat', tool_formatter:'Pemformat data', tool_report:'Generator laporan',
     tool_validator:'Validator email', tool_vault:'Vault email', tool_gmail:'Perbaiki Gmail',
-    tool_names:'Nama dan recovery', tool_password:'Generator sandi', tool_ip:'IP zona waktu',
+    tool_names:'Nama dan recovery', tool_password:'Generator sandi', tool_ip:'IP zona waktu',tool_duplicate_d:'Cari email duplikat',tool_formatter_d:'Format daftar email',tool_report_d:'Buat laporan',tool_validator_d:'Validasi email',tool_vault_d:'Penyimpanan aman',tool_gmail_d:'Perbaiki format Gmail',tool_names_d:'Nama & recovery',tool_password_d:'Password kuat',tool_ip_d:'IP, zona waktu',
     photo_only:'Pilih foto', photo_processing:'Memproses...', photo_ready:'✅ Siap — Simpan', photo_fail:'Gagal'
   },
   ur: {
@@ -929,7 +929,7 @@ const I18N = {
     admin_panel:'ایڈمن پینل',
     tool_duplicate:'ڈپلیکیٹ چیکر', tool_formatter:'ڈیٹا فارمیٹر', tool_report:'رپورٹ جنریٹر',
     tool_validator:'ای میل ویلیڈیٹر', tool_vault:'ای میل والٹ', tool_gmail:'جی میل فکسر',
-    tool_names:'نام اور ریکوری', tool_password:'پاس ورڈ جنریٹر', tool_ip:'آئی پی ٹائم زون',
+    tool_names:'نام اور ریکوری', tool_password:'پاس ورڈ جنریٹر', tool_ip:'آئی پی ٹائم زون',tool_duplicate_d:'ڈپلیکیٹ ای میل تلاش',tool_formatter_d:'ای میل فہرست فارمیٹ',tool_report_d:'رپورٹ بنائیں',tool_validator_d:'ای میل تصدیق',tool_vault_d:'محفوظ اسٹوریج',tool_gmail_d:'Gmail فارمیٹ ٹھیک',tool_names_d:'نام اور ریکوری',tool_password_d:'مضبوط پاس ورڈ',tool_ip_d:'IP، ٹائم زون',
     photo_only:'تصویر منتخب کریں', photo_processing:'پروسیس...', photo_ready:'✅ تیار', photo_fail:'ناکام'
   },
   zh: {
@@ -939,7 +939,7 @@ const I18N = {
     admin_panel:'管理面板',
     tool_duplicate:'重复检查', tool_formatter:'数据格式化', tool_report:'报告生成',
     tool_validator:'邮箱验证', tool_vault:'邮箱保险库', tool_gmail:'Gmail修复',
-    tool_names:'姓名与恢复', tool_password:'密码生成', tool_ip:'IP时区',
+    tool_names:'姓名与恢复', tool_password:'密码生成', tool_ip:'IP时区',tool_duplicate_d:'查找重复邮箱',tool_formatter_d:'格式化邮箱列表',tool_report_d:'生成报告',tool_validator_d:'验证邮箱',tool_vault_d:'安全邮箱存储',tool_gmail_d:'修复 Gmail 格式',tool_names_d:'姓名与恢复',tool_password_d:'强密码',tool_ip_d:'IP、时区等',
     photo_only:'请选择照片', photo_processing:'处理中...', photo_ready:'✅ 就绪 — 保存', photo_fail:'失败'
   }
 };
@@ -957,8 +957,6 @@ function setLanguage(code) {
 function applyLanguage() {
     const sel = document.getElementById('langSelect');
     if (sel) sel.value = currentLang;
-    const sel2 = document.getElementById('langSelectFloat');
-    if (sel2) sel2.value = currentLang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const k = el.getAttribute('data-i18n');
         if (k) el.textContent = t(k);
@@ -1034,6 +1032,28 @@ function applyLanguage() {
         const onlyText = !pageTitle.querySelector('button');
         if (onlyText) pageTitle.childNodes.forEach ? null : null;
     }
+
+    // Tool cards on dashboard grid
+    const descMap = {
+        'Duplicate Checker': {title:'tool_duplicate', desc:'tool_duplicate_d'},
+        'Data Formatter': {title:'tool_formatter', desc:'tool_formatter_d'},
+        'Report Generator': {title:'tool_report', desc:'tool_report_d'},
+        'Email Validator': {title:'tool_validator', desc:'tool_validator_d'},
+        'Email Vault': {title:'tool_vault', desc:'tool_vault_d'},
+        'Gmail format fixer': {title:'tool_gmail', desc:'tool_gmail_d'},
+        'Names & Recovery': {title:'tool_names', desc:'tool_names_d'},
+        'Password Generator': {title:'tool_password', desc:'tool_password_d'},
+        'IP TimeZone Finder': {title:'tool_ip', desc:'tool_ip_d'}
+    };
+    document.querySelectorAll('#toolsGrid .card, .grid .card').forEach(card => {
+        const tool = card.getAttribute('data-tool') || '';
+        const m = descMap[tool];
+        if (!m) return;
+        const titleEl = card.querySelector('.card-title, [data-tool-name], h3');
+        const descEl = card.querySelector('.card-desc, p');
+        if (titleEl) titleEl.textContent = t(m.title);
+        if (descEl && I18N[currentLang] && I18N[currentLang][m.desc]) descEl.textContent = t(m.desc);
+    });
     document.documentElement.dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
 }
 document.addEventListener('DOMContentLoaded', function() { applyLanguage(); });
@@ -1224,7 +1244,7 @@ const BIN_ID = '6a6eb29dda38895dfeae700a';
 const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
 const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
-/* ========== DB HELPERS (safe merge — পুরনো ইউজার/ফটো হারাবে না) ========== */
+/* ========== DB HELPERS ========== */
 async function fetchDB() {
     const res = await fetch(BIN_URL + '/latest', {
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -1234,77 +1254,42 @@ async function fetchDB() {
     return data.record || { users: [], settings: {} };
 }
 
-function mergeUser(remoteU, localU) {
-    const out = Object.assign({}, remoteU || {}, localU || {});
-    out.profile = Object.assign({}, (remoteU && remoteU.profile) || {}, (localU && localU.profile) || {});
-    if (!(localU && localU.profile && localU.profile.photo) && remoteU && remoteU.profile && remoteU.profile.photo) {
-        out.profile.photo = remoteU.profile.photo;
-    }
-    out.toolUsage = Object.assign({}, (remoteU && remoteU.toolUsage) || {}, (localU && localU.toolUsage) || {});
-    out.toolLastUsed = Object.assign({}, (remoteU && remoteU.toolLastUsed) || {}, (localU && localU.toolLastUsed) || {});
-    const mergeArr = (a, b, key) => {
-        const map = {};
-        (a || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
-        (b || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
-        return Object.values(map);
-    };
-    out.devices = mergeArr(remoteU && remoteU.devices, localU && localU.devices, 'fingerprint');
-    out.blockedDevices = Array.from(new Set([].concat((remoteU && remoteU.blockedDevices) || [], (localU && localU.blockedDevices) || [])));
-    out.approvedDevices = Array.from(new Set([].concat((remoteU && remoteU.approvedDevices) || [], (localU && localU.approvedDevices) || [])));
-    const hist = [].concat((remoteU && remoteU.loginHistory) || [], (localU && localU.loginHistory) || []);
-    out.loginHistory = hist.slice(-40);
-    if (Array.isArray(localU && localU.tools)) out.tools = localU.tools;
-    else if (Array.isArray(remoteU && remoteU.tools)) out.tools = remoteU.tools;
-    return out;
-}
-
-function mergeById(remoteArr, localArr, idKey) {
-    const map = {};
-    (remoteArr || []).forEach(x => { if (x && x[idKey]) map[x[idKey]] = x; });
-    (localArr || []).forEach(x => {
-        if (!x || !x[idKey]) return;
-        map[x[idKey]] = Object.assign({}, map[x[idKey]] || {}, x);
-    });
-    return Object.values(map);
-}
-
-function mergeDB(remote, local) {
-    const r = remote || { users: [], settings: {} };
-    const l = local || { users: [], settings: {} };
-    const byEmail = {};
-    (r.users || []).forEach(u => {
-        const k = (u.email || '').toLowerCase();
-        if (k) byEmail[k] = u;
-    });
-    (l.users || []).forEach(u => {
-        const k = (u.email || '').toLowerCase();
-        if (!k) return;
-        byEmail[k] = mergeUser(byEmail[k], u);
-    });
-    const users = Object.values(byEmail);
-    const settings = Object.assign({}, r.settings || {}, l.settings || {});
-    if (r.settings && r.settings.adminInfo && settings.adminInfo) {
-        if (!settings.adminInfo.photo && r.settings.adminInfo.photo) {
-            settings.adminInfo.photo = r.settings.adminInfo.photo;
-        }
-    }
-    const posts = mergeById(r.posts, l.posts, 'id').sort((a, b) => String(b.time || '').localeCompare(String(a.time || ''))).slice(0, 200);
-    const messages = mergeById(r.messages, l.messages, 'id').sort((a, b) => String(a.time || '').localeCompare(String(b.time || ''))).slice(-500);
-    const passwordRequests = mergeById(r.passwordRequests, l.passwordRequests, 'id');
-    const deviceRequests = mergeById(r.deviceRequests, l.deviceRequests, 'id');
-    return { users, settings, posts, messages, passwordRequests, deviceRequests };
-}
-
 async function saveDB() {
     if (saving || !DB) return;
     saving = true;
     try {
+        // Safe merge: never drop remote users / posts / messages
         let remote = { users: [], settings: {} };
-        try { remote = await fetchDB(); } catch (e) {}
-        if ((!DB.users || DB.users.length === 0) && remote.users && remote.users.length > 0) {
-            DB.users = remote.users;
-        }
-        DB = mergeDB(remote, DB);
+        try {
+            const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': MASTER_KEY } });
+            if (r.ok) {
+                const j = await r.json();
+                remote = j.record || remote;
+            }
+        } catch (e) {}
+        const byEmail = {};
+        (remote.users || []).forEach(u => {
+            const k = (u.email || '').toLowerCase();
+            if (k) byEmail[k] = u;
+        });
+        (DB.users || []).forEach(u => {
+            const k = (u.email || '').toLowerCase();
+            if (!k) return;
+            const prev = byEmail[k] || {};
+            const merged = Object.assign({}, prev, u);
+            merged.profile = Object.assign({}, prev.profile || {}, u.profile || {});
+            // keep richer device/login data
+            if ((prev.devices || []).length > (u.devices || []).length) merged.devices = prev.devices;
+            if ((prev.loginHistory || []).length > (u.loginHistory || []).length) merged.loginHistory = prev.loginHistory;
+            byEmail[k] = merged;
+        });
+        DB.users = Object.values(byEmail);
+        // preserve remote arrays if local empty
+        if ((!DB.posts || !DB.posts.length) && remote.posts) DB.posts = remote.posts;
+        if ((!DB.messages || !DB.messages.length) && remote.messages) DB.messages = remote.messages;
+        if ((!DB.passwordRequests || !DB.passwordRequests.length) && remote.passwordRequests) DB.passwordRequests = remote.passwordRequests;
+        if ((!DB.deviceRequests || !DB.deviceRequests.length) && remote.deviceRequests) DB.deviceRequests = remote.deviceRequests;
+        DB.settings = Object.assign({}, remote.settings || {}, DB.settings || {});
         const res = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
@@ -1715,14 +1700,13 @@ function onPhotoSelected(e) {
         status.textContent = msg;
     };
 
-    // সব ধরনের ছবি (JPG/PNG/WEBP/GIF/BMP/HEIC/Android empty MIME)
+    // Accept almost any image; some Android give empty MIME
     const name = (file.name || '').toLowerCase();
     const type = (file.type || '').toLowerCase();
-    const looksImage = !type || type.startsWith('image/') || type === 'application/octet-stream'
-        || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?|jfif)$/i.test(name);
-    if (!looksImage) {
-        // শেষ চেষ্টা: ফাইলটা ইমেজ হিসেবে লোড করার চেষ্টা হবে নিচে
-        console.warn('Unusual file type, still trying:', type, name);
+    const looksImage = type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?)$/i.test(name) || type === '';
+    if (!looksImage && type && !type.startsWith('image/')) {
+        showStatus((typeof t === 'function' ? t('photo_only') : null) || 'Please select a photo', false);
+        return;
     }
 
     showStatus((typeof t === 'function' ? t('photo_processing') : null) || 'Processing photo...', null);
@@ -1951,7 +1935,7 @@ async function renderCommunity(fullList) {
             const photoHtml = photo
                 ? `<img src="${String(photo).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
                 : `<div style="width:56px;height:56px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-user"></i></div>`;
-            const msgHtml = msg
+            const msgHtml = (isPremium && msg)
                 ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">💬 ${escapeHtmlLocal(msg)}</div>`
                 : '';
             const chatBtn = isMe ? '' : `<button onclick="openChat('${escapeHtmlLocal(u.email)}','${escapeHtmlLocal(u.name || 'User')}')" class="logout-btn" style="margin-top:8px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;"><i class="fas fa-comments"></i> Chat</button>`;
@@ -2012,32 +1996,43 @@ document.addEventListener('change', function(e) {
 function onPostPhotoSelected(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    const _pt = (file.type || '').toLowerCase();
-    const _pn = (file.name || '').toLowerCase();
-    if (_pt && !_pt.startsWith('image/') && !/\.(jpe?g|png|webp|gif|bmp)$/i.test(_pn)) {
-        alert('Please select a photo'); return;
-    }
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = function() {
+    const name = (file.name || '').toLowerCase();
+    const type = (file.type || '').toLowerCase();
+    const looksImage = type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?)$/i.test(name) || type === '';
+    if (!looksImage && type && !type.startsWith('image/')) { alert('শুধু ছবি (JPG/PNG/WEBP/GIF/BMP/HEIC/AVIF)'); return; }
+    const finish = (bmp, w, h) => {
         const maxW = 640;
-        const scale = Math.min(1, maxW / img.width);
+        const scale = Math.min(1, maxW / (w || bmp.width || 1));
         const c = document.createElement('canvas');
-        c.width = Math.round(img.width * scale);
-        c.height = Math.round(img.height * scale);
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.width = Math.round((w || bmp.width) * scale);
+        c.height = Math.round((h || bmp.height) * scale);
+        c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+        if (bmp.close) try { bmp.close(); } catch(e) {}
         let q = 0.8;
         postPhotoData = c.toDataURL('image/jpeg', q);
         while (postPhotoData.length > 120000 && q > 0.35) {
             q -= 0.1;
             postPhotoData = c.toDataURL('image/jpeg', q);
         }
-        URL.revokeObjectURL(url);
         document.getElementById('postPhotoName').textContent = file.name;
         document.getElementById('postPhotoPreview').src = postPhotoData;
         document.getElementById('postPhotoPreviewWrap').style.display = 'block';
     };
-    img.src = url;
+    if (typeof createImageBitmap === 'function') {
+        createImageBitmap(file).then(bmp => finish(bmp, bmp.width, bmp.height)).catch(() => {
+            const img = new Image();
+            const url = URL.createObjectURL(file);
+            img.onload = function() { finish(img, img.width, img.height); URL.revokeObjectURL(url); };
+            img.onerror = function() { alert('ছবি পড়া যায়নি — JPG/PNG চেষ্টা করুন'); URL.revokeObjectURL(url); };
+            img.src = url;
+        });
+    } else {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = function() { finish(img, img.width, img.height); URL.revokeObjectURL(url); };
+        img.onerror = function() { alert('ছবি পড়া যায়নি'); URL.revokeObjectURL(url); };
+        img.src = url;
+    }
 }
 
 async function createPost() {
@@ -2326,24 +2321,7 @@ document.querySelectorAll('.sidebar-menu .menu-item[href="dashboard.html"]').for
 /* After sync, refresh community wall */
 const _origSync = typeof syncFromCloud === 'function' ? syncFromCloud : null;
 
-setInterval(syncFromCloud, 12000);
+setInterval(syncFromCloud, 5000);
 </script>
-
-<!-- Language always visible -->
-<div id="langToggleFloat" style="position:fixed;left:12px;bottom:14px;z-index:9998;">
-  <select onchange="setLanguage(this.value);var s=document.getElementById('langSelect');if(s)s.value=this.value;" id="langSelectFloat" style="padding:8px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:700;box-shadow:var(--shadow);backdrop-filter:blur(8px);">
-    <option value="en">🌐 EN</option>
-    <option value="bn">🌐 বাং</option>
-    <option value="hi">🌐 हिं</option>
-    <option value="ar">🌐 ع</option>
-    <option value="es">🌐 ES</option>
-    <option value="fr">🌐 FR</option>
-    <option value="tr">🌐 TR</option>
-    <option value="id">🌐 ID</option>
-    <option value="ur">🌐 اردو</option>
-    <option value="zh">🌐 中文</option>
-  </select>
-</div>
-
 </body>
 </html>
