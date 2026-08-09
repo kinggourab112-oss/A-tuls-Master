@@ -646,6 +646,13 @@ body {
             <i class="fas fa-users"></i> Community
         </a>
 
+        <div id="adminControlMenu" style="display:none;">
+            <div class="menu-label">Admin Control</div>
+            <a class="menu-item" href="admin.html" style="border:1px solid rgba(255,200,0,0.35);background:rgba(255,200,0,0.12);">
+                <i class="fas fa-user-shield"></i> Admin Panel
+            </a>
+        </div>
+
         <div class="menu-label">Email Tools</div>
         <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
             <i class="fas fa-copy"></i> Duplicate Checker
@@ -1003,7 +1010,11 @@ if (role !== 'user' && role !== 'admin') {
     A_TULS_TOUCH();
 }
 
-document.getElementById('userName').textContent = user.name || 'User';
+document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
+if (role === 'admin') {
+    const acm = document.getElementById('adminControlMenu');
+    if (acm) acm.style.display = 'block';
+}
 
 /* ========== DEVICE FINGERPRINT ========== */
 function getBrowserName() {
@@ -1294,7 +1305,11 @@ async function syncFromCloud() {
                 }
                 user = fresh;
                 localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
-                document.getElementById('userName').textContent = user.name || 'User';
+                document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
+if (role === 'admin') {
+    const acm = document.getElementById('adminControlMenu');
+    if (acm) acm.style.display = 'block';
+}
             }
         }
 
@@ -1576,7 +1591,11 @@ async function saveMyProfile() {
 
         user = DB.users[idx];
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
-        document.getElementById('userName').textContent = user.name || 'User';
+        document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
+if (role === 'admin') {
+    const acm = document.getElementById('adminControlMenu');
+    if (acm) acm.style.display = 'block';
+}
 
         await saveDB();
         const msg = document.getElementById('profileSaveMsg');
