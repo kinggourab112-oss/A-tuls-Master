@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pending Approval | A-tuls</title>
+<title>Pending Approval | A-tuls √MASTER</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
@@ -35,13 +35,84 @@ p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:20px; }
 </style>
 </head>
 <body>
+<script>
+/* ===== Session: 10 min idle + browser-tab session ===== */
+(function(){
+  var IDLE_MS = 10 * 60 * 1000; // 10 minutes
+  var KEY_ACT = 'a_tuls_last_activity';
+  var KEY_TAB = 'a_tuls_tab_session';
+
+  function touch() {
+    try { localStorage.setItem(KEY_ACT, String(Date.now())); } catch(e) {}
+  }
+
+  function ensureTabSession() {
+    // sessionStorage clears when browser is fully closed
+    try {
+      if (!sessionStorage.getItem(KEY_TAB)) {
+        // New browser session after close — force re-login unless on index
+        var role = localStorage.getItem('a_tuls_role');
+        if (role && role !== '') {
+          // Mark tab; first page after browser open keeps role only if activity fresh
+          sessionStorage.setItem(KEY_TAB, '1');
+        } else {
+          sessionStorage.setItem(KEY_TAB, '1');
+        }
+      }
+    } catch(e) {}
+  }
+
+  function checkIdle() {
+    try {
+      var last = parseInt(localStorage.getItem(KEY_ACT) || '0', 10);
+      if (!last) { touch(); return true; }
+      if (Date.now() - last > IDLE_MS) {
+        localStorage.removeItem('a_tuls_role');
+        localStorage.removeItem('a_tuls_user');
+        localStorage.removeItem(KEY_ACT);
+        try { sessionStorage.removeItem(KEY_TAB); } catch(e) {}
+        return false;
+      }
+      return true;
+    } catch(e) { return true; }
+  }
+
+  // On protected pages only — index should not force logout loop
+  var path = (location.pathname || '').toLowerCase();
+  var isAuthPage = path.indexOf('index') >= 0 || path.endsWith('/') || path === '';
+  if (!isAuthPage) {
+    ensureTabSession();
+    if (!checkIdle()) {
+      location.replace('index.html');
+      return;
+    }
+    touch();
+    ['click','keydown','mousemove','scroll','touchstart'].forEach(function(ev){
+      document.addEventListener(ev, function(){ touch(); }, { passive: true });
+    });
+    document.addEventListener('visibilitychange', function(){
+      if (!document.hidden) {
+        if (!checkIdle()) location.replace('index.html');
+        else touch();
+      }
+    });
+    setInterval(function(){
+      if (!checkIdle()) location.replace('index.html');
+    }, 30000);
+  } else {
+    // Login page: if still within idle and has role, optional auto-redirect is existing logic
+    touch();
+  }
+})();
+</script>
+
 <div class="card">
     <div class="icon"><i class="fas fa-clock"></i></div>
-    <h1>অ্যাকাউন্ট পেন্ডিং</h1>
-    <p>আপনার রেজিস্ট্রেশন সফল হয়েছে।<br>
-    অ্যাডমিন আপনার অ্যাকাউন্ট অ্যাপ্রুভ করলে আপনি সব টুল ব্যবহার করতে পারবেন।<br><br>
-    অনুগ্রহ করে অপেক্ষা করুন।</p>
-    <div class="status" id="statusText">স্ট্যাটাস চেক হচ্ছে...</div>
+    <h1>Account Pending</h1>
+    <p>Your registration was successful.<br>
+    Once Admin approves your account, you can use all tools.<br><br>
+    Please wait for approval.</p>
+    <div class="status" id="statusText">Checking status...</div>
     <a class="btn" id="msgAdminBtn" href="https://wa.me/8801336489062?text=Assalamu%20Alaikum%20Admin%2C%20amar%20account%20pending%20ache.%20Please%20approve%20koren." target="_blank" rel="noopener" style="text-decoration:none;margin-bottom:12px;background:linear-gradient(135deg,#25D366,#128C7E);">
         <i class="fab fa-whatsapp"></i> Message Admin (WhatsApp)
     </a>
@@ -52,6 +123,54 @@ p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:20px; }
 </div>
 
 <script>
+
+/* ===== Session: 10 min inactivity → login (data never auto-deleted) ===== */
+(function(){
+  var ROLE_KEY = 'a_tuls_role';
+  var USER_KEY = 'a_tuls_user';
+  var ACT_KEY = 'a_tuls_last_active';
+  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
+
+  function touch() {
+    try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
+  }
+
+  function checkSession() {
+    var role = localStorage.getItem(ROLE_KEY);
+    if (!role || role === '') return false;
+    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
+    if (!last || (Date.now() - last) > MAX_IDLE) {
+      // Session expired — only clear local session, NEVER delete cloud user data
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(ACT_KEY);
+      return false;
+    }
+    touch();
+    return true;
+  }
+
+  // Expose for pages
+  window.A_TULS_TOUCH = touch;
+  window.A_TULS_CHECK_SESSION = checkSession;
+
+  // Activity listeners
+  ['click','keydown','mousemove','scroll','touchstart'].forEach(function(ev){
+    document.addEventListener(ev, function(){ touch(); }, { passive: true });
+  });
+  setInterval(function(){
+    var role = localStorage.getItem(ROLE_KEY);
+    if (!role) return;
+    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
+    if (!last || (Date.now() - last) > MAX_IDLE) {
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(ACT_KEY);
+      location.replace('index.html');
+    }
+  }, 30000);
+})();
+
 const BIN_ID = '6a6eb29dda38895dfeae700a';
 const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
 const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
@@ -59,8 +178,14 @@ const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 const role = localStorage.getItem('a_tuls_role');
 const user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
 
-if (role === 'user' || role === 'admin') {
+if (!role || role === '') {
+    location.replace('index.html');
+} else if (typeof A_TULS_CHECK_SESSION === 'function' && !A_TULS_CHECK_SESSION() && role !== 'pending') {
+    location.replace('index.html');
+} else if (role === 'user' || role === 'admin') {
     location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
+} else if (role === 'pending') {
+    if (typeof A_TULS_TOUCH === 'function') A_TULS_TOUCH();
 }
 
 /* Device fingerprint for block check */
@@ -98,14 +223,14 @@ async function checkStatus() {
         const fresh = users.find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
 
         if (!fresh) {
-            document.getElementById('statusText').textContent = 'অ্যাকাউন্ট পাওয়া যায়নি। আবার রেজিস্টার করুন।';
+            document.getElementById('statusText').textContent = 'Account not found. Please register again.';
             return;
         }
 
         // Device block check
         const fp = getFingerprint();
         if (Array.isArray(fresh.blockedDevices) && fresh.blockedDevices.includes(fp)) {
-            document.getElementById('statusText').textContent = '⛔ এই ডিভাইস Admin কর্তৃক ব্লক করা হয়েছে।';
+            document.getElementById('statusText').textContent = '⛔ This device has been blocked by Admin.';
             localStorage.removeItem('a_tuls_role');
             localStorage.removeItem('a_tuls_user');
             return;
@@ -114,19 +239,19 @@ async function checkStatus() {
         if (fresh.status === 'Approved') {
             localStorage.setItem('a_tuls_role', 'user');
             localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
-            document.getElementById('statusText').textContent = '✅ অ্যাপ্রুভড! ড্যাশবোর্ডে যাচ্ছে...';
+            document.getElementById('statusText').textContent = '✅ Approved! Redirecting to dashboard...';
             setTimeout(() => location.href = 'dashboard.html', 800);
             return;
         }
 
         if (fresh.status === 'Blocked') {
-            document.getElementById('statusText').textContent = '⛔ অ্যাকাউন্ট ব্লক করা হয়েছে।';
+            document.getElementById('statusText').textContent = '⛔ Your account has been blocked.';
             localStorage.removeItem('a_tuls_role');
             localStorage.removeItem('a_tuls_user');
             return;
         }
 
-        document.getElementById('statusText').textContent = 'অপেক্ষা করুন... (অটো চেক চলছে)';
+        document.getElementById('statusText').textContent = 'Waiting for approval... (auto-check running)';
         try {
             const tg = (db.settings && db.settings.adminInfo && db.settings.adminInfo.telegram) || '';
             // Keep fixed number 01336-489062 as requested; only refresh prefilled text with user email
@@ -137,7 +262,7 @@ async function checkStatus() {
             }
         } catch (e) {}
     } catch (e) {
-        document.getElementById('statusText').textContent = 'নেটওয়ার্ক চেক করুন...';
+        document.getElementById('statusText').textContent = 'Network error. Checking again...';
     }
 }
 

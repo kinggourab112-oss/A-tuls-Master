@@ -244,6 +244,25 @@ input:focus { border-color: var(--cyan); }
 </div>
 
 <script>
+
+// If already logged in with valid session, go to app (refresh-safe)
+(function(){
+  try {
+    var role = localStorage.getItem('a_tuls_role');
+    var last = parseInt(localStorage.getItem('a_tuls_last_active') || '0', 10);
+    var maxIdle = 10 * 60 * 1000;
+    if (role && last && (Date.now() - last) <= maxIdle) {
+      if (role === 'admin' || role === 'user') location.replace('dashboard.html');
+      else if (role === 'pending') location.replace('pending.html');
+    } else if (role) {
+      // expired session only — do NOT delete cloud data
+      localStorage.removeItem('a_tuls_role');
+      localStorage.removeItem('a_tuls_user');
+      localStorage.removeItem('a_tuls_last_active');
+    }
+  } catch(e) {}
+})();
+
 /* ========== JSONBin Config ========== */
 const BIN_ID = '6a6eb29dda38895dfeae700a';
 const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
@@ -572,6 +591,9 @@ async function doLogin() {
                 }
                 await saveDB(db);
             } catch (e) { console.error('Admin device track', e); }
+            localStorage.setItem('a_tuls_last_activity', String(Date.now()));
+            try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
+            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'admin');
             localStorage.setItem('a_tuls_user', JSON.stringify({
                 name: 'Admin Gourab', email: ADMIN_EMAIL, status: 'Approved', mode: 'premium'
@@ -629,6 +651,9 @@ async function doLogin() {
         }
 
         if (user.status === 'Pending') {
+            localStorage.setItem('a_tuls_last_activity', String(Date.now()));
+            try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
+            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'pending');
             localStorage.setItem('a_tuls_user', JSON.stringify(user));
             window.location.href = 'pending.html';
@@ -722,6 +747,9 @@ async function doLogin() {
         db.users[userIdx] = user;
         await saveDB(db);
 
+        localStorage.setItem('a_tuls_last_activity', String(Date.now()));
+        try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
+        localStorage.setItem('a_tuls_last_active', String(Date.now()));
         localStorage.setItem('a_tuls_role', 'user');
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
         window.location.href = 'dashboard.html';
@@ -847,6 +875,7 @@ async function doRegister() {
         msg.textContent = 'রেজিস্ট্রেশন সফল! অ্যাডমিন অ্যাপ্রুভের জন্য অপেক্ষা করুন।';
 
         setTimeout(() => {
+            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'pending');
             localStorage.setItem('a_tuls_user', JSON.stringify(newUser));
             window.location.href = 'pending.html';
