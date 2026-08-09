@@ -1260,15 +1260,37 @@ async function saveDB() {
             DB.users = remote.users;
         }
         DB = mergeDB(remote, DB);
+        // JSONBin size guard — পুরনো বড় পোস্ট ফটো কেটে payload ছোট রাখি (ইউজার/ফটো মুছি না)
+        if (Array.isArray(DB.posts) && DB.posts.length > 80) {
+            DB.posts = DB.posts.slice(0, 80);
+        }
+        if (Array.isArray(DB.messages) && DB.messages.length > 300) {
+            DB.messages = DB.messages.slice(-300);
+        }
+        let body = JSON.stringify(DB);
+        // যদি খুব বড় হয়, পোস্টের পুরনো ফটো ট্রিম (ইউজার প্রোফাইল ফটো নয়)
+        if (body.length > 900000 && Array.isArray(DB.posts)) {
+            DB.posts = DB.posts.map((p, i) => {
+                if (i > 25 && p && p.photo && String(p.photo).length > 50000) {
+                    return Object.assign({}, p, { photo: '' });
+                }
+                return p;
+            });
+            body = JSON.stringify(DB);
+        }
         const res = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Master-Key': MASTER_KEY
             },
-            body: JSON.stringify(DB)
+            body: body
         });
-        if (!res.ok) throw new Error('Save failed');
+        if (!res.ok) {
+            let extra = '';
+            try { extra = (await res.text()).slice(0, 120); } catch (e) {}
+            throw new Error('Save failed (' + res.status + ') ' + extra);
+        }
     } finally {
         saving = false;
     }
@@ -1687,17 +1709,23 @@ function onPhotoSelected(e) {
         const size = Math.min(img.width, img.height);
         const sx = (img.width - size) / 2;
         const sy = (img.height - size) / 2;
-        const out = 400; // profile square
+        let out = 240; // smaller for JSONBin limit
         const c = document.createElement('canvas');
-        c.width = out; c.height = out;
         const ctx = c.getContext('2d');
-        ctx.drawImage(img, sx, sy, size, size, 0, 0, out, out);
-        // compress until reasonable (<400KB data url roughly)
-        let q = 0.85;
-        profilePhotoData = c.toDataURL('image/jpeg', q);
-        while (profilePhotoData.length > 350000 && q > 0.4) {
-            q -= 0.1;
-            profilePhotoData = c.toDataURL('image/jpeg', q);
+        let q = 0.7;
+        function encode() {
+            c.width = out; c.height = out;
+            ctx.drawImage(img, sx, sy, size, size, 0, 0, out, out);
+            return c.toDataURL('image/jpeg', q);
+        }
+        profilePhotoData = encode();
+        while (profilePhotoData.length > 85000 && q > 0.35) {
+            q -= 0.08;
+            profilePhotoData = encode();
+        }
+        while (profilePhotoData.length > 85000 && out > 140) {
+            out -= 40;
+            profilePhotoData = encode();
         }
         URL.revokeObjectURL(url);
         updatePhotoUI();
@@ -1929,17 +1957,25 @@ function onPostPhotoSelected(e) {
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = function() {
-        const maxW = 900;
-        const scale = Math.min(1, maxW / img.width);
+        let maxW = 640;
+        let scale = Math.min(1, maxW / img.width);
         const c = document.createElement('canvas');
         c.width = Math.round(img.width * scale);
         c.height = Math.round(img.height * scale);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        let q = 0.8;
+        let q = 0.65;
         postPhotoData = c.toDataURL('image/jpeg', q);
-        while (postPhotoData.length > 500000 && q > 0.4) {
-            q -= 0.1;
+        while (postPhotoData.length > 120000 && q > 0.35) {
+            q -= 0.08;
             postPhotoData = c.toDataURL('image/jpeg', q);
+        }
+        while (postPhotoData.length > 120000 && maxW > 320) {
+            maxW -= 80;
+            scale = Math.min(1, maxW / img.width);
+            c.width = Math.round(img.width * scale);
+            c.height = Math.round(img.height * scale);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            postPhotoData = c.toDataURL('image/jpeg', Math.max(0.4, q));
         }
         URL.revokeObjectURL(url);
         document.getElementById('postPhotoName').textContent = file.name;
