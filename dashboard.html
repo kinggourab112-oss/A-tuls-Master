@@ -965,7 +965,7 @@ body {
 
         <!-- ===== TOOLS (bottom, always like before) ===== -->
         <div class="section-title" id="toolsSectionTitle">
-            <i class="fas fa-th"></i> Your Premium Tools
+            <i class="fas fa-th"></i> <span data-i18n="Your Premium Tools">Your Premium Tools</span>
             <span class="theme-tag" id="themeTag">Dark Ocean</span>
         </div>
 
@@ -1172,10 +1172,12 @@ function mergeUser(remoteU, localU) {
     const out = Object.assign({}, remoteU || {}, localU || {});
     // nested objects
     out.profile = Object.assign({}, (remoteU && remoteU.profile) || {}, (localU && localU.profile) || {});
-    // ফটো খালি দিয়ে মুছবে না
-    if (!(localU && localU.profile && localU.profile.photo) && remoteU && remoteU.profile && remoteU.profile.photo) {
-        out.profile.photo = remoteU.profile.photo;
-    }
+    // ফটো কখনো খালি দিয়ে মুছবে না — remote/local যেটা নন-খালি
+    const rPhoto = remoteU && remoteU.profile && remoteU.profile.photo;
+    const lPhoto = localU && localU.profile && localU.profile.photo;
+    if (lPhoto) out.profile.photo = lPhoto;
+    else if (rPhoto) out.profile.photo = rPhoto;
+    // if both empty keep empty only
     out.toolUsage = Object.assign({}, (remoteU && remoteU.toolUsage) || {}, (localU && localU.toolUsage) || {});
     out.toolLastUsed = Object.assign({}, (remoteU && remoteU.toolLastUsed) || {}, (localU && localU.toolLastUsed) || {});
     // arrays: union by fingerprint / keep longer
@@ -2266,7 +2268,18 @@ const I18N = {
     'Admin Information': 'Admin Information',
     'Save Profile': 'Save Profile',
     'Chat': 'Chat',
-    'See More': 'See More'
+    'See More': 'See More',
+    'Duplicate Checker': 'Duplicate Checker',
+    'Data Formatter': 'Data Formatter',
+    'Report Generator': 'Report Generator',
+    'Email Validator': 'Email Validator',
+    'Email Vault': 'Email Vault',
+    'Gmail format fixer': 'Gmail format fixer',
+    'Names & Recovery': 'Names & Recovery',
+    'Password Generator': 'Password Generator',
+    'IP TimeZone Finder': 'IP TimeZone Finder',
+    'Tools': 'Tools',
+    'Other Tools': 'Other Tools'
   },
   bn: {
     'Dashboard': 'ড্যাশবোর্ড',
@@ -2279,7 +2292,18 @@ const I18N = {
     'Admin Information': 'অ্যাডমিন তথ্য',
     'Save Profile': 'প্রোফাইল সেভ',
     'Chat': 'চ্যাট',
-    'See More': 'আরও দেখুন'
+    'See More': 'আরও দেখুন',
+    'Duplicate Checker': 'ডুপ্লিকেট চেকার',
+    'Data Formatter': 'ডেটা ফরম্যাটার',
+    'Report Generator': 'রিপোর্ট জেনারেটর',
+    'Email Validator': 'ইমেইল ভ্যালিডেটর',
+    'Email Vault': 'ইমেইল ভল্ট',
+    'Gmail format fixer': 'জিমেইল ফরম্যাট ফিক্সার',
+    'Names & Recovery': 'নেমস অ্যান্ড রিকভারি',
+    'Password Generator': 'পাসওয়ার্ড জেনারেটর',
+    'IP TimeZone Finder': 'আইপি টাইমজোন ফাইন্ডার',
+    'Tools': 'টুলস',
+    'Other Tools': 'অন্যান্য টুলস'
   }
 };
 let uiLang = localStorage.getItem('a_tuls_lang') || 'en';
@@ -2289,6 +2313,33 @@ function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (dict[key]) el.textContent = dict[key];
+  });
+  // tool names in sidebar + cards (data-tool)
+  document.querySelectorAll('[data-tool]').forEach(el => {
+    const key = el.getAttribute('data-tool');
+    if (!dict[key]) return;
+    // keep icon, replace text nodes / last span / card h3
+    const h3 = el.querySelector('h3');
+    if (h3) { h3.textContent = dict[key]; return; }
+    const spans = el.querySelectorAll('span');
+    let done = false;
+    spans.forEach(s => {
+      if (s.hasAttribute('data-i18n')) return;
+      if (!s.querySelector('i') && s.childNodes.length && !done) {
+        // skip badge spans
+        if (s.className && s.className.indexOf('badge') >= 0) return;
+      }
+    });
+    // sidebar menu-item: text after icon
+    if (el.classList.contains('menu-item')) {
+      el.childNodes.forEach(n => {
+        if (n.nodeType === 3 && n.textContent.trim()) {
+          n.textContent = ' ' + dict[key];
+        }
+      });
+      const textSpan = el.querySelector('span:not([data-i18n])');
+      if (textSpan && !textSpan.querySelector('i')) textSpan.textContent = dict[key];
+    }
   });
   const lab = document.getElementById('langToggleLabel');
   if (lab) lab.textContent = uiLang === 'en' ? 'EN' : 'বাং';
