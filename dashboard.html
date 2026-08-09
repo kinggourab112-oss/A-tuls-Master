@@ -5,359 +5,176 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>User Dashboard | A-tuls - √MASTER</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* =====================================================
-   THEME 1: DARK OCEAN — soft glass, wave feel
+   THEME 1: DARK OCEAN (Default)
 ===================================================== */
 :root, [data-theme="dark-ocean"] {
     --primary: #38bdf8;
-    --primary2: #818cf8;
-    --bg: #070f1c;
-    --bg2: #122038;
-    --card: rgba(56,189,248,0.07);
-    --border: rgba(56,189,248,0.2);
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --side1: #0c1a2e;
-    --side2: #060d18;
-    --top: rgba(8,16,32,0.9);
-    --notice-bg: rgba(56,189,248,0.1);
-    --notice-bd: rgba(56,189,248,0.28);
-    --notice-tx: #7dd3fc;
-    --danger-bg: rgba(255,59,92,0.15);
-    --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.3);
-    --badge-bg: rgba(56,189,248,0.12);
-    --badge-tx: #7dd3fc;
-    --shadow: 0 10px 40px rgba(0,20,40,0.5);
-    --radius: 22px;
-    --card-hover: translateY(-8px);
-    --side-w: 270px;
-    --font: 'Plus Jakarta Sans', sans-serif;
-}
-
-/* =====================================================
-   THEME 2: NEON NIGHT — glow, neon borders
-===================================================== */
-[data-theme="neon-night"] {
-    --primary: #e879f9;
-    --primary2: #22d3ee;
-    --bg: #0a0214;
-    --bg2: #1a0a30;
-    --card: rgba(232,121,249,0.08);
-    --border: rgba(232,121,249,0.35);
-    --text: #fdf4ff;
-    --muted: #d8b4fe;
-    --side1: #1f0640;
-    --side2: #0c0218;
-    --top: rgba(18,4,36,0.92);
-    --notice-bg: rgba(232,121,249,0.12);
-    --notice-bd: rgba(34,211,238,0.35);
-    --notice-tx: #f0abfc;
-    --danger-bg: rgba(255,59,92,0.18);
-    --danger-tx: #ff6b8a;
-    --danger-bd: rgba(255,59,92,0.35);
-    --badge-bg: rgba(34,211,238,0.12);
-    --badge-tx: #67e8f9;
-    --shadow: 0 0 28px rgba(232,121,249,0.25), 0 0 60px rgba(34,211,238,0.08);
-    --radius: 14px;
-    --card-hover: translateY(-6px) scale(1.03);
-    --side-w: 268px;
-    --font: 'Space Grotesk', sans-serif;
-}
-
-/* =====================================================
-   THEME 3: GOLD PREMIUM — luxury, elegant
-===================================================== */
-[data-theme="gold-premium"] {
-    --primary: #fbbf24;
-    --primary2: #f59e0b;
-    --bg: #120e06;
-    --bg2: #241c0c;
-    --card: rgba(251,191,36,0.08);
-    --border: rgba(251,191,36,0.32);
-    --text: #fffbeb;
-    --muted: #d6bc8a;
-    --side1: #2a2008;
-    --side2: #100c04;
-    --top: rgba(24,18,8,0.94);
-    --notice-bg: rgba(251,191,36,0.1);
-    --notice-bd: rgba(251,191,36,0.3);
-    --notice-tx: #fcd34d;
-    --danger-bg: rgba(255,59,92,0.15);
-    --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.3);
-    --badge-bg: rgba(251,191,36,0.12);
-    --badge-tx: #fcd34d;
-    --shadow: 0 12px 40px rgba(251,191,36,0.08);
-    --radius: 28px;
-    --card-hover: translateY(-10px);
-    --side-w: 285px;
-    --font: 'Playfair Display', Georgia, serif;
-}
-
-/* =====================================================
-   THEME 4: CYBER PUNK — sharp, tech, angled
-===================================================== */
-[data-theme="cyber-punk"] {
-    --primary: #ff2d95;
-    --primary2: #00f0ff;
-    --bg: #0a0014;
-    --bg2: #1a0030;
-    --card: rgba(0,240,255,0.06);
-    --border: rgba(0,240,255,0.35);
-    --text: #f0fdfa;
-    --muted: #a5b4fc;
-    --side1: #1a0033;
-    --side2: #0a0014;
-    --top: rgba(12,0,24,0.95);
-    --notice-bg: rgba(255,45,149,0.12);
-    --notice-bd: rgba(0,240,255,0.4);
+    --primary2: #c084fc;
+    --bg: #0b1424;
+    --bg2: #152238;
+    --card: rgba(56,189,248,0.08);
+    --border: rgba(56,189,248,0.22);
+    --text: #f8fafc;
+    --muted: #a5b4c8;
+    --side1: #0e1a32;
+    --side2: #0a1220;
+    --top: rgba(15,25,45,0.92);
+    --notice-bg: rgba(0,240,255,0.1);
+    --notice-bd: rgba(0,240,255,0.3);
     --notice-tx: #00f0ff;
-    --danger-bg: rgba(255,59,92,0.2);
+    --danger-bg: rgba(255,59,92,0.15);
     --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.4);
-    --badge-bg: rgba(255,45,149,0.15);
-    --badge-tx: #ff2d95;
-    --shadow: 4px 4px 0 rgba(0,240,255,0.25);
-    --radius: 4px;
-    --card-hover: translate(-3px, -3px);
-    --side-w: 255px;
-    --font: 'Orbitron', sans-serif;
-}
-
-/* =====================================================
-   THEME 5: EMERALD LIGHT — clean light UI
-===================================================== */
-[data-theme="emerald-light"] {
-    --primary: #0d9488;
-    --primary2: #10b981;
-    --bg: #f0fdfa;
-    --bg2: #e6fffa;
-    --card: #ffffff;
-    --border: #99f6e4;
-    --text: #134e4a;
-    --muted: #0f766e;
-    --side1: #0f766e;
-    --side2: #115e59;
-    --top: #ffffff;
-    --notice-bg: #ecfdf5;
-    --notice-bd: #6ee7b7;
-    --notice-tx: #047857;
-    --danger-bg: #fef2f2;
-    --danger-tx: #dc2626;
-    --danger-bd: #fecaca;
-    --badge-bg: #ccfbf1;
-    --badge-tx: #0f766e;
-    --shadow: 0 8px 30px rgba(13,148,136,0.1);
+    --danger-bd: rgba(255,59,92,0.3);
+    --badge-bg: rgba(0,240,255,0.12);
+    --badge-tx: #00f0ff;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
     --radius: 20px;
     --card-hover: translateY(-6px);
     --side-w: 270px;
     --font: 'Plus Jakarta Sans', sans-serif;
 }
 
-
-/* ===== Base + deep theme differences ===== */
-.card { backdrop-filter: blur(14px); }
-.card:hover { box-shadow: 0 14px 44px rgba(0,0,0,0.28); }
-.sidebar { box-shadow: 8px 0 40px rgba(0,0,0,0.35); }
-.topbar { box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
-.page-title { letter-spacing: -0.5px; }
-.icon { box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
-
-/* --- DARK OCEAN: soft glass waves --- */
-[data-theme="dark-ocean"] body {
-    background:
-        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(56,189,248,0.15), transparent 50%),
-        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(129,140,248,0.12), transparent 45%),
-        var(--bg);
-}
-[data-theme="dark-ocean"] .card {
-    border-radius: 22px;
-    background: linear-gradient(145deg, rgba(56,189,248,0.1), rgba(15,25,45,0.5));
-}
-[data-theme="dark-ocean"] .sidebar {
-    border-right: 1px solid rgba(56,189,248,0.12);
-}
-[data-theme="dark-ocean"] .menu-item.active {
-    background: linear-gradient(90deg, rgba(56,189,248,0.25), transparent);
-    border-left: 3px solid #38bdf8;
-}
-[data-theme="dark-ocean"] .icon { border-radius: 16px; }
-
-/* --- NEON NIGHT: glow everything --- */
-[data-theme="neon-night"] body {
-    background:
-        radial-gradient(circle at 20% 20%, rgba(232,121,249,0.18), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(34,211,238,0.12), transparent 40%),
-        var(--bg);
-}
-[data-theme="neon-night"] .card {
-    border-radius: 14px;
-    box-shadow: 0 0 20px rgba(232,121,249,0.12), inset 0 0 20px rgba(34,211,238,0.03);
-}
-[data-theme="neon-night"] .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary), var(--primary2), var(--primary));
-}
-[data-theme="neon-night"] .card:hover {
-    box-shadow: 0 0 32px rgba(232,121,249,0.35), 0 0 60px rgba(34,211,238,0.15);
-}
-[data-theme="neon-night"] .sidebar {
-    box-shadow: 0 0 40px rgba(176,38,255,0.2);
-}
-[data-theme="neon-night"] .menu-item.active {
-    background: linear-gradient(90deg, rgba(232,121,249,0.35), transparent);
-    border-left: 3px solid #e879f9;
-    text-shadow: 0 0 12px rgba(232,121,249,0.8);
-}
-[data-theme="neon-night"] .page-title {
-    text-shadow: 0 0 20px rgba(232,121,249,0.5);
-}
-[data-theme="neon-night"] .icon {
-    border-radius: 12px;
-    box-shadow: 0 0 16px rgba(232,121,249,0.3);
-}
-[data-theme="neon-night"] .grid { gap: 18px; }
-
-/* --- GOLD PREMIUM: luxury serif, large soft cards --- */
-[data-theme="gold-premium"] body {
-    background:
-        radial-gradient(ellipse at top, rgba(251,191,36,0.08), transparent 55%),
-        linear-gradient(180deg, #1a1408 0%, #0c0a04 100%);
-}
-[data-theme="gold-premium"] .card {
-    border-radius: 28px;
-    border: 1px solid rgba(251,191,36,0.28);
-    background: linear-gradient(160deg, rgba(251,191,36,0.12), rgba(20,14,6,0.7));
-    padding: 26px;
-}
-[data-theme="gold-premium"] .card:hover {
-    box-shadow: 0 16px 48px rgba(251,191,36,0.18);
-    border-color: rgba(251,191,36,0.55);
-}
-[data-theme="gold-premium"] .sidebar {
-    border-right: 1px solid rgba(251,191,36,0.2);
-}
-[data-theme="gold-premium"] .menu-item.active {
-    background: linear-gradient(90deg, rgba(251,191,36,0.28), transparent);
-    border-left: 3px solid #fbbf24;
-}
-[data-theme="gold-premium"] .page-title {
-    font-family: 'Playfair Display', serif;
-    letter-spacing: 0.5px;
-}
-[data-theme="gold-premium"] .icon {
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(251,191,36,0.2);
-}
-[data-theme="gold-premium"] .grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 22px;
-}
-[data-theme="gold-premium"] .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-}
-[data-theme="gold-premium"] .card h3 {
-    font-family: 'Playfair Display', serif;
+/* =====================================================
+   THEME 2: NEON NIGHT
+===================================================== */
+[data-theme="neon-night"] {
+    --primary: #f0abfc;
+    --primary2: #67e8f9;
+    --bg: #10041f;
+    --bg2: #1e0a3a;
+    --card: rgba(240,171,252,0.14);
+    --border: rgba(240,171,252,0.4);
+    --text: #fdf4ff;
+    --muted: #e9d5ff;
+    --side1: #2a0850;
+    --side2: #120428;
+    --top: rgba(28,8,48,0.94);
+    --notice-bg: rgba(176,38,255,0.14);
+    --notice-bd: rgba(176,38,255,0.4);
+    --notice-tx: #d4a5ff;
+    --danger-bg: rgba(255,59,92,0.18);
+    --danger-tx: #ff6b8a;
+    --danger-bd: rgba(255,59,92,0.35);
+    --badge-bg: rgba(176,38,255,0.18);
+    --badge-tx: #d4a5ff;
+    --shadow: 0 0 40px rgba(176,38,255,0.2);
+    --radius: 16px;
+    --card-hover: translateY(-6px) scale(1.02);
+    --side-w: 270px;
 }
 
-/* --- CYBER PUNK: hard edges, offset shadows, mono feel --- */
-[data-theme="cyber-punk"] body {
-    background:
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,240,255,0.015) 2px, rgba(0,240,255,0.015) 4px),
-        linear-gradient(135deg, #0a0014 0%, #1a0030 50%, #0a0014 100%);
-}
-[data-theme="cyber-punk"] .card {
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--primary);
-    box-shadow: 4px 4px 0 rgba(0,240,255,0.2);
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-}
-[data-theme="cyber-punk"] .card:hover {
-    border-left-color: var(--primary2);
-    box-shadow: 6px 6px 0 rgba(255,45,149,0.35);
-}
-[data-theme="cyber-punk"] .sidebar {
-    border-right: 2px solid rgba(0,240,255,0.25);
-}
-[data-theme="cyber-punk"] .sidebar-logo i {
-    border-radius: 4px;
-    border: 1px solid rgba(0,240,255,0.5);
-}
-[data-theme="cyber-punk"] .menu-item {
-    border-radius: 4px;
-}
-[data-theme="cyber-punk"] .menu-item.active {
-    background: linear-gradient(90deg, rgba(255,45,149,0.3), transparent);
-    border-left: 3px solid #00f0ff;
-    border-radius: 0;
-}
-[data-theme="cyber-punk"] .page-title {
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 1rem;
-}
-[data-theme="cyber-punk"] .icon {
-    border-radius: 4px;
-    border: 1px solid rgba(0,240,255,0.3);
-}
-[data-theme="cyber-punk"] .grid {
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 14px;
-}
-[data-theme="cyber-punk"] .logout-btn,
-[data-theme="cyber-punk"] .user-badge {
-    border-radius: 4px;
-}
-[data-theme="cyber-punk"] .section-title {
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 0.95rem;
+/* =====================================================
+   THEME 3: GOLD PREMIUM
+===================================================== */
+[data-theme="gold-premium"] {
+    --primary: #fcd34d;
+    --primary2: #fb923c;
+    --bg: #1c160a;
+    --bg2: #2e2412;
+    --card: rgba(252,211,77,0.14);
+    --border: rgba(252,211,77,0.4);
+    --text: #fffef5;
+    --muted: #e7d29a;
+    --side1: #3d2e08;
+    --side2: #1a1408;
+    --top: rgba(35,28,12,0.94);
+    --notice-bg: rgba(255,200,0,0.12);
+    --notice-bd: rgba(255,200,0,0.35);
+    --notice-tx: #ffc800;
+    --danger-bg: rgba(255,59,92,0.15);
+    --danger-tx: #ff3b5c;
+    --danger-bd: rgba(255,59,92,0.3);
+    --badge-bg: rgba(255,200,0,0.14);
+    --badge-tx: #ffc800;
+    --shadow: 0 8px 32px rgba(255,200,0,0.12);
+    --radius: 24px;
+    --card-hover: translateY(-8px);
+    --side-w: 280px;
 }
 
-/* --- EMERALD LIGHT: airy, soft white cards --- */
-[data-theme="emerald-light"] body {
-    background:
-        radial-gradient(ellipse at 0% 0%, #ccfbf1 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 100%, #d1fae5 0%, transparent 45%),
-        #f0fdfa;
+/* =====================================================
+   THEME 4: CYBER PUNK
+===================================================== */
+[data-theme="cyber-punk"] {
+    --primary: #ff6bcb;
+    --primary2: #5eead4;
+    --bg: #160028;
+    --bg2: #2a0050;
+    --card: rgba(255,107,203,0.14);
+    --border: rgba(94,234,212,0.4);
+    --text: #f8fafc;
+    --muted: #ddd6fe;
+    --side1: #3b0066;
+    --side2: #160028;
+    --top: rgba(32,0,56,0.94);
+    --notice-bg: rgba(0,240,255,0.1);
+    --notice-bd: rgba(255,45,149,0.4);
+    --notice-tx: #00f0ff;
+    --danger-bg: rgba(255,59,92,0.18);
+    --danger-tx: #ff3b5c;
+    --danger-bd: rgba(255,59,92,0.35);
+    --badge-bg: rgba(255,45,149,0.16);
+    --badge-tx: #ff2d95;
+    --shadow: 0 0 30px rgba(255,45,149,0.18);
+    --radius: 8px;
+    --card-hover: translateY(-4px) skewX(-1deg);
+    --side-w: 260px;
 }
-[data-theme="emerald-light"] .card {
-    border-radius: 20px;
-    background: #fff;
-    border: 1px solid #99f6e4;
-    box-shadow: 0 4px 20px rgba(13,148,136,0.06);
+
+/* =====================================================
+   THEME 5: EMERALD LIGHT
+===================================================== */
+[data-theme="emerald-light"] {
+    --primary: #0d9488;
+    --primary2: #059669;
+    --bg: #f0fdfa;
+    --bg2: #ccfbf1;
+    --card: #ffffff;
+    --border: #5eead4;
+    --text: #042f2e;
+    --muted: #0f766e;
+    --side1: #0f766e;
+    --side2: #115e59;
+    --top: #ffffff;
+    --notice-bg: #ecfdf5;
+    --notice-bd: #a7f3d0;
+    --notice-tx: #047857;
+    --danger-bg: #fef2f2;
+    --danger-tx: #dc2626;
+    --danger-bd: #fecaca;
+    --badge-bg: #f0fdfa;
+    --badge-tx: #0f766e;
+    --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --radius: 18px;
+    --card-hover: translateY(-5px);
+    --side-w: 270px;
+}
+
+
+/* ===== Theme polish ===== */
+.card {
+    backdrop-filter: blur(12px);
+}
+.card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
 }
 [data-theme="emerald-light"] .card:hover {
-    box-shadow: 0 14px 36px rgba(13,148,136,0.14);
-    border-color: #2dd4bf;
+    box-shadow: 0 12px 32px rgba(20,184,166,0.18);
 }
-[data-theme="emerald-light"] .sidebar {
-    box-shadow: 4px 0 24px rgba(13,148,136,0.15);
+.sidebar {
+    box-shadow: 8px 0 40px rgba(0,0,0,0.35);
 }
-[data-theme="emerald-light"] .topbar {
-    border-bottom: 1px solid #99f6e4;
-    box-shadow: 0 2px 12px rgba(13,148,136,0.06);
+.topbar {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
 }
-[data-theme="emerald-light"] .menu-item.active {
-    background: rgba(255,255,255,0.2);
+.page-title {
+    letter-spacing: -0.5px;
 }
-[data-theme="emerald-light"] .icon {
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(13,148,136,0.12);
-}
-[data-theme="emerald-light"] .admin-info-box {
-    background: #fff;
-    box-shadow: 0 4px 16px rgba(13,148,136,0.08);
+.icon {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; font-family: var(--font, 'Plus Jakarta Sans', sans-serif); }
@@ -751,9 +568,6 @@ body {
         <a class="menu-item active" href="dashboard.html">
             <i class="fas fa-th-large"></i> Dashboard
         </a>
-        <a class="menu-item" id="adminPanelMenu" href="admin.html" style="display:none;">
-            <i class="fas fa-user-shield"></i> Admin Panel
-        </a>
         <a class="menu-item" href="#myProfile" onclick="showProfileSection();return false;">
             <i class="fas fa-user-circle"></i> My Profile
         </a>
@@ -813,9 +627,6 @@ body {
             <div class="page-title">Dashboard</div>
         </div>
         <div class="topbar-right">
-            <a id="adminPanelBtn" href="admin.html" class="logout-btn" style="display:none;background:var(--badge-bg);color:var(--badge-tx);border:1px solid var(--border);text-decoration:none;">
-                <i class="fas fa-user-shield"></i> Admin Panel
-            </a>
             <div class="user-badge">
                 <i class="fas fa-user"></i>
                 <span id="userName">User</span>
@@ -830,10 +641,9 @@ body {
 
     <div class="admin-info-box" id="adminInfoBox">
         <div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>
-        <div><i class="fas fa-user"></i> Name: <strong>Admin Gourab</strong></div>
-        <div><i class="fas fa-id-badge"></i> Admin ID: <strong>gourabmon112233@gmail.com</strong></div>
         <div><i class="fab fa-telegram"></i> Telegram: <strong>+8801944035239</strong></div>
-        <div><i class="fab fa-facebook"></i> Facebook: Gourab Official</div>
+        <div><i class="fab fa-facebook"></i> Facebook: <a href="#" target="_blank">Gourab Official</a></div>
+        <div><i class="fas fa-envelope"></i> Email: gourabmon112233@gmail.com</div>
         <div style="margin-top:4px;opacity:0.7;font-size:12px;">Developed by Gourab • 01944035239</div>
     </div>
 
@@ -901,16 +711,14 @@ body {
         <div id="chatPanel" style="margin-bottom:28px;display:none;">
             <div class="section-title"><i class="fas fa-comments"></i> Chat <span id="chatWithName" class="theme-tag"></span></div>
             <div class="card" style="cursor:default;padding:16px;max-width:640px;">
-                <div id="chatMessages" style="height:320px;overflow-y:auto;background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:13.5px;border:1px solid var(--border);"></div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+                <div id="chatMessages" style="height:220px;overflow-y:auto;background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:13.5px;border:1px solid var(--border);"></div>
+                <div style="display:flex;gap:10px;">
+                    <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
                     <button class="logout-btn" style="background:var(--primary);color:#000;border:none;white-space:nowrap;" onclick="sendChat()">
                         <i class="fas fa-paper-plane"></i> Send
                     </button>
-                    <button class="logout-btn" style="border:1px solid var(--border);" onclick="loadChatMessages()"><i class="fas fa-sync"></i></button>
                     <button class="logout-btn" style="border:1px solid var(--border);" onclick="closeChat()">Close</button>
                 </div>
-                <p style="font-size:11px;color:var(--muted);margin-top:8px;">মেসেজ অটো রিফ্রেশ হয় • অন্যজনের মেসেজ এখানে দেখা যাবে</p>
             </div>
         </div>
 
@@ -943,8 +751,8 @@ body {
                             <textarea id="profileBio" rows="2" placeholder="Short bio..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
                         </div>
                         <div style="margin-bottom:10px;">
-                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Public Note / Message (নাম ও ID-এর উপরে সবাই দেখবে)</label>
-                            <textarea id="profileMessage" rows="2" placeholder="নোট লিখুন — Members-এ আপনার নামের উপরে দেখাবে..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Public Message (শুধু Premium হলে নামের উপরে সবাই দেখবে)</label>
+                            <textarea id="profileMessage" rows="2" placeholder="Your public status..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
                         </div>
                         <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;">
                             <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
@@ -1072,15 +880,7 @@ if (role !== 'user' && role !== 'admin') {
     location.href = 'index.html';
 }
 
-document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin' : 'User');
-
-// Admin হলে Dashboard + Admin Panel দুটো অপশন দেখাও
-if (role === 'admin') {
-    const apMenu = document.getElementById('adminPanelMenu');
-    const apBtn = document.getElementById('adminPanelBtn');
-    if (apMenu) apMenu.style.display = '';
-    if (apBtn) apBtn.style.display = 'inline-flex';
-}
+document.getElementById('userName').textContent = user.name || 'User';
 
 /* ========== DEVICE FINGERPRINT ========== */
 function getBrowserName() {
@@ -1301,30 +1101,19 @@ function applyTheme(theme) {
 function updateAdminInfo(visible) {
     const box = document.getElementById('adminInfoBox');
     if (!box) return;
-    // HIDE ON DASH → শুধু এই বক্স লুকানো; SHOW → সবাই দেখবে
     box.style.display = visible !== false ? 'block' : 'none';
     const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
-    const tg = escapeHtmlLocal(info.telegram || '+8801944035239');
-    const fbRaw = (info.facebook || 'Gourab Official').trim();
-    const fb = escapeHtmlLocal(fbRaw);
-    const em = escapeHtmlLocal(info.email || 'gourabmon112233@gmail.com');
-    const extra = escapeHtmlLocal(info.extra || 'Developed by Gourab • 01944035239');
-    const an = escapeHtmlLocal(info.name || 'Admin Gourab');
-    const fbHtml = /^https?:\/\//i.test(fbRaw)
-        ? '<a href="' + escapeHtmlLocal(fbRaw) + '" target="_blank" rel="noopener">' + fb + '</a>'
-        : fb;
-    // Admin photo — সবাই দেখবে
-    const photo = info.photo || '';
-    const photoHtml = photo
-        ? '<img src="' + String(photo).replace(/"/g, '') + '" alt="Admin" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);margin-bottom:10px;display:block;">'
-        : '';
+    const tg = info.telegram || '+8801944035239';
+    const fb = info.facebook || 'Gourab Official';
+    const em = info.email || 'gourabmon112233@gmail.com';
+    const extra = info.extra || 'Developed by Gourab • 01944035239';
+    const an = info.name || 'Admin Gourab';
     box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
-        + photoHtml
         + '<div><i class="fas fa-user"></i> Name: <strong>' + an + '</strong></div>'
         + '<div><i class="fas fa-id-badge"></i> Admin ID: <strong>' + em + '</strong></div>'
         + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
-        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fbHtml + '</div>'
-        + (extra ? '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>' : '');
+        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fb + '</div>'
+        + '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>';
 }
 
 function updateNotice(notice) {
@@ -1379,12 +1168,6 @@ async function syncFromCloud() {
                     localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
                     location.href = 'pending.html';
                     return;
-                }
-                // প্রোফাইল/ফটো ক্লাউডে থাকলে সেটাই রাখো — খালি ডেটা দিয়ে মুছবে না
-                if (fresh.profile && user.profile) {
-                    if (!fresh.profile.photo && user.profile.photo) {
-                        fresh.profile.photo = user.profile.photo;
-                    }
                 }
                 user = fresh;
                 localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
@@ -1500,7 +1283,10 @@ function showProfileSection() {
     const title = document.getElementById('toolsSectionTitle');
     if (title) title.style.display = 'none';
     setActiveMenu('profile');
-    loadProfileForm();
+    (async function(){
+        try { if (!DB) DB = await fetchDB(); } catch(e) {}
+        loadProfileForm();
+    })();
     closeSidebar();
 }
 
@@ -1545,7 +1331,6 @@ function setActiveMenu(which) {
 }
 
 function loadProfileForm() {
-    // Admin → settings.adminInfo থেকে লোড
     if (role === 'admin') {
         const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
         document.getElementById('profileName').value = info.name || 'Admin Gourab';
@@ -1624,7 +1409,7 @@ async function saveMyProfile() {
     try {
         if (!DB) DB = await fetchDB();
 
-        // Admin → settings.adminInfo সেভ (সবার ড্যাশবোর্ডে দেখা যাবে)
+        // Admin saves to settings.adminInfo (সবাই দেখবে)
         if (role === 'admin') {
             if (!DB.settings) DB.settings = {};
             const prev = DB.settings.adminInfo || {};
@@ -1634,12 +1419,11 @@ async function saveMyProfile() {
                 facebook: document.getElementById('profileBio').value.trim() || prev.facebook || '',
                 email: prev.email || 'gourabmon112233@gmail.com',
                 extra: document.getElementById('profileMessage').value.trim() || '',
-                // ফটো ডিলিট না করা পর্যন্ত থাকবে
                 photo: profilePhotoData || prev.photo || ''
             };
             document.getElementById('userName').textContent = DB.settings.adminInfo.name;
             await saveDB();
-            updateAdminInfo(DB.settings.adminInfoVisible !== false);
+            updateAdminInfo(true);
             const msg = document.getElementById('profileSaveMsg');
             if (msg) {
                 msg.style.display = 'block';
@@ -1647,7 +1431,7 @@ async function saveMyProfile() {
                 msg.textContent = '✅ Admin প্রোফাইল সেভ হয়েছে! সবাই দেখতে পারবে।';
                 setTimeout(() => { msg.style.display = 'none'; }, 3000);
             }
-            try { renderCommunity(false); } catch (e) {}
+            renderCommunity(false);
             return;
         }
 
@@ -1661,35 +1445,23 @@ async function saveMyProfile() {
         if (name) DB.users[idx].name = name;
 
         if (!DB.users[idx].profile) DB.users[idx].profile = {};
-        const prevPhoto = DB.users[idx].profile.photo || '';
         DB.users[idx].profile.phone = document.getElementById('profilePhone').value.trim();
         DB.users[idx].profile.bio = document.getElementById('profileBio').value.trim();
         DB.users[idx].profile.publicMessage = document.getElementById('profileMessage').value.trim();
         DB.users[idx].profile.showOnHome = document.getElementById('profileShowOnHome').checked;
-        // ফটো মুছে না দেওয়া পর্যন্ত আগের ফটো রাখো (রিফ্রেশে হারাবে না)
-        DB.users[idx].profile.photo = profilePhotoData || prevPhoto || '';
+        if (profilePhotoData) DB.users[idx].profile.photo = profilePhotoData;
 
         user = DB.users[idx];
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
         document.getElementById('userName').textContent = user.name || 'User';
 
         await saveDB();
-        // ক্লাউড থেকে আবার নিশ্চিত করে নাও — রিফ্রেশে একই থাকবে
-        try {
-            DB = await fetchDB();
-            const fresh = (DB.users || []).find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
-            if (fresh) {
-                user = fresh;
-                localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
-                profilePhotoData = (fresh.profile && fresh.profile.photo) || profilePhotoData || '';
-            }
-        } catch (e) {}
         const msg = document.getElementById('profileSaveMsg');
         msg.style.display = 'block';
         msg.style.color = 'var(--primary)';
         msg.textContent = '✅ প্রোফাইল সেভ হয়েছে!';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
-        try { renderCommunity(false); } catch (e) { try { renderCommunity(); } catch (e2) {} }
+        renderCommunity(false);
     } catch (e) {
         alert('সেভ ব্যর্থ: ' + e.message);
     }
@@ -1722,18 +1494,15 @@ async function renderCommunity(fullList) {
                 const adminTg = ai.telegram || '+8801944035239';
                 const adminFb = ai.facebook || 'Gourab Official';
                 const adminExtra = ai.extra || '';
-                const adminPhoto = ai.photo || '';
-                // Admin photo — সবাই Members-এ দেখবে
-                const adminPhotoHtml = adminPhoto
-                    ? `<img src="${String(adminPhoto).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
-                    : `<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;"><i class="fas fa-user-shield"></i></div>`;
                 return `
                 <div class="card" style="cursor:default;padding:16px;border:1px solid var(--primary);">
                     <div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">
                         👑 OFFICIAL ADMIN
                     </div>
                     <div style="display:flex;gap:12px;align-items:center;">
-                        ${adminPhotoHtml}
+                        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
                         <div>
                             <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(adminName)}</div>
                             <div style="font-size:11px;color:var(--muted);">ADMIN ID</div>
@@ -1767,9 +1536,8 @@ async function renderCommunity(fullList) {
             const photoHtml = photo
                 ? `<img src="${String(photo).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
                 : `<div style="width:56px;height:56px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-user"></i></div>`;
-            // নোট থাকলে নাম/ID-এর উপরে সবাই দেখবে (Free + Premium)
-            const msgHtml = msg
-                ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;word-break:break-word;">💬 ${escapeHtmlLocal(msg)}</div>`
+            const msgHtml = (isPremium && msg)
+                ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">💬 ${escapeHtmlLocal(msg)}</div>`
                 : '';
             const chatBtn = isMe ? '' : `<button onclick="openChat('${escapeHtmlLocal(u.email)}','${escapeHtmlLocal(u.name || 'User')}')" class="logout-btn" style="margin-top:8px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;"><i class="fas fa-comments"></i> Chat</button>`;
             const waBtn = phone ? `<a href="https://wa.me/${phone.replace(/[^0-9+]/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;margin-left:8px;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none;"><i class="fab fa-whatsapp"></i> WA</a>` : '';
@@ -1778,10 +1546,9 @@ async function renderCommunity(fullList) {
                 ${msgHtml}
                 <div style="display:flex;gap:12px;align-items:center;">
                     ${photoHtml}
-                    <div style="min-width:0;">
+                    <div>
                         <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(u.name || 'User')}${isMe ? ' (You)' : ''}</div>
                         <div style="font-size:11px;color:var(--muted);">${mode}</div>
-                        <div style="font-size:10px;color:var(--muted);opacity:0.85;word-break:break-all;">ID: ${escapeHtmlLocal(u.email || '')}</div>
                     </div>
                 </div>
                 ${bio ? `<div style="margin-top:10px;font-size:12.5px;color:var(--muted);">${escapeHtmlLocal(bio)}</div>` : ''}
@@ -1790,8 +1557,9 @@ async function renderCommunity(fullList) {
         }
 
         let html = '';
-        // Members-এ Admin কার্ড সবসময় দেখাবে (HIDE শুধু উপরের Admin Information বক্সে)
-        html += memberCard(null, true);
+        if (settings.adminInfoVisible !== false) {
+            html += memberCard(null, true);
+        }
 
         let users = (DB.users || []).filter(u => {
             const pr = u.profile || {};
@@ -2042,72 +1810,54 @@ async function addComment(postId) {
 
 
 /* ===== CHAT (stored in JSONBin messages array) ===== */
-let chatPollTimer = null;
-
 function openChat(email, name) {
     chatPartnerEmail = email;
     chatPartnerName = name;
     document.getElementById('chatPanel').style.display = 'block';
-    document.getElementById('chatWithName').textContent = name + ' • ' + email;
+    document.getElementById('chatWithName').textContent = name;
     document.getElementById('chatPanel').scrollIntoView({ behavior: 'smooth' });
     loadChatMessages();
-    // অন্যজনের মেসেজ দেখতে অটো রিফ্রেশ
-    if (chatPollTimer) clearInterval(chatPollTimer);
-    chatPollTimer = setInterval(function() {
-        if (chatPartnerEmail && document.getElementById('chatPanel').style.display !== 'none') {
-            loadChatMessages(true);
-        }
-    }, 3000);
 }
 
 function closeChat() {
     document.getElementById('chatPanel').style.display = 'none';
     chatPartnerEmail = null;
-    if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
 }
 
-async function loadChatMessages(silent) {
+async function loadChatMessages() {
     const box = document.getElementById('chatMessages');
     if (!box || !chatPartnerEmail) return;
     try {
-        // সবসময় ফ্রেশ ডেটা নাও যাতে অন্যজনের মেসেজ দেখা যায়
-        DB = await fetchDB();
+        if (!DB) DB = await fetchDB();
         if (!Array.isArray(DB.messages)) DB.messages = [];
 
-        const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
-        const other = String(chatPartnerEmail || '').toLowerCase();
-        if (!me || !other) return;
+        const me = (user && user.email || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+        const other = chatPartnerEmail.toLowerCase();
 
         const msgs = DB.messages.filter(m => {
-            const f = String(m.from || '').toLowerCase();
-            const t = String(m.to || '').toLowerCase();
+            const f = (m.from || '').toLowerCase();
+            const t = (m.to || '').toLowerCase();
             return (f === me && t === other) || (f === other && t === me);
-        }).slice(-100);
+        }).slice(-80);
 
         if (!msgs.length) {
-            if (!silent) {
-                box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</div>';
-            }
+            box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</div>';
             return;
         }
 
-        const html = msgs.map(m => {
-            const mine = String(m.from || '').toLowerCase() === me;
+        box.innerHTML = msgs.map(m => {
+            const mine = (m.from || '').toLowerCase() === me;
             const time = m.time ? new Date(m.time).toLocaleString('bn-BD', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : '';
             return `<div style="margin-bottom:10px;text-align:${mine ? 'right' : 'left'};">
-                <div style="display:inline-block;max-width:85%;padding:10px 14px;border-radius:14px;background:${mine ? 'var(--primary)' : 'var(--card)'};color:${mine ? '#000' : 'var(--text)'};border:1px solid var(--border);font-size:13.5px;line-height:1.45;word-break:break-word;text-align:left;">
-                    ${!mine ? '<div style="font-size:10px;opacity:0.7;margin-bottom:2px;">' + escapeHtmlLocal(chatPartnerName || 'User') + '</div>' : ''}
+                <div style="display:inline-block;max-width:80%;padding:8px 12px;border-radius:12px;background:${mine ? 'var(--primary)' : 'var(--card)'};color:${mine ? '#000' : 'var(--text)'};border:1px solid var(--border);font-size:13px;">
                     ${escapeHtmlLocal(m.text)}
                 </div>
                 <div style="font-size:10px;color:var(--muted);margin-top:2px;">${time}</div>
             </div>`;
         }).join('');
-
-        const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
-        box.innerHTML = html;
-        if (!silent || nearBottom) box.scrollTop = box.scrollHeight;
+        box.scrollTop = box.scrollHeight;
     } catch (e) {
-        if (!silent) box.innerHTML = '<div style="color:var(--danger-tx);">মেসেজ লোড ব্যর্থ</div>';
+        box.innerHTML = '<div style="color:var(--danger-tx);">মেসেজ লোড ব্যর্থ</div>';
     }
 }
 
@@ -2120,16 +1870,17 @@ async function sendChat() {
     if (!me) return alert('লগইন প্রয়োজন');
 
     try {
-        DB = await fetchDB();
+        if (!DB) DB = await fetchDB();
         if (!Array.isArray(DB.messages)) DB.messages = [];
 
         DB.messages.push({
-            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+            id: Date.now().toString(36),
             from: me,
             to: chatPartnerEmail,
             text: text,
             time: new Date().toISOString()
         });
+        // keep last 500 messages globally
         if (DB.messages.length > 500) DB.messages = DB.messages.slice(-500);
 
         await saveDB();

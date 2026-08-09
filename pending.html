@@ -42,7 +42,11 @@ p { color:#8b9cb3; font-size:15px; line-height:1.6; margin-bottom:20px; }
     অ্যাডমিন আপনার অ্যাকাউন্ট অ্যাপ্রুভ করলে আপনি সব টুল ব্যবহার করতে পারবেন।<br><br>
     অনুগ্রহ করে অপেক্ষা করুন।</p>
     <div class="status" id="statusText">স্ট্যাটাস চেক হচ্ছে...</div>
-    <button class="btn" onclick="location.href='index.html'">
+    <a class="btn" id="msgAdminBtn" href="https://wa.me/8801336489062?text=Assalamu%20Alaikum%20Admin%2C%20amar%20account%20pending%20ache.%20Please%20approve%20koren." target="_blank" rel="noopener" style="text-decoration:none;margin-bottom:12px;background:linear-gradient(135deg,#25D366,#128C7E);">
+        <i class="fab fa-whatsapp"></i> Message Admin (WhatsApp)
+    </a>
+    <p style="font-size:12px;color:#64748b;margin-bottom:16px;">WhatsApp: 01336-489062</p>
+    <button class="btn" onclick="location.href='index.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;">
         <i class="fas fa-arrow-left"></i> Back to Login
     </button>
 </div>
@@ -123,6 +127,15 @@ async function checkStatus() {
         }
 
         document.getElementById('statusText').textContent = 'অপেক্ষা করুন... (অটো চেক চলছে)';
+        try {
+            const tg = (db.settings && db.settings.adminInfo && db.settings.adminInfo.telegram) || '';
+            // Keep fixed number 01336-489062 as requested; only refresh prefilled text with user email
+            const btn = document.getElementById('msgAdminBtn');
+            if (btn && user && user.email) {
+                const msg = encodeURIComponent('Assalamu Alaikum Admin, amar account pending ache. Email: ' + user.email + '. Please approve koren.');
+                btn.href = 'https://wa.me/8801336489062?text=' + msg;
+            }
+        } catch (e) {}
     } catch (e) {
         document.getElementById('statusText').textContent = 'নেটওয়ার্ক চেক করুন...';
     }

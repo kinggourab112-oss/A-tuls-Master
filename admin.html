@@ -523,14 +523,20 @@ select, input[type="text"], input[type="search"] {
 
     <!-- Double Database -->
     <div class="card">
-        <div class="card-title"><i class="fas fa-database"></i> Double Database Setup</div>
-        <div class="grid-2">
-            <button class="btn-sm btn-cyan" onclick="switchDB('primary')">PRIMARY CLOUD</button>
-            <button class="btn-sm btn-outline" onclick="switchDB('backup')">BACKUP CLOUD</button>
-        </div>
-        <p style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center;">
-            MongoDB Atlas • Cloudflare Ready • 50,000+ Users Supported
+        <div class="card-title"><i class="fas fa-database"></i> Double Database (Primary + Backup)</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;">
+            ২টা JSONBin কানেক্ট। Admin যেকোনো একটা Active করতে পারবে। সাইটে ল্যাগ হলে নিচে নোটিশ আসবে — তখন Backup-এ সুইচ করতে পারবেন।
         </p>
+        <p id="activeCloudLabel" style="text-align:center;font-size:13px;color:var(--cyan);margin-bottom:10px;">Active: PRIMARY</p>
+        <div class="grid-2">
+            <button class="btn-sm btn-cyan" onclick="switchDB('primary')"><i class="fas fa-database"></i> PRIMARY</button>
+            <button class="btn-sm btn-outline" onclick="switchDB('backup')"><i class="fas fa-copy"></i> BACKUP</button>
+        </div>
+        <input type="text" id="backupBinInput" placeholder="Backup JSONBin Bin ID (দ্বিতীয় bin)" style="margin-top:10px;">
+        <button class="btn-sm btn-outline" style="width:100%;margin-top:8px;" onclick="saveBackupBinId()">SAVE BACKUP BIN ID</button>
+        <button class="btn-sm btn-gold" style="width:100%;margin-top:8px;" onclick="copyPrimaryToBackup()">COPY PRIMARY → BACKUP</button>
+        <div id="lagNoticeBox" style="margin-top:14px;max-height:160px;overflow-y:auto;"></div>
+        <button class="btn-sm btn-cyan" style="width:100%;margin-top:8px;" onclick="loadLagNotices()">REFRESH LAG NOTICES</button>
     </div>
 
     <!-- Global Notice -->
@@ -626,6 +632,7 @@ select, input[type="text"], input[type="search"] {
     <!-- Live User Management -->
     <div class="card">
         <div class="card-title"><i class="fas fa-users"></i> Live User Management + Ultra Tracking</div>
+        <p style="font-size:12px;color:var(--gold);margin-bottom:10px;">🛡 User Delete সুরক্ষিত — ভুলে ডিলিট হবে না (ইমেইল টাইপ করে ৩ ধাপে Confirm লাগবে)। সাধারণত BLOCK ব্যবহার করুন।</p>
         
         <div class="search-bar">
             <input type="search" id="userSearch" placeholder="নাম বা ইমেইল দিয়ে সার্চ করুন..." oninput="loadUsers()">
@@ -685,10 +692,54 @@ async function fetchDB() {
     return data.record || { users: [], settings: {} };
 }
 
+function mergeDBSafe(remote, local) {
+    const r = remote || { users: [], settings: {} };
+    const l = local || { users: [], settings: {} };
+    const byEmail = {};
+    (r.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (k) byEmail[k] = u;
+    });
+    (l.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (!k) return;
+        const prev = byEmail[k] || {};
+        const merged = Object.assign({}, prev, u);
+        merged.profile = Object.assign({}, prev.profile || {}, u.profile || {});
+        if (!(u.profile && u.profile.photo) && prev.profile && prev.profile.photo) {
+            merged.profile.photo = prev.profile.photo;
+        }
+        merged.devices = (u.devices && u.devices.length) ? u.devices : (prev.devices || []);
+        merged.toolUsage = Object.assign({}, prev.toolUsage || {}, u.toolUsage || {});
+        byEmail[k] = merged;
+    });
+    let users;
+    if (!l.users || l.users.length === 0) {
+        users = r.users || [];
+    } else {
+        users = (l.users || []).map(u => byEmail[(u.email || '').toLowerCase()] || u);
+    }
+    const settings = Object.assign({}, r.settings || {}, l.settings || {});
+    return {
+        users,
+        settings,
+        posts: l.posts != null ? l.posts : (r.posts || []),
+        messages: l.messages != null ? l.messages : (r.messages || []),
+        passwordRequests: l.passwordRequests != null ? l.passwordRequests : (r.passwordRequests || []),
+        deviceRequests: l.deviceRequests != null ? l.deviceRequests : (r.deviceRequests || [])
+    };
+}
+
 async function saveDB() {
     if (saving) return;
     saving = true;
     try {
+        let remote = { users: [], settings: {} };
+        try { remote = await fetchDB(); } catch (e) {}
+        if ((!DB.users || DB.users.length === 0) && remote.users && remote.users.length > 0) {
+            DB.users = remote.users.slice();
+        }
+        DB = mergeDBSafe(remote, DB);
         const res = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
@@ -1095,7 +1146,7 @@ function loadUsers() {
                     SET PENDING
                 </button>
                 <button class="btn-sm btn-red" style="background:rgba(255,59,92,0.2);border:1px solid var(--red);color:var(--red);" onclick="deleteUser('${user.id}')">
-                    <i class="fas fa-trash-alt"></i> DELETE
+                    <i class="fas fa-trash-alt"></i> DELETE (Protected)
                 </button>
             </div>
         </div>`;
@@ -1194,15 +1245,37 @@ async function setPending(userId) {
 
 async function deleteUser(userId) {
     const user = DB.users.find(u => u.id === userId);
-    const userName = user ? (user.name || user.email || 'Unknown') : 'Unknown';
+    if (!user) return;
+    const userName = user.name || user.email || 'Unknown';
+    const userEmail = (user.email || '').toLowerCase();
 
-    if (!confirm('⚠️ আপনি কি নিশ্চিত?\n\n"' + userName + '" কে সাইট থেকে সম্পূর্ণ ডিলিট করতে চান?\n\nএই কাজ আর ফিরে পাওয়া যাবে না!')) {
+    // Step 1: soft warning — prefer BLOCK instead of DELETE
+    if (!confirm('⚠️ সতর্কতা!\n\n"' + userName + '" কে ডিলিট করবেন?\n\nইউজার হারিয়ে যাবে।\n\nবেশিরভাগ সময় BLOCK করাই যথেষ্ট।\n\nতবুও ডিলিট করতে চাইলে OK চাপুন।')) {
+        return;
+    }
+
+    // Step 2: must type full email to confirm (accidental delete রোধ)
+    const typed = prompt('সুরক্ষা: ডিলিট নিশ্চিত করতে ইউজারের পুরো ইমেইল টাইপ করুন:\n\n' + userEmail);
+    if (!typed || typed.trim().toLowerCase() !== userEmail) {
+        alert('❌ ইমেইল মিলেনি। ডিলিট বাতিল — ইউজার সেইফ আছে।');
+        return;
+    }
+
+    // Step 3: final confirm
+    if (!confirm('শেষ নিশ্চিতকরণ:\n\n' + userEmail + ' সম্পূর্ণ ডিলিট হবে।\n\nএটি আর ফেরানো যাবে না। OK = Delete')) {
         return;
     }
 
     DB.users = DB.users.filter(u => u.id !== userId);
+    // Clean related requests so orphan data না থাকে
+    if (Array.isArray(DB.passwordRequests)) {
+        DB.passwordRequests = DB.passwordRequests.filter(r => (r.email || '').toLowerCase() !== userEmail);
+    }
+    if (Array.isArray(DB.deviceRequests)) {
+        DB.deviceRequests = DB.deviceRequests.filter(r => (r.email || '').toLowerCase() !== userEmail);
+    }
     await saveDB();
-    alert('🗑️ ইউজার সম্পূর্ণ ডিলিট করা হয়েছে!');
+    alert('🗑️ ইউজার ডিলিট হয়েছে।');
     loadUsers();
 }
 

@@ -208,6 +208,26 @@ input:focus { border-color: var(--cyan); }
         <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:10px;" onclick="backToLoginFromError()">Back</button>
     </div>
 
+    
+    <div id="emailAlreadyBox" style="display:none;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">📧</div>
+        <h2 style="font-size:1.35rem;color:#ffc800;margin-bottom:12px;">Email Already Used</h2>
+        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="emailAlreadyMsg">
+            এই Gmail / ইমেইল ইতিমধ্যে রেজিস্টার্ড আছে। অন্য ইমেইল দিয়ে চেষ্টা করুন অথবা Login করুন।
+        </p>
+        <button class="btn" style="margin-top:14px;" onclick="backToLoginFromError()"><i class="fas fa-sign-in-alt"></i> Go to Login</button>
+        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:10px;" onclick="backToRegisterFromError()"><i class="fas fa-user-plus"></i> Try Another Email</button>
+    </div>
+
+    <div id="regErrorBox" style="display:none;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
+        <h2 style="font-size:1.35rem;color:#ff3b5c;margin-bottom:12px;">Registration Error</h2>
+        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="regErrorMsg">
+            রেজিস্ট্রেশনে সমস্যা হয়েছে।
+        </p>
+        <button class="btn" style="margin-top:14px;" onclick="backToRegisterFromError()"><i class="fas fa-arrow-left"></i> Back</button>
+    </div>
+
     <div id="registerForm">
         <input type="text" id="regName" placeholder="Full Name">
         <input type="email" id="regEmail" placeholder="Email address">
@@ -317,14 +337,45 @@ async function fetchDB() {
     return data.record || { users: [], settings: {} };
 }
 
+function mergeDBIndex(remote, local) {
+    const r = remote || { users: [], settings: {} };
+    const l = local || { users: [], settings: {} };
+    const byEmail = {};
+    (r.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (k) byEmail[k] = u;
+    });
+    (l.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (!k) return;
+        const prev = byEmail[k] || {};
+        byEmail[k] = Object.assign({}, prev, u);
+        byEmail[k].profile = Object.assign({}, prev.profile || {}, u.profile || {});
+    });
+    return {
+        users: Object.values(byEmail),
+        settings: Object.assign({}, r.settings || {}, l.settings || {}),
+        posts: l.posts != null ? l.posts : (r.posts || []),
+        messages: l.messages != null ? l.messages : (r.messages || []),
+        passwordRequests: l.passwordRequests != null ? l.passwordRequests : (r.passwordRequests || []),
+        deviceRequests: l.deviceRequests != null ? l.deviceRequests : (r.deviceRequests || [])
+    };
+}
+
 async function saveDB(db) {
+    let remote = { users: [], settings: {} };
+    try { remote = await fetchDB(); } catch (e) {}
+    if ((!db.users || db.users.length === 0) && remote.users && remote.users.length > 0) {
+        db.users = remote.users;
+    }
+    const merged = mergeDBIndex(remote, db);
     const res = await fetch(BIN_URL, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-Master-Key': MASTER_KEY
         },
-        body: JSON.stringify(db)
+        body: JSON.stringify(merged)
     });
     if (!res.ok) throw new Error('DB save failed: ' + res.status);
     return await res.json();
@@ -352,10 +403,19 @@ function showForgot() {
 }
 
 function hideAllForms() {
-    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox','wrongPassBox','accountBlockedBox'].forEach(id => {
+    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox','wrongPassBox','accountBlockedBox','emailAlreadyBox','regErrorBox'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
+}
+
+function backToRegisterFromError() {
+    hideAllForms();
+    const tabs = document.querySelector('.tabs');
+    if (tabs) tabs.style.display = 'flex';
+    document.getElementById('registerForm').style.display = 'block';
+    document.getElementById('regTab').classList.add('active');
+    document.getElementById('loginTab').classList.remove('active');
 }
 
 function backToLoginFromError() {
@@ -720,20 +780,26 @@ async function doRegister() {
         }
 
         if (db.settings.siteLive === false) {
-            msg.className = 'msg error';
-            msg.textContent = 'সাইট সাময়িক বন্ধ আছে।';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('siteBlockedBox').style.display = 'block';
             return;
         }
 
         if (db.settings.registrationOpen === false) {
-            msg.className = 'msg error';
-            msg.textContent = 'রেজিস্ট্রেশন এখন বন্ধ আছে!';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('regErrorBox').style.display = 'block';
+            document.getElementById('regErrorMsg').textContent = 'রেজিস্ট্রেশন এখন Admin কর্তৃক বন্ধ আছে। পরে আবার চেষ্টা করুন।';
             return;
         }
 
         if (db.users.find(u => (u.email || '').toLowerCase() === email)) {
-            msg.className = 'msg error';
-            msg.textContent = 'এই ইমেইল ইতিমধ্যে রেজিস্টার্ড';
+            hideAllForms();
+            document.querySelector('.tabs').style.display = 'none';
+            document.getElementById('emailAlreadyBox').style.display = 'block';
+            const em = document.getElementById('emailAlreadyMsg');
+            if (em) em.innerHTML = '<strong style="color:#ffc800;">' + email + '</strong><br>এই Gmail / ইমেইল ইতিমধ্যে রেজিস্টার্ড আছে। অন্য ইমেইল দিয়ে চেষ্টা করুন অথবা Login করুন।';
             return;
         }
 
@@ -786,8 +852,10 @@ async function doRegister() {
             window.location.href = 'pending.html';
         }, 1200);
     } catch (e) {
-        msg.className = 'msg error';
-        msg.textContent = 'নেটওয়ার্ক এরর! আবার চেষ্টা করুন।';
+        hideAllForms();
+        document.querySelector('.tabs').style.display = 'none';
+        document.getElementById('regErrorBox').style.display = 'block';
+        document.getElementById('regErrorMsg').textContent = 'নেটওয়ার্ক এরর বা সার্ভার সমস্যা। ইন্টারনেট চেক করে আবার চেষ্টা করুন।';
         console.error(e);
     } finally {
         btn.disabled = false;
