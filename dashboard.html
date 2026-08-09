@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>User Dashboard | A-tuls - √MASTER</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =====================================================
-   THEME 1: DARK OCEAN (Default)
+   THEME 1: DARK OCEAN — deep blue glass
 ===================================================== */
 :root, [data-theme="dark-ocean"] {
-    --primary: #38bdf8;
-    --primary2: #c084fc;
-    --bg: #0b1424;
-    --bg2: #152238;
-    --card: rgba(56,189,248,0.08);
-    --border: rgba(56,189,248,0.22);
-    --text: #f8fafc;
-    --muted: #a5b4c8;
-    --side1: #0e1a32;
-    --side2: #0a1220;
-    --top: rgba(15,25,45,0.92);
-    --notice-bg: rgba(0,240,255,0.1);
-    --notice-bd: rgba(0,240,255,0.3);
-    --notice-tx: #00f0ff;
-    --danger-bg: rgba(255,59,92,0.15);
-    --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.3);
-    --badge-bg: rgba(0,240,255,0.12);
-    --badge-tx: #00f0ff;
-    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --primary: #22d3ee;
+    --primary2: #6366f1;
+    --bg: #020617;
+    --bg2: #0f172a;
+    --card: rgba(34,211,238,0.06);
+    --border: rgba(34,211,238,0.18);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --side1: #0f172a;
+    --side2: #020617;
+    --top: rgba(2,6,23,0.92);
+    --notice-bg: rgba(34,211,238,0.1);
+    --notice-bd: rgba(34,211,238,0.25);
+    --notice-tx: #67e8f9;
+    --danger-bg: rgba(248,113,113,0.12);
+    --danger-tx: #f87171;
+    --danger-bd: rgba(248,113,113,0.28);
+    --badge-bg: rgba(34,211,238,0.12);
+    --badge-tx: #67e8f9;
+    --shadow: 0 12px 40px rgba(0,0,0,0.55);
     --radius: 20px;
     --card-hover: translateY(-6px);
     --side-w: 270px;
@@ -38,143 +38,326 @@
 }
 
 /* =====================================================
-   THEME 2: NEON NIGHT
+   THEME 2: NEON NIGHT — purple neon
 ===================================================== */
 [data-theme="neon-night"] {
-    --primary: #f0abfc;
-    --primary2: #67e8f9;
-    --bg: #10041f;
-    --bg2: #1e0a3a;
-    --card: rgba(240,171,252,0.14);
-    --border: rgba(240,171,252,0.4);
-    --text: #fdf4ff;
-    --muted: #e9d5ff;
-    --side1: #2a0850;
-    --side2: #120428;
-    --top: rgba(28,8,48,0.94);
-    --notice-bg: rgba(176,38,255,0.14);
-    --notice-bd: rgba(176,38,255,0.4);
-    --notice-tx: #d4a5ff;
-    --danger-bg: rgba(255,59,92,0.18);
-    --danger-tx: #ff6b8a;
-    --danger-bd: rgba(255,59,92,0.35);
-    --badge-bg: rgba(176,38,255,0.18);
-    --badge-tx: #d4a5ff;
-    --shadow: 0 0 40px rgba(176,38,255,0.2);
-    --radius: 16px;
-    --card-hover: translateY(-6px) scale(1.02);
-    --side-w: 270px;
+    --primary: #c084fc;
+    --primary2: #f472b6;
+    --bg: #0c0118;
+    --bg2: #1a0b2e;
+    --card: rgba(192,132,252,0.08);
+    --border: rgba(192,132,252,0.28);
+    --text: #faf5ff;
+    --muted: #d8b4fe;
+    --side1: #1e0a3c;
+    --side2: #0c0118;
+    --top: rgba(12,1,24,0.94);
+    --notice-bg: rgba(192,132,252,0.12);
+    --notice-bd: rgba(244,114,182,0.3);
+    --notice-tx: #e9d5ff;
+    --danger-bg: rgba(248,113,113,0.15);
+    --danger-tx: #fb7185;
+    --danger-bd: rgba(248,113,113,0.3);
+    --badge-bg: rgba(244,114,182,0.12);
+    --badge-tx: #f9a8d4;
+    --shadow: 0 0 32px rgba(192,132,252,0.18);
+    --radius: 14px;
+    --card-hover: translateY(-5px) scale(1.02);
+    --side-w: 268px;
+    --font: 'Space Grotesk', sans-serif;
 }
 
 /* =====================================================
-   THEME 3: GOLD PREMIUM
+   THEME 3: GOLD PREMIUM — warm luxury
 ===================================================== */
 [data-theme="gold-premium"] {
-    --primary: #fcd34d;
-    --primary2: #fb923c;
-    --bg: #1c160a;
-    --bg2: #2e2412;
-    --card: rgba(252,211,77,0.14);
-    --border: rgba(252,211,77,0.4);
-    --text: #fffef5;
-    --muted: #e7d29a;
-    --side1: #3d2e08;
-    --side2: #1a1408;
-    --top: rgba(35,28,12,0.94);
-    --notice-bg: rgba(255,200,0,0.12);
-    --notice-bd: rgba(255,200,0,0.35);
-    --notice-tx: #ffc800;
-    --danger-bg: rgba(255,59,92,0.15);
-    --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.3);
-    --badge-bg: rgba(255,200,0,0.14);
-    --badge-tx: #ffc800;
-    --shadow: 0 8px 32px rgba(255,200,0,0.12);
-    --radius: 24px;
+    --primary: #eab308;
+    --primary2: #f59e0b;
+    --bg: #0c0a06;
+    --bg2: #1c160a;
+    --card: rgba(234,179,8,0.07);
+    --border: rgba(234,179,8,0.25);
+    --text: #fefce8;
+    --muted: #d6c48a;
+    --side1: #1f1808;
+    --side2: #0c0a06;
+    --top: rgba(12,10,6,0.94);
+    --notice-bg: rgba(234,179,8,0.1);
+    --notice-bd: rgba(234,179,8,0.28);
+    --notice-tx: #fde047;
+    --danger-bg: rgba(248,113,113,0.12);
+    --danger-tx: #f87171;
+    --danger-bd: rgba(248,113,113,0.28);
+    --badge-bg: rgba(234,179,8,0.12);
+    --badge-tx: #fde047;
+    --shadow: 0 12px 36px rgba(234,179,8,0.08);
+    --radius: 26px;
     --card-hover: translateY(-8px);
     --side-w: 280px;
+    --font: 'Playfair Display', Georgia, serif;
 }
 
 /* =====================================================
-   THEME 4: CYBER PUNK
+   THEME 4: CYBER PUNK — magenta + cyan tech
 ===================================================== */
 [data-theme="cyber-punk"] {
-    --primary: #ff6bcb;
-    --primary2: #5eead4;
-    --bg: #160028;
-    --bg2: #2a0050;
-    --card: rgba(255,107,203,0.14);
-    --border: rgba(94,234,212,0.4);
-    --text: #f8fafc;
-    --muted: #ddd6fe;
-    --side1: #3b0066;
-    --side2: #160028;
-    --top: rgba(32,0,56,0.94);
-    --notice-bg: rgba(0,240,255,0.1);
-    --notice-bd: rgba(255,45,149,0.4);
-    --notice-tx: #00f0ff;
-    --danger-bg: rgba(255,59,92,0.18);
-    --danger-tx: #ff3b5c;
-    --danger-bd: rgba(255,59,92,0.35);
-    --badge-bg: rgba(255,45,149,0.16);
-    --badge-tx: #ff2d95;
-    --shadow: 0 0 30px rgba(255,45,149,0.18);
-    --radius: 8px;
-    --card-hover: translateY(-4px) skewX(-1deg);
-    --side-w: 260px;
+    --primary: #f43f5e;
+    --primary2: #06b6d4;
+    --bg: #05010a;
+    --bg2: #12081f;
+    --card: rgba(6,182,212,0.06);
+    --border: rgba(6,182,212,0.28);
+    --text: #f0fdfa;
+    --muted: #a5b4fc;
+    --side1: #150828;
+    --side2: #05010a;
+    --top: rgba(5,1,10,0.95);
+    --notice-bg: rgba(244,63,94,0.1);
+    --notice-bd: rgba(6,182,212,0.35);
+    --notice-tx: #22d3ee;
+    --danger-bg: rgba(244,63,94,0.15);
+    --danger-tx: #fb7185;
+    --danger-bd: rgba(244,63,94,0.35);
+    --badge-bg: rgba(244,63,94,0.12);
+    --badge-tx: #fb7185;
+    --shadow: 4px 4px 0 rgba(6,182,212,0.2);
+    --radius: 4px;
+    --card-hover: translate(-2px, -2px);
+    --side-w: 255px;
+    --font: 'Orbitron', sans-serif;
 }
 
 /* =====================================================
-   THEME 5: EMERALD LIGHT
+   THEME 5: EMERALD LIGHT — clean white (kept)
 ===================================================== */
 [data-theme="emerald-light"] {
     --primary: #0d9488;
-    --primary2: #059669;
-    --bg: #f0fdfa;
-    --bg2: #ccfbf1;
+    --primary2: #14b8a6;
+    --bg: #f8fffc;
+    --bg2: #ecfdf5;
     --card: #ffffff;
-    --border: #5eead4;
-    --text: #042f2e;
+    --border: #a7f3d0;
+    --text: #134e4a;
     --muted: #0f766e;
     --side1: #0f766e;
-    --side2: #115e59;
+    --side2: #0d9488;
     --top: #ffffff;
     --notice-bg: #ecfdf5;
-    --notice-bd: #a7f3d0;
+    --notice-bd: #6ee7b7;
     --notice-tx: #047857;
     --danger-bg: #fef2f2;
     --danger-tx: #dc2626;
     --danger-bd: #fecaca;
-    --badge-bg: #f0fdfa;
+    --badge-bg: #ccfbf1;
     --badge-tx: #0f766e;
-    --shadow: 0 4px 20px rgba(0,0,0,0.06);
-    --radius: 18px;
+    --shadow: 0 8px 28px rgba(13,148,136,0.08);
+    --radius: 20px;
     --card-hover: translateY(-5px);
     --side-w: 270px;
+    --font: 'Plus Jakarta Sans', sans-serif;
 }
 
 
-/* ===== Theme polish ===== */
-.card {
-    backdrop-filter: blur(12px);
+/* ===== Base + deep theme differences ===== */
+.card { backdrop-filter: blur(14px); }
+.card:hover { box-shadow: 0 14px 44px rgba(0,0,0,0.28); }
+.sidebar { box-shadow: 8px 0 40px rgba(0,0,0,0.35); }
+.topbar { box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+.page-title { letter-spacing: -0.5px; }
+.icon { box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+
+/* --- DARK OCEAN: soft glass waves --- */
+[data-theme="dark-ocean"] body {
+    background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(56,189,248,0.15), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(129,140,248,0.12), transparent 45%),
+        var(--bg);
 }
-.card:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+[data-theme="dark-ocean"] .card {
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(56,189,248,0.1), rgba(15,25,45,0.5));
+}
+[data-theme="dark-ocean"] .sidebar {
+    border-right: 1px solid rgba(56,189,248,0.12);
+}
+[data-theme="dark-ocean"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(56,189,248,0.25), transparent);
+    border-left: 3px solid #38bdf8;
+}
+[data-theme="dark-ocean"] .icon { border-radius: 16px; }
+
+/* --- NEON NIGHT: glow everything --- */
+[data-theme="neon-night"] body {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(232,121,249,0.18), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(34,211,238,0.12), transparent 40%),
+        var(--bg);
+}
+[data-theme="neon-night"] .card {
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(232,121,249,0.12), inset 0 0 20px rgba(34,211,238,0.03);
+}
+[data-theme="neon-night"] .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--primary2), var(--primary));
+}
+[data-theme="neon-night"] .card:hover {
+    box-shadow: 0 0 32px rgba(232,121,249,0.35), 0 0 60px rgba(34,211,238,0.15);
+}
+[data-theme="neon-night"] .sidebar {
+    box-shadow: 0 0 40px rgba(176,38,255,0.2);
+}
+[data-theme="neon-night"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(232,121,249,0.35), transparent);
+    border-left: 3px solid #e879f9;
+    text-shadow: 0 0 12px rgba(232,121,249,0.8);
+}
+[data-theme="neon-night"] .page-title {
+    text-shadow: 0 0 20px rgba(232,121,249,0.5);
+}
+[data-theme="neon-night"] .icon {
+    border-radius: 12px;
+    box-shadow: 0 0 16px rgba(232,121,249,0.3);
+}
+[data-theme="neon-night"] .grid { gap: 18px; }
+
+/* --- GOLD PREMIUM: luxury serif, large soft cards --- */
+[data-theme="gold-premium"] body {
+    background:
+        radial-gradient(ellipse at top, rgba(251,191,36,0.08), transparent 55%),
+        linear-gradient(180deg, #1a1408 0%, #0c0a04 100%);
+}
+[data-theme="gold-premium"] .card {
+    border-radius: 28px;
+    border: 1px solid rgba(251,191,36,0.28);
+    background: linear-gradient(160deg, rgba(251,191,36,0.12), rgba(20,14,6,0.7));
+    padding: 26px;
+}
+[data-theme="gold-premium"] .card:hover {
+    box-shadow: 0 16px 48px rgba(251,191,36,0.18);
+    border-color: rgba(251,191,36,0.55);
+}
+[data-theme="gold-premium"] .sidebar {
+    border-right: 1px solid rgba(251,191,36,0.2);
+}
+[data-theme="gold-premium"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(251,191,36,0.28), transparent);
+    border-left: 3px solid #fbbf24;
+}
+[data-theme="gold-premium"] .page-title {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+}
+[data-theme="gold-premium"] .icon {
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(251,191,36,0.2);
+}
+[data-theme="gold-premium"] .grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
+}
+[data-theme="gold-premium"] .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+}
+[data-theme="gold-premium"] .card h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- CYBER PUNK: hard edges, offset shadows, mono feel --- */
+[data-theme="cyber-punk"] body {
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,240,255,0.015) 2px, rgba(0,240,255,0.015) 4px),
+        linear-gradient(135deg, #0a0014 0%, #1a0030 50%, #0a0014 100%);
+}
+[data-theme="cyber-punk"] .card {
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    box-shadow: 4px 4px 0 rgba(0,240,255,0.2);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+[data-theme="cyber-punk"] .card:hover {
+    border-left-color: var(--primary2);
+    box-shadow: 6px 6px 0 rgba(255,45,149,0.35);
+}
+[data-theme="cyber-punk"] .sidebar {
+    border-right: 2px solid rgba(0,240,255,0.25);
+}
+[data-theme="cyber-punk"] .sidebar-logo i {
+    border-radius: 4px;
+    border: 1px solid rgba(0,240,255,0.5);
+}
+[data-theme="cyber-punk"] .menu-item {
+    border-radius: 4px;
+}
+[data-theme="cyber-punk"] .menu-item.active {
+    background: linear-gradient(90deg, rgba(255,45,149,0.3), transparent);
+    border-left: 3px solid #00f0ff;
+    border-radius: 0;
+}
+[data-theme="cyber-punk"] .page-title {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+[data-theme="cyber-punk"] .icon {
+    border-radius: 4px;
+    border: 1px solid rgba(0,240,255,0.3);
+}
+[data-theme="cyber-punk"] .grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+}
+[data-theme="cyber-punk"] .logout-btn,
+[data-theme="cyber-punk"] .user-badge {
+    border-radius: 4px;
+}
+[data-theme="cyber-punk"] .section-title {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+}
+
+/* --- EMERALD LIGHT: airy, soft white cards --- */
+[data-theme="emerald-light"] body {
+    background:
+        radial-gradient(ellipse at 0% 0%, #ccfbf1 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, #d1fae5 0%, transparent 45%),
+        #f0fdfa;
+}
+[data-theme="emerald-light"] .card {
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #99f6e4;
+    box-shadow: 0 4px 20px rgba(13,148,136,0.06);
 }
 [data-theme="emerald-light"] .card:hover {
-    box-shadow: 0 12px 32px rgba(20,184,166,0.18);
+    box-shadow: 0 14px 36px rgba(13,148,136,0.14);
+    border-color: #2dd4bf;
 }
-.sidebar {
-    box-shadow: 8px 0 40px rgba(0,0,0,0.35);
+[data-theme="emerald-light"] .sidebar {
+    box-shadow: 4px 0 24px rgba(13,148,136,0.15);
 }
-.topbar {
-    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+[data-theme="emerald-light"] .topbar {
+    border-bottom: 1px solid #99f6e4;
+    box-shadow: 0 2px 12px rgba(13,148,136,0.06);
 }
-.page-title {
-    letter-spacing: -0.5px;
+[data-theme="emerald-light"] .menu-item.active {
+    background: rgba(255,255,255,0.2);
 }
-.icon {
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+[data-theme="emerald-light"] .icon {
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(13,148,136,0.12);
+}
+[data-theme="emerald-light"] .admin-info-box {
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(13,148,136,0.08);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; font-family: var(--font, 'Plus Jakarta Sans', sans-serif); }
@@ -551,43 +734,10 @@ body {
   document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
 })();
 </script>
-
-<style>
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:linear-gradient(180deg,var(--side1,#0e1a32),var(--side2,#0a1220));z-index:100;overflow-y:auto;transform:translateX(-100%);transition:.25s;}
-.sidebar.open{transform:translateX(0);}
-@media(min-width:900px){.sidebar{transform:none;} .main{margin-left:270px;}}
-.sidebar-header{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
-.sidebar-logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--primary,#38bdf8);}
-.sidebar-menu{padding:12px;}
-.menu-label{font-size:11px;text-transform:uppercase;color:var(--muted,#94a3b8);margin:14px 8px 8px;letter-spacing:.5px;}
-.menu-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:var(--text,#f0f9ff);text-decoration:none;font-size:13.5px;font-weight:600;margin-bottom:4px;}
-.menu-item:hover,.menu-item.active{background:rgba(56,189,248,.15);color:var(--primary,#38bdf8);}
-.sidebar-footer{padding:14px;font-size:11px;color:var(--muted);text-align:center;border-top:1px solid rgba(255,255,255,.06);}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;}
-.overlay.open{display:block;}
-.main{min-height:100vh;padding:0 16px 40px;}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 0;position:sticky;top:0;z-index:50;background:var(--top,rgba(15,25,45,.92));backdrop-filter:blur(10px);}
-.topbar-left,.topbar-right{display:flex;align-items:center;gap:10px;}
-.menu-toggle{background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;}
-.page-title{font-size:1.15rem;font-weight:800;}
-.user-badge{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:6px 10px;border-radius:20px;background:var(--badge-bg,rgba(56,189,248,.12));}
-.logout-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border,rgba(255,255,255,.12));background:transparent;color:var(--text);font-weight:700;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
-.notice{background:var(--notice-bg,rgba(255,200,0,.12));border:1px solid var(--notice-bd,rgba(255,200,0,.3));color:var(--notice-tx,#ffc800);padding:12px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;}
-.admin-info-box{background:var(--card,rgba(255,255,255,.06));border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:18px;font-size:13px;line-height:1.7;}
-.admin-info-box .title{font-weight:800;color:var(--primary);margin-bottom:8px;}
-.section-title{font-size:1.05rem;font-weight:800;margin:18px 0 12px;display:flex;align-items:center;gap:8px;}
-.theme-tag{font-size:11px;padding:3px 8px;border-radius:8px;background:var(--badge-bg,rgba(56,189,248,.15));color:var(--primary);font-weight:700;}
-.card{background:var(--card,rgba(255,255,255,.06));border:1px solid var(--border,rgba(255,255,255,.1));border-radius:16px;padding:16px;text-decoration:none;color:var(--text);display:block;transition:.2s;}
-.card:hover{border-color:var(--primary);transform:translateY(-2px);}
-.card .icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2,#a78bfa));display:flex;align-items:center;justify-content:center;color:#000;margin-bottom:10px;font-size:18px;}
-.card-title{font-weight:800;font-size:14px;margin-bottom:4px;}
-.card-desc{font-size:12px;color:var(--muted);}
-body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family:'Plus Jakarta Sans',sans-serif;}
-</style>
-
 </head>
-
 <body>
+
+<!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="sidebar-logo">
@@ -595,84 +745,88 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
             <span>A-tuls √MASTER</span>
         </div>
     </div>
+
     <div class="sidebar-menu">
         <div class="menu-label">Main Menu</div>
         <a class="menu-item active" href="dashboard.html">
-            <i class="fas fa-th-large"></i> Dashboard
+            <i class="fas fa-th-large"></i> <span data-i18n="Dashboard">Dashboard</span>
+        </a>
+        <a class="menu-item" id="adminPanelMenu" href="admin.html" style="display:none;">
+            <i class="fas fa-user-shield"></i> <span data-i18n="Admin Panel">Admin Panel</span>
         </a>
         <a class="menu-item" href="#myProfile" onclick="showProfileSection();return false;">
-            <i class="fas fa-user-circle"></i> My Profile
+            <i class="fas fa-user-circle"></i> <span data-i18n="My Profile">My Profile</span>
         </a>
         <a class="menu-item" href="#community" onclick="showCommunitySection();return false;">
-            <i class="fas fa-users"></i> Community
+            <i class="fas fa-users"></i> <span data-i18n="Community">Community</span>
         </a>
-        <div id="adminControlMenu" style="display:none;">
-            <div class="menu-label">Admin Control</div>
-            <a class="menu-item" href="admin.html" style="border:1px solid rgba(255,200,0,0.35);background:rgba(255,200,0,0.12);">
-                <i class="fas fa-user-shield"></i> Admin Panel
-            </a>
-        </div>
+
         <div class="menu-label">Email Tools</div>
-        <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker" onclick="typeof trackToolUse==='function'&&trackToolUse('Duplicate Checker')">
+        <a class="menu-item" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
             <i class="fas fa-copy"></i> Duplicate Checker
         </a>
-        <a class="menu-item" href="Email Data Formatter.html" data-tool="Data Formatter" onclick="typeof trackToolUse==='function'&&trackToolUse('Data Formatter')">
+        <a class="menu-item" href="Email Data Formatter.html" data-tool="Data Formatter">
             <i class="fas fa-align-left"></i> Data Formatter
         </a>
-        <a class="menu-item" href="emaill report .html" data-tool="Report Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Report Generator')">
+        <a class="menu-item" href="emaill report .html" data-tool="Report Generator">
             <i class="fas fa-file-alt"></i> Report Generator
         </a>
-        <a class="menu-item" href="esey emaill vawucer.html" data-tool="Email Validator" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Validator')">
+        <a class="menu-item" href="esey emaill vawucer.html" data-tool="Email Validator">
             <i class="fas fa-check-double"></i> Email Validator
         </a>
-        <a class="menu-item" href="parshnol emaill vaault.html" data-tool="Email Vault" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Vault')">
+        <a class="menu-item" href="parshnol emaill vaault.html" data-tool="Email Vault">
             <i class="fas fa-vault"></i> Email Vault
         </a>
-        <a class="menu-item" href="gmail-format-fixer.html" data-tool="Gmail format fixer" onclick="typeof trackToolUse==='function'&&trackToolUse('Gmail format fixer')">
-            <i class="fas fa-envelope"></i> Gmail format fixer
+        <a class="menu-item" href="gmail-format-fixer.html" data-tool="Gmail format fixer">
+            <i class="fas fa-envelope-circle-check"></i> Gmail format fixer
         </a>
+
         <div class="menu-label">Generators</div>
-        <a class="menu-item" href="name and recovery ganaretod.html" data-tool="Names & Recovery" onclick="typeof trackToolUse==='function'&&trackToolUse('Names & Recovery')">
+        <a class="menu-item" href="name and recovery ganaretod.html" data-tool="Names & Recovery">
             <i class="fas fa-users"></i> Names & Recovery
         </a>
-        <a class="menu-item" href="pasword ganaratod.html" data-tool="Password Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Password Generator')">
+        <a class="menu-item" href="pasword ganaratod.html" data-tool="Password Generator">
             <i class="fas fa-key"></i> Password Generator
         </a>
+
         <div class="menu-label">Utility</div>
-        <a class="menu-item" href="ip time zoone farat.html" data-tool="IP TimeZone Finder" onclick="typeof trackToolUse==='function'&&trackToolUse('IP TimeZone Finder')">
+        <a class="menu-item" href="ip time zoone farat.html" data-tool="IP TimeZone Finder">
             <i class="fas fa-globe"></i> IP TimeZone Finder
         </a>
     </div>
-    <div class="sidebar-footer">A-tuls - √MASTER<br>Premium Tools Platform</div>
+
+    <div class="sidebar-footer">
+        A-tuls - √MASTER STYLES<br>
+        Premium Tools Platform
+    </div>
 </aside>
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
+<!-- Main -->
 <main class="main">
     <div class="topbar">
         <div class="topbar-left">
-            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <div class="page-title">Dashboard</div>
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="page-title" data-i18n="Dashboard">Dashboard</div>
         </div>
         <div class="topbar-right">
-            <select id="langSelect" onchange="setLanguage(this.value)" title="Language" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;font-weight:600;max-width:130px;font-family:inherit;">
-                <option value="en">🌐 EN</option>
-                <option value="bn">🌐 বাং</option>
-                <option value="hi">🌐 हिं</option>
-                <option value="ar">🌐 ع</option>
-                <option value="es">🌐 ES</option>
-                <option value="fr">🌐 FR</option>
-                <option value="tr">🌐 TR</option>
-                <option value="id">🌐 ID</option>
-                <option value="ur">🌐 اردو</option>
-                <option value="zh">🌐 中文</option>
-            </select>
-            <div class="user-badge"><i class="fas fa-user"></i> <span id="userName">User</span></div>
-            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></button>
+            <a id="adminPanelBtn" href="admin.html" class="logout-btn" style="display:none;background:var(--badge-bg);color:var(--badge-tx);border:1px solid var(--border);text-decoration:none;">
+                <i class="fas fa-user-shield"></i> Admin Panel
+            </a>
+            <div class="user-badge">
+                <i class="fas fa-user"></i>
+                <span id="userName">User</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> <span data-i18n="Logout">Logout</span>
+            </button>
         </div>
     </div>
 
-    <div class="notice" id="adminNotice" style="display:none;"></div>
+    <div class="notice" id="adminNotice"></div>
 
     <div class="admin-info-box" id="adminInfoBox">
         <div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>
@@ -680,453 +834,232 @@ body{margin:0;background:var(--bg,#0b1424);color:var(--text,#f0f9ff);font-family
         <div><i class="fas fa-id-badge"></i> Admin ID: <strong>gourabmon112233@gmail.com</strong></div>
         <div><i class="fab fa-telegram"></i> Telegram: <strong>+8801944035239</strong></div>
         <div><i class="fab fa-facebook"></i> Facebook: Gourab Official</div>
+        <div style="margin-top:4px;opacity:0.7;font-size:12px;">Developed by Gourab • 01944035239</div>
     </div>
 
-    <!-- Members preview -->
-    <div id="communityWall" style="margin-bottom:28px;">
-        <div class="section-title"><i class="fas fa-users"></i> Members <span class="theme-tag">Admin + Users</span></div>
-        <div id="communityList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:12px;"></div>
-        <button id="seeMoreBtn" class="logout-btn" style="background:var(--primary);color:#000;border:none;display:none;" onclick="showCommunitySection()">
-            <i class="fas fa-ellipsis-h"></i> See More
-        </button>
-    </div>
+    
+    <div class="content">
 
-    <!-- Full community -->
-    <div id="fullCommunitySection" style="display:none;margin-bottom:28px;">
-        <div class="section-title"><i class="fas fa-globe"></i> Community Feed</div>
-        <div class="card" style="cursor:default;padding:16px;margin-bottom:18px;max-width:640px;">
-            <div style="font-weight:700;margin-bottom:10px;"><i class="fas fa-pen"></i> Create Post</div>
-            <select id="postType" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:10px;font-family:inherit;">
-                <option value="general">General</option>
-                <option value="sell">Sell</option>
-                <option value="buy">Buy</option>
-            </select>
-            <textarea id="postText" rows="3" placeholder="Write something..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-                <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="postPhoto" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif,.tif,.tiff" style="display:none;" onchange="onPostPhotoSelected(event)">
-                    <i class="fas fa-image"></i> Add Photo
-                </label>
-                <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
-                <input type="text" id="postPrice" placeholder="Price" style="flex:1;min-width:120px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;display:none;">
+        
+        <!-- ===== DASHBOARD: limited profiles (5-10) ===== -->
+        <div id="communityWall" style="margin-bottom:28px;">
+            <div class="section-title">
+                <i class="fas fa-users"></i> Members
+                <span class="theme-tag">Admin + Users</span>
             </div>
-            <div id="postPhotoPreviewWrap" style="display:none;margin-bottom:10px;">
-                <img id="postPhotoPreview" style="max-width:100%;max-height:180px;border-radius:12px;">
-            </div>
-            <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="createPost()"><i class="fas fa-paper-plane"></i> Post</button>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">
+                Admin প্রথমে, তারপর সদস্যরা। Premium মেসেজ নামের উপরে। সম্পূর্ণ তালিকা ও সোশ্যাল ফিডের জন্য Community দেখুন।
+            </p>
+            <div id="communityList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:12px;"></div>
+            <button id="seeMoreBtn" class="logout-btn" style="background:var(--primary);color:#000;border:none;display:none;" onclick="showCommunitySection()">
+                <i class="fas fa-ellipsis-h"></i> See More — সব প্রোফাইল ও Community
+            </button>
         </div>
-        <div class="section-title" style="font-size:1rem;"><i class="fas fa-user-friends"></i> All Members</div>
-        <div id="fullMembersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:22px;"></div>
-        <div class="section-title" style="font-size:1rem;"><i class="fas fa-stream"></i> Posts</div>
-        <div id="postsFeed" style="display:flex;flex-direction:column;gap:14px;max-width:640px;"></div>
-    </div>
 
-    <!-- Profile -->
-    <div id="profileSection" style="display:none;margin-bottom:28px;">
-        <div class="section-title"><i class="fas fa-user-circle"></i> My Profile</div>
-        <div class="card" style="cursor:default;padding:18px;max-width:520px;">
-            <div style="text-align:center;margin-bottom:14px;">
-                <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);display:none;margin:0 auto;">
-                <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;"><i class="fas fa-user"></i></div>
-                <label style="display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;">
-                    <input type="file" id="profilePhotoInput" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif,.tif,.tiff" style="display:none;" onchange="onPhotoSelected(event)">
-                    <i class="fas fa-camera"></i> Upload Photo
-                </label>
+        <!-- ===== FULL COMMUNITY FEED (posts, like, comment, buy/sell) ===== -->
+        <div id="fullCommunitySection" style="display:none;margin-bottom:28px;">
+            <div class="section-title">
+                <i class="fas fa-globe"></i> Community Feed
+                <span class="theme-tag">Post · Like · Comment · Buy/Sell</span>
             </div>
-            <label style="font-size:12px;color:var(--muted);">Display Name</label>
-            <input type="text" id="profileName" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
-            <label style="font-size:12px;color:var(--muted);">Phone / Telegram</label>
-            <input type="text" id="profilePhone" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
-            <label style="font-size:12px;color:var(--muted);">Bio / Facebook</label>
-            <input type="text" id="profileBio" style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
-            <label style="font-size:12px;color:var(--muted);">Public Message</label>
-            <textarea id="profileMessage" rows="2" placeholder="Your public status..." style="width:100%;padding:10px 12px;margin:6px 0 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;"></textarea>
-            <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-                <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
-            </label>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="saveMyProfile()"><i class="fas fa-save"></i> Save Profile</button>
-                <button class="logout-btn" style="border:1px solid var(--danger-bd, #f66);color:var(--danger-tx, #f66);" onclick="clearMyNote()"><i class="fas fa-trash"></i> Delete Note</button>
+
+            <!-- Create Post -->
+            <div class="card" style="cursor:default;padding:16px;margin-bottom:18px;max-width:640px;">
+                <div style="font-weight:700;margin-bottom:10px;font-size:14px;"><i class="fas fa-pen"></i> Create Post</div>
+                <select id="postType" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-bottom:10px;font-family:inherit;">
+                    <option value="general">General Post</option>
+                    <option value="sell">Sell / বিক্রি</option>
+                    <option value="buy">Buy / কিনতে চাই</option>
+                </select>
+                <textarea id="postText" rows="3" placeholder="কী লিখতে চান? অফার, আপডেট, প্রশ্ন..." style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;font-family:inherit;margin-bottom:10px;"></textarea>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                    <label style="font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">
+                        <input type="file" id="postPhoto" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,.jpg,.jpeg,.png,.webp,.gif,.bmp" style="display:none;" onchange="onPostPhotoSelected(event)">
+                        <i class="fas fa-image"></i> Add Photo
+                    </label>
+                    <span id="postPhotoName" style="font-size:12px;color:var(--muted);"></span>
+                    <input type="text" id="postPrice" placeholder="Price (৳) — Buy/Sell এর জন্য" style="flex:1;min-width:140px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;display:none;">
+                </div>
+                <div id="postPhotoPreviewWrap" style="display:none;margin-bottom:10px;">
+                    <img id="postPhotoPreview" style="max-width:100%;max-height:180px;border-radius:12px;border:1px solid var(--border);">
+                </div>
+                <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="createPost()">
+                    <i class="fas fa-paper-plane"></i> Post
+                </button>
             </div>
-            <div id="profileSaveMsg" style="display:none;margin-top:12px;font-size:13px;font-weight:600;"></div>
+
+            <!-- All members (full list) -->
+            <div class="section-title" style="font-size:1rem;"><i class="fas fa-user-friends"></i> All Members</div>
+            <div id="fullMembersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:22px;"></div>
+
+            <!-- Feed -->
+            <div class="section-title" style="font-size:1rem;"><i class="fas fa-stream"></i> Posts</div>
+            <div id="postsFeed" style="display:flex;flex-direction:column;gap:14px;max-width:640px;"></div>
+        </div>
+
+<!-- ===== CHAT PANEL ===== -->
+        <div id="chatPanel" style="margin-bottom:28px;display:none;">
+            <div class="section-title"><i class="fas fa-comments"></i> Chat <span id="chatWithName" class="theme-tag"></span></div>
+            <div class="card" style="cursor:default;padding:16px;max-width:640px;">
+                <div id="chatMessages" style="height:320px;overflow-y:auto;background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:13.5px;border:1px solid var(--border);"></div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
+                    <button class="logout-btn" style="background:var(--primary);color:#000;border:none;white-space:nowrap;" onclick="sendChat()">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="logout-btn" style="border:1px solid var(--border);" onclick="loadChatMessages()"><i class="fas fa-sync"></i></button>
+                    <button class="logout-btn" style="border:1px solid var(--border);" onclick="closeChat()">Close</button>
+                </div>
+                <p style="font-size:11px;color:var(--muted);margin-top:8px;">মেসেজ অটো রিফ্রেশ হয় • অন্যজনের মেসেজ এখানে দেখা যাবে</p>
+            </div>
+        </div>
+
+        <!-- ===== MY PROFILE (toggle) ===== -->
+        <div id="profileSection" style="display:none;margin-bottom:28px;">
+            <div class="section-title"><i class="fas fa-user-circle"></i> My Profile</div>
+            <div class="card" style="cursor:default;max-width:560px;">
+                <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;">
+                    <div style="text-align:center;">
+                        <img id="profilePhotoPreview" src="" alt="Photo" style="width:90px;height:90px;border-radius:50%;object-fit:cover;background:var(--border);border:2px solid var(--primary);display:none;">
+                        <div id="profilePhotoPlaceholder" style="width:90px;height:90px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);margin:0 auto;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <label style="display:inline-block;margin-top:10px;font-size:12px;cursor:pointer;color:var(--primary);font-weight:600;">
+                            <input type="file" id="profilePhotoInput" accept="image/*,image/jpeg,image/png,image/webp,image/gif,image/bmp,image/heic,image/heif,image/avif,.jpg,.jpeg,.png,.webp,.gif,.bmp,.heic,.heif,.avif" style="display:none;" onchange="onPhotoSelected(event)">
+                            <i class="fas fa-camera"></i> Change Photo
+                        </label>
+                    </div>
+                    <div style="flex:1;min-width:220px;">
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Display Name</label>
+                            <input type="text" id="profileName" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;">
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Phone / WhatsApp</label>
+                            <input type="text" id="profilePhone" placeholder="+8801XXXXXXXXX" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;">
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Bio / Details</label>
+                            <textarea id="profileBio" rows="2" placeholder="Short bio..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;color:var(--muted);font-weight:600;">Public Note / Message (নাম ও ID-এর উপরে সবাই দেখবে)</label>
+                            <textarea id="profileMessage" rows="2" placeholder="নোট লিখুন — Members-এ আপনার নামের উপরে দেখাবে..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);margin-top:4px;resize:vertical;"></textarea>
+                        </div>
+                        <label style="font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;">
+                            <input type="checkbox" id="profileShowOnHome" checked> Show my profile on Community
+                        </label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="saveMyProfile()">
+                            <i class="fas fa-save"></i> Save Profile
+                        </button>
+                        <button class="logout-btn" style="border:1px solid var(--danger-bd);color:var(--danger-tx);" onclick="clearMyNote()">
+                            <i class="fas fa-trash"></i> Delete Note
+                        </button>
+                        </div>
+                        <div id="profileSaveMsg" style="margin-top:10px;font-size:13px;display:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TOOLS (bottom, always like before) ===== -->
+        <div class="section-title" id="toolsSectionTitle">
+            <i class="fas fa-th"></i> Your Premium Tools
+            <span class="theme-tag" id="themeTag">Dark Ocean</span>
+        </div>
+
+        <div class="grid" id="toolsGrid">
+            <a class="card" href="Duplicate Email Checker .html" data-tool="Duplicate Checker">
+                <div class="icon" style="background:rgba(13,148,136,0.18);color:#0d9488;">
+                    <i class="fas fa-copy"></i>
+                </div>
+                <h3>Duplicate Checker</h3>
+                <p>Find & remove duplicate emails from your list instantly</p>
+            </a>
+
+            <a class="card" href="Email Data Formatter.html" data-tool="Data Formatter">
+                <div class="icon" style="background:rgba(37,99,235,0.18);color:#2563eb;">
+                    <i class="fas fa-align-left"></i>
+                </div>
+                <h3>Data Formatter</h3>
+                <p>Format email:password data in clean structure</p>
+            </a>
+
+            <a class="card" href="emaill report .html" data-tool="Report Generator">
+                <div class="icon" style="background:rgba(219,39,119,0.18);color:#db2777;">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3>Report Generator</h3>
+                <p>Generate Found / Good reports with price calculation</p>
+            </a>
+
+            <a class="card" href="esey emaill vawucer.html" data-tool="Email Validator">
+                <div class="icon" style="background:rgba(5,150,105,0.18);color:#059669;">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <h3>Email Validator</h3>
+                <p>Validate emails with password & recovery support</p>
+            </a>
+
+            <a class="card" href="parshnol emaill vaault.html" data-tool="Email Vault">
+                <div class="icon" style="background:rgba(217,119,6,0.18);color:#d97706;">
+                    <i class="fas fa-vault"></i>
+                </div>
+                <h3>Email Vault</h3>
+                <p>Securely store & manage your email lists privately</p>
+            </a>
+
+            <a class="card" href="name and recovery ganaretod.html" data-tool="Names & Recovery">
+                <div class="icon" style="background:rgba(79,70,229,0.18);color:#4f46e5;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Names & Recovery</h3>
+                <p>Generate unique names with recovery emails</p>
+            </a>
+
+            <a class="card" href="pasword ganaratod.html" data-tool="Password Generator">
+                <div class="icon" style="background:rgba(220,38,38,0.18);color:#dc2626;">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h3>Password Generator</h3>
+                <p>Generate up to 1000 strong passwords at once</p>
+            </a>
+
+            <a class="card" href="gmail-format-fixer.html" data-tool="Gmail format fixer">
+                <div class="icon" style="background:rgba(16,185,129,0.18);color:#10b981;">
+                    <i class="fas fa-envelope-circle-check"></i>
+                </div>
+                <h3>Gmail format fixer</h3>
+                <p>Email & password separate + side-by-side format</p>
+            </a>
+
+            <a class="card" href="ip time zoone farat.html" data-tool="IP TimeZone Finder">
+                <div class="icon" style="background:rgba(8,145,178,0.18);color:#0891b2;">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>IP TimeZone Finder</h3>
+                <p>Find IP, location, ISP and timezone instantly</p>
+            </a>
         </div>
     </div>
 
-    <!-- Chat panel -->
-    <div id="chatPanel" style="display:none;margin-bottom:20px;" class="card">
-        <div class="section-title" style="font-size:1rem;"><i class="fas fa-comments"></i> Chat with <span id="chatWithName">User</span></div>
-        <div id="chatMessages" style="max-height:220px;overflow-y:auto;margin-bottom:10px;font-size:13px;"></div>
-        <div style="display:flex;gap:8px;">
-            <input type="text" id="chatInput" placeholder="Message..." style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;">
-            <button class="logout-btn" style="background:var(--primary);color:#000;border:none;" onclick="sendChat()">Send</button>
-            <button class="logout-btn" onclick="document.getElementById('chatPanel').style.display='none'">Close</button>
-        </div>
-    </div>
-
-    <!-- Tools -->
-    <div class="section-title" id="toolsSectionTitle"><i class="fas fa-tools"></i> Tools</div>
-    <div class="tools-grid" id="toolsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">
-        <a class="card" href="Duplicate Email Checker .html" data-tool="Duplicate Checker" onclick="typeof trackToolUse==='function'&&trackToolUse('Duplicate Checker')">
-            <div class="icon"><i class="fas fa-copy"></i></div>
-            <div class="card-title" data-tool-name>Duplicate Checker</div>
-            <div class="card-desc">Find unique & duplicate emails</div>
-        </a>
-        <a class="card" href="Email Data Formatter.html" data-tool="Data Formatter" onclick="typeof trackToolUse==='function'&&trackToolUse('Data Formatter')">
-            <div class="icon"><i class="fas fa-align-left"></i></div>
-            <div class="card-title" data-tool-name>Data Formatter</div>
-            <div class="card-desc">Format email:password lists</div>
-        </a>
-        <a class="card" href="emaill report .html" data-tool="Report Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Report Generator')">
-            <div class="icon"><i class="fas fa-file-alt"></i></div>
-            <div class="card-title" data-tool-name>Report Generator</div>
-            <div class="card-desc">Found / Good / Unknown reports</div>
-        </a>
-        <a class="card" href="esey emaill vawucer.html" data-tool="Email Validator" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Validator')">
-            <div class="icon"><i class="fas fa-check-double"></i></div>
-            <div class="card-title" data-tool-name>Email Validator</div>
-            <div class="card-desc">Validate email lists</div>
-        </a>
-        <a class="card" href="parshnol emaill vaault.html" data-tool="Email Vault" onclick="typeof trackToolUse==='function'&&trackToolUse('Email Vault')">
-            <div class="icon"><i class="fas fa-vault"></i></div>
-            <div class="card-title" data-tool-name>Email Vault</div>
-            <div class="card-desc">Save & manage lists</div>
-        </a>
-        <a class="card" href="gmail-format-fixer.html" data-tool="Gmail format fixer" onclick="typeof trackToolUse==='function'&&trackToolUse('Gmail format fixer')">
-            <div class="icon"><i class="fas fa-envelope"></i></div>
-            <div class="card-title" data-tool-name>Gmail format fixer</div>
-            <div class="card-desc">Fix Gmail formats</div>
-        </a>
-        <a class="card" href="name and recovery ganaretod.html" data-tool="Names & Recovery" onclick="typeof trackToolUse==='function'&&trackToolUse('Names & Recovery')">
-            <div class="icon"><i class="fas fa-users"></i></div>
-            <div class="card-title" data-tool-name>Names & Recovery</div>
-            <div class="card-desc">Generate names & recovery</div>
-        </a>
-        <a class="card" href="pasword ganaratod.html" data-tool="Password Generator" onclick="typeof trackToolUse==='function'&&trackToolUse('Password Generator')">
-            <div class="icon"><i class="fas fa-key"></i></div>
-            <div class="card-title" data-tool-name>Password Generator</div>
-            <div class="card-desc">Strong passwords</div>
-        </a>
-        <a class="card" href="ip time zoone farat.html" data-tool="IP TimeZone Finder" onclick="typeof trackToolUse==='function'&&trackToolUse('IP TimeZone Finder')">
-            <div class="icon"><i class="fas fa-globe"></i></div>
-            <div class="card-title" data-tool-name>IP TimeZone Finder</div>
-            <div class="card-desc">IP, timezone & more</div>
-        </a>
-    </div>
 </main>
 
 
-
 <script>
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar(){
-  var s=document.getElementById('sidebar');
-  var o=document.getElementById('overlay');
-  if(s) s.classList.remove('open');
-  if(o) o.classList.remove('open');
-}
-</script>
+/* ========== JSONBin Config ========== */
+const BIN_ID = '6a6eb29dda38895dfeae700a';
+const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
-<script>
-/* Early theme – no flash */
-(function(){
-  var t = localStorage.getItem('a_tuls_dash_color') || localStorage.getItem('a_tuls_theme') || 'dark-ocean';
-  var ok = ['dark-ocean','neon-night','gold-premium','cyber-punk','emerald-light'];
-  document.documentElement.setAttribute('data-theme', ok.indexOf(t) >= 0 ? t : 'dark-ocean');
-})();
-</script>
-<script>
-
-
-/* ===== Multi-language (full UI) ===== */
-const I18N = {
-  en: {
-    logout:'Logout', dashboard:'Dashboard', my_profile:'My Profile', community:'Community',
-    save_profile:'Save Profile', delete_note:'Delete Note', members:'Members', tools:'Email Tools',
-    generators:'Generators', utility:'Utility', main_menu:'Main Menu', admin_control:'Admin Control',
-    admin_panel:'Admin Panel',
-    tool_duplicate:'Duplicate Checker', tool_formatter:'Data Formatter', tool_report:'Report Generator',
-    tool_validator:'Email Validator', tool_vault:'Email Vault', tool_gmail:'Gmail format fixer',
-    tool_names:'Names & Recovery', tool_password:'Password Generator', tool_ip:'IP TimeZone Finder',tool_duplicate_d:'Find duplicate emails',tool_formatter_d:'Format email lists',tool_report_d:'Generate reports',tool_validator_d:'Validate emails',tool_vault_d:'Secure email storage',tool_gmail_d:'Fix Gmail formats',tool_names_d:'Generate names & recovery',tool_password_d:'Strong passwords',tool_ip_d:'IP, timezone & more',
-    photo_only:'Please select a photo', photo_processing:'Processing photo...', photo_ready:'✅ Photo ready — Save Profile', photo_fail:'Photo failed'
-  },
-  bn: {
-    logout:'লগআউট', dashboard:'ড্যাশবোর্ড', my_profile:'আমার প্রোফাইল', community:'কমিউনিটি',
-    save_profile:'প্রোফাইল সেভ', delete_note:'নোট মুছুন', members:'সদস্য', tools:'ইমেইল টুলস',
-    generators:'জেনারেটর', utility:'ইউটিলিটি', main_menu:'মেইন মেনু', admin_control:'অ্যাডমিন কন্ট্রোল',
-    admin_panel:'অ্যাডমিন প্যানেল',
-    tool_duplicate:'ডুপ্লিকেট চেকার', tool_formatter:'ডেটা ফরম্যাটার', tool_report:'রিপোর্ট জেনারেটর',
-    tool_validator:'ইমেইল ভ্যালিডেটর', tool_vault:'ইমেইল ভল্ট', tool_gmail:'জিমেইল ফরম্যাট ফিক্সার',
-    tool_names:'নেমস ও রিকভারি', tool_password:'পাসওয়ার্ড জেনারেটর', tool_ip:'আইপি টাইমজোন ফাইন্ডার',tool_duplicate_d:'ডুপ্লিকেট ইমেইল খুঁজুন',tool_formatter_d:'ইমেইল লিস্ট ফরম্যাট',tool_report_d:'রিপোর্ট তৈরি',tool_validator_d:'ইমেইল যাচাই',tool_vault_d:'নিরাপদ ইমেইল স্টোরেজ',tool_gmail_d:'Gmail ফরম্যাট ঠিক',tool_names_d:'নাম ও রিকভারি জেনারেট',tool_password_d:'শক্তিশালী পাসওয়ার্ড',tool_ip_d:'IP, টাইমজোন ও আরও',
-    photo_only:'শুধু ছবি সিলেক্ট করুন', photo_processing:'ছবি প্রসেস হচ্ছে...', photo_ready:'✅ ছবি রেডি — Save চাপুন', photo_fail:'ছবি ব্যর্থ'
-  },
-  hi: {
-    logout:'लॉगआउट', dashboard:'डैशबोर्ड', my_profile:'मेरी प्रोफ़ाइल', community:'कम्युनिटी',
-    save_profile:'सेव प्रोफ़ाइल', delete_note:'नोट हटाएँ', members:'सदस्य', tools:'ईमेल टूल्स',
-    generators:'जेनरेटर', utility:'यूटिलिटी', main_menu:'मुख्य मेनू', admin_control:'एडमिन नियंत्रण',
-    admin_panel:'एडमिन पैनल',
-    tool_duplicate:'डुप्लिकेट चेकर', tool_formatter:'डेटा फ़ॉर्मेटर', tool_report:'रिपोर्ट जेनरेटर',
-    tool_validator:'ईमेल वैलिडेटर', tool_vault:'ईमेल वॉल्ट', tool_gmail:'जिमेल फ़ॉर्मेट फिक्सर',
-    tool_names:'नाम और रिकवरी', tool_password:'पासवर्ड जेनरेटर', tool_ip:'आईपी टाइमज़ोन',tool_duplicate_d:'डुप्लिकेट ईमेल खोजें',tool_formatter_d:'ईमेल सूची फॉर्मेट',tool_report_d:'रिपोर्ट बनाएं',tool_validator_d:'ईमेल सत्यापन',tool_vault_d:'सुरक्षित ईमेल स्टोरेज',tool_gmail_d:'Gmail फॉर्मेट ठीक',tool_names_d:'नाम और रिकवरी',tool_password_d:'मजबूत पासवर्ड',tool_ip_d:'IP, टाइमज़ोन आदि',
-    photo_only:'कृपया फ़ोटो चुनें', photo_processing:'प्रोसेस हो रहा...', photo_ready:'✅ तैयार — सेव करें', photo_fail:'फ़ोटो असफल'
-  },
-  ar: {
-    logout:'خروج', dashboard:'لوحة التحكم', my_profile:'ملفي', community:'المجتمع',
-    save_profile:'حفظ الملف', delete_note:'حذف الملاحظة', members:'الأعضاء', tools:'أدوات البريد',
-    generators:'مولدات', utility:'أدوات', main_menu:'القائمة', admin_control:'تحكم الأدمن',
-    admin_panel:'لوحة الأدمن',
-    tool_duplicate:'فاحص التكرار', tool_formatter:'منسق البيانات', tool_report:'مولد التقارير',
-    tool_validator:'التحقق من البريد', tool_vault:'خزنة البريد', tool_gmail:'مصلح جيميل',
-    tool_names:'الأسماء والاستعادة', tool_password:'مولد كلمات المرور', tool_ip:'IP والمنطقة الزمنية',tool_duplicate_d:'البحث عن البريد المكرر',tool_formatter_d:'تنسيق قوائم البريد',tool_report_d:'إنشاء التقارير',tool_validator_d:'التحقق من البريد',tool_vault_d:'تخزين آمن للبريد',tool_gmail_d:'إصلاح تنسيق Gmail',tool_names_d:'أسماء واستعادة',tool_password_d:'كلمات مرور قوية',tool_ip_d:'IP والمنطقة الزمنية',
-    photo_only:'اختر صورة', photo_processing:'جاري المعالجة...', photo_ready:'✅ جاهز — احفظ', photo_fail:'فشل'
-  },
-  es: {
-    logout:'Salir', dashboard:'Panel', my_profile:'Mi perfil', community:'Comunidad',
-    save_profile:'Guardar', delete_note:'Borrar nota', members:'Miembros', tools:'Herramientas email',
-    generators:'Generadores', utility:'Utilidad', main_menu:'Menú', admin_control:'Control Admin',
-    admin_panel:'Panel Admin',
-    tool_duplicate:'Checker duplicados', tool_formatter:'Formateador', tool_report:'Generador reportes',
-    tool_validator:'Validador email', tool_vault:'Bóveda email', tool_gmail:'Gmail fixer',
-    tool_names:'Nombres y recovery', tool_password:'Generador contraseñas', tool_ip:'IP zona horaria',tool_duplicate_d:'Buscar emails duplicados',tool_formatter_d:'Formatear listas',tool_report_d:'Generar reportes',tool_validator_d:'Validar emails',tool_vault_d:'Almacenamiento seguro',tool_gmail_d:'Arreglar formato Gmail',tool_names_d:'Nombres y recuperación',tool_password_d:'Contraseñas fuertes',tool_ip_d:'IP, zona horaria',
-    photo_only:'Seleccione foto', photo_processing:'Procesando...', photo_ready:'✅ Listo — Guardar', photo_fail:'Error foto'
-  },
-  fr: {
-    logout:'Déconnexion', dashboard:'Tableau', my_profile:'Mon profil', community:'Communauté',
-    save_profile:'Enregistrer', delete_note:'Supprimer', members:'Membres', tools:'Outils email',
-    generators:'Générateurs', utility:'Utilitaire', main_menu:'Menu', admin_control:'Contrôle Admin',
-    admin_panel:'Panneau Admin',
-    tool_duplicate:'Vérif. doublons', tool_formatter:'Formateur', tool_report:'Rapports',
-    tool_validator:'Validateur', tool_vault:'Coffre email', tool_gmail:'Correcteur Gmail',
-    tool_names:'Noms et recovery', tool_password:'Mots de passe', tool_ip:'IP fuseau horaire',tool_duplicate_d:'Trouver emails doublons',tool_formatter_d:'Formater listes',tool_report_d:'Générer rapports',tool_validator_d:'Valider emails',tool_vault_d:'Stockage sécurisé',tool_gmail_d:'Corriger format Gmail',tool_names_d:'Noms et récupération',tool_password_d:'Mots de passe forts',tool_ip_d:'IP, fuseau horaire',
-    photo_only:'Choisir photo', photo_processing:'Traitement...', photo_ready:'✅ Prêt — Enregistrer', photo_fail:'Échec'
-  },
-  tr: {
-    logout:'Çıkış', dashboard:'Panel', my_profile:'Profilim', community:'Topluluk',
-    save_profile:'Kaydet', delete_note:'Notu sil', members:'Üyeler', tools:'E-posta araçları',
-    generators:'Üreticiler', utility:'Yardımcı', main_menu:'Menü', admin_control:'Yönetici',
-    admin_panel:'Admin Panel',
-    tool_duplicate:'Kopya kontrol', tool_formatter:'Veri biçimleyici', tool_report:'Rapor üretici',
-    tool_validator:'E-posta doğrula', tool_vault:'E-posta kasası', tool_gmail:'Gmail düzeltici',
-    tool_names:'İsim ve recovery', tool_password:'Şifre üretici', tool_ip:'IP saat dilimi',tool_duplicate_d:'Yinelenen e-postaları bul',tool_formatter_d:'Liste biçimlendir',tool_report_d:'Rapor oluştur',tool_validator_d:'E-posta doğrula',tool_vault_d:'Güvenli depolama',tool_gmail_d:'Gmail format düzelt',tool_names_d:'İsim ve kurtarma',tool_password_d:'Güçlü şifreler',tool_ip_d:'IP, saat dilimi',
-    photo_only:'Foto seçin', photo_processing:'İşleniyor...', photo_ready:'✅ Hazır — Kaydet', photo_fail:'Hata'
-  },
-  id: {
-    logout:'Keluar', dashboard:'Dasbor', my_profile:'Profil saya', community:'Komunitas',
-    save_profile:'Simpan', delete_note:'Hapus catatan', members:'Anggota', tools:'Alat email',
-    generators:'Generator', utility:'Utilitas', main_menu:'Menu', admin_control:'Kontrol Admin',
-    admin_panel:'Panel Admin',
-    tool_duplicate:'Cek duplikat', tool_formatter:'Pemformat data', tool_report:'Generator laporan',
-    tool_validator:'Validator email', tool_vault:'Vault email', tool_gmail:'Perbaiki Gmail',
-    tool_names:'Nama dan recovery', tool_password:'Generator sandi', tool_ip:'IP zona waktu',tool_duplicate_d:'Cari email duplikat',tool_formatter_d:'Format daftar email',tool_report_d:'Buat laporan',tool_validator_d:'Validasi email',tool_vault_d:'Penyimpanan aman',tool_gmail_d:'Perbaiki format Gmail',tool_names_d:'Nama & recovery',tool_password_d:'Password kuat',tool_ip_d:'IP, zona waktu',
-    photo_only:'Pilih foto', photo_processing:'Memproses...', photo_ready:'✅ Siap — Simpan', photo_fail:'Gagal'
-  },
-  ur: {
-    logout:'لاگ آؤٹ', dashboard:'ڈیش بورڈ', my_profile:'میرا پروفائل', community:'کمیونٹی',
-    save_profile:'محفوظ', delete_note:'نوٹ مٹائیں', members:'ممبرز', tools:'ای میل ٹولز',
-    generators:'جنریٹرز', utility:'یوٹیلیٹی', main_menu:'مین مینو', admin_control:'ایڈمن کنٹرول',
-    admin_panel:'ایڈمن پینل',
-    tool_duplicate:'ڈپلیکیٹ چیکر', tool_formatter:'ڈیٹا فارمیٹر', tool_report:'رپورٹ جنریٹر',
-    tool_validator:'ای میل ویلیڈیٹر', tool_vault:'ای میل والٹ', tool_gmail:'جی میل فکسر',
-    tool_names:'نام اور ریکوری', tool_password:'پاس ورڈ جنریٹر', tool_ip:'آئی پی ٹائم زون',tool_duplicate_d:'ڈپلیکیٹ ای میل تلاش',tool_formatter_d:'ای میل فہرست فارمیٹ',tool_report_d:'رپورٹ بنائیں',tool_validator_d:'ای میل تصدیق',tool_vault_d:'محفوظ اسٹوریج',tool_gmail_d:'Gmail فارمیٹ ٹھیک',tool_names_d:'نام اور ریکوری',tool_password_d:'مضبوط پاس ورڈ',tool_ip_d:'IP، ٹائم زون',
-    photo_only:'تصویر منتخب کریں', photo_processing:'پروسیس...', photo_ready:'✅ تیار', photo_fail:'ناکام'
-  },
-  zh: {
-    logout:'退出', dashboard:'仪表板', my_profile:'我的资料', community:'社区',
-    save_profile:'保存', delete_note:'删除备注', members:'成员', tools:'邮件工具',
-    generators:'生成器', utility:'实用工具', main_menu:'主菜单', admin_control:'管理控制',
-    admin_panel:'管理面板',
-    tool_duplicate:'重复检查', tool_formatter:'数据格式化', tool_report:'报告生成',
-    tool_validator:'邮箱验证', tool_vault:'邮箱保险库', tool_gmail:'Gmail修复',
-    tool_names:'姓名与恢复', tool_password:'密码生成', tool_ip:'IP时区',tool_duplicate_d:'查找重复邮箱',tool_formatter_d:'格式化邮箱列表',tool_report_d:'生成报告',tool_validator_d:'验证邮箱',tool_vault_d:'安全邮箱存储',tool_gmail_d:'修复 Gmail 格式',tool_names_d:'姓名与恢复',tool_password_d:'强密码',tool_ip_d:'IP、时区等',
-    photo_only:'请选择照片', photo_processing:'处理中...', photo_ready:'✅ 就绪 — 保存', photo_fail:'失败'
-  }
+const THEME_NAMES = {
+    'dark-ocean': 'Dark Ocean',
+    'neon-night': 'Neon Night',
+    'gold-premium': 'Gold Premium',
+    'cyber-punk': 'Cyber Punk',
+    'emerald-light': 'Emerald Light'
 };
-let currentLang = localStorage.getItem('a_tuls_lang') || 'en';
-function t(key) {
-    const pack = I18N[currentLang] || I18N.en;
-    return (pack && pack[key]) || (I18N.en[key]) || key;
-}
-function setLanguage(code) {
-    if (!I18N[code]) code = 'en';
-    currentLang = code;
-    localStorage.setItem('a_tuls_lang', code);
-    applyLanguage();
-}
-function applyLanguage() {
-    const sel = document.getElementById('langSelect');
-    if (sel) sel.value = currentLang;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const k = el.getAttribute('data-i18n');
-        if (k) el.textContent = t(k);
-    });
-    // Menu labels
-    document.querySelectorAll('.sidebar-menu .menu-label').forEach((lab, i) => {
-        const txt = (lab.textContent || '').trim().toLowerCase();
-        if (txt.includes('main') || lab.getAttribute('data-lab') === 'main') {
-            lab.setAttribute('data-lab', 'main'); lab.textContent = t('main_menu');
-        } else if (txt.includes('admin') || lab.getAttribute('data-lab') === 'admin') {
-            lab.setAttribute('data-lab', 'admin'); lab.textContent = t('admin_control');
-        } else if (txt.includes('email') || lab.getAttribute('data-lab') === 'tools') {
-            lab.setAttribute('data-lab', 'tools'); lab.textContent = t('tools');
-        } else if (txt.includes('gen') || lab.getAttribute('data-lab') === 'gen') {
-            lab.setAttribute('data-lab', 'gen'); lab.textContent = t('generators');
-        } else if (txt.includes('util') || lab.getAttribute('data-lab') === 'util') {
-            lab.setAttribute('data-lab', 'util'); lab.textContent = t('utility');
-        }
-    });
-    // Tool + menu items by data-tool or href
-    const toolMap = {
-        'Duplicate Checker': 'tool_duplicate',
-        'Data Formatter': 'tool_formatter',
-        'Report Generator': 'tool_report',
-        'Email Validator': 'tool_validator',
-        'Email Vault': 'tool_vault',
-        'Gmail format fixer': 'tool_gmail',
-        'Names & Recovery': 'tool_names',
-        'Password Generator': 'tool_password',
-        'IP TimeZone Finder': 'tool_ip'
-    };
-    document.querySelectorAll('.sidebar-menu .menu-item').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const tool = a.getAttribute('data-tool') || '';
-        const icon = a.querySelector('i');
-        const iconHtml = icon ? icon.outerHTML + ' ' : '';
-        if (href === 'dashboard.html' || (href.includes('dashboard') && !href.includes('#'))) {
-            a.innerHTML = iconHtml + t('dashboard');
-        } else if (href === '#myProfile') {
-            a.innerHTML = iconHtml + t('my_profile');
-        } else if (href === '#community') {
-            a.innerHTML = iconHtml + t('community');
-        } else if (href === 'admin.html') {
-            a.innerHTML = iconHtml + t('admin_panel');
-        } else if (tool && toolMap[tool]) {
-            a.innerHTML = iconHtml + t(toolMap[tool]);
-        }
-    });
-    // Tool cards on dashboard grid
-    document.querySelectorAll('#toolsGrid .card[data-tool]').forEach(card => {
-        const tool = card.getAttribute('data-tool');
-        if (!tool || !toolMap[tool]) return;
-        const titleEl = card.querySelector('.card-title, h3, .tool-title, strong');
-        // common structure: .title or text after icon
-        const nameEl = card.querySelector('[data-tool-name]') || card.querySelector('.card-title');
-        if (nameEl) {
-            const ic = nameEl.querySelector('i');
-            nameEl.innerHTML = (ic ? ic.outerHTML + ' ' : '') + t(toolMap[tool]);
-        } else {
-            // try first bold or title-like
-            const h = card.querySelector('div[style*="font-weight"], .title');
-            if (h && !h.querySelector('img')) {
-                const ic = h.querySelector('i');
-                if (ic || h.textContent.length < 40) {
-                    h.innerHTML = (ic ? ic.outerHTML + ' ' : '') + t(toolMap[tool]);
-                }
-            }
-        }
-    });
-    const pageTitle = document.querySelector('.page-title');
-    if (pageTitle && !pageTitle.querySelector('span.theme-tag')) {
-        // keep simple
-        const onlyText = !pageTitle.querySelector('button');
-        if (onlyText) pageTitle.childNodes.forEach ? null : null;
-    }
-
-    // Tool cards on dashboard grid
-    const descMap = {
-        'Duplicate Checker': {title:'tool_duplicate', desc:'tool_duplicate_d'},
-        'Data Formatter': {title:'tool_formatter', desc:'tool_formatter_d'},
-        'Report Generator': {title:'tool_report', desc:'tool_report_d'},
-        'Email Validator': {title:'tool_validator', desc:'tool_validator_d'},
-        'Email Vault': {title:'tool_vault', desc:'tool_vault_d'},
-        'Gmail format fixer': {title:'tool_gmail', desc:'tool_gmail_d'},
-        'Names & Recovery': {title:'tool_names', desc:'tool_names_d'},
-        'Password Generator': {title:'tool_password', desc:'tool_password_d'},
-        'IP TimeZone Finder': {title:'tool_ip', desc:'tool_ip_d'}
-    };
-    document.querySelectorAll('#toolsGrid .card, .grid .card').forEach(card => {
-        const tool = card.getAttribute('data-tool') || '';
-        const m = descMap[tool];
-        if (!m) return;
-        const titleEl = card.querySelector('.card-title, [data-tool-name], h3');
-        const descEl = card.querySelector('.card-desc, p');
-        if (titleEl) titleEl.textContent = t(m.title);
-        if (descEl && I18N[currentLang] && I18N[currentLang][m.desc]) descEl.textContent = t(m.desc);
-    });
-    document.documentElement.dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
-}
-document.addEventListener('DOMContentLoaded', function() { applyLanguage(); });
-setTimeout(applyLanguage, 100);
-setTimeout(applyLanguage, 800);
-
-
-
-
-/* ===== Session: 30 min idle → login (never deletes cloud data) ===== */
-(function(){
-  var ROLE_KEY = 'a_tuls_role';
-  var USER_KEY = 'a_tuls_user';
-  var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
-
-  function touch() {
-    try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
-  }
-
-  function checkSession() {
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role || role === '') return false;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    // First visit after login without timestamp — keep session & set now
-    if (!last) {
-      touch();
-      return true;
-    }
-    // Only expire after 30 minutes idle / browser closed
-    if ((Date.now() - last) > MAX_IDLE) {
-      try {
-        localStorage.removeItem(ROLE_KEY);
-        localStorage.removeItem(USER_KEY);
-        localStorage.removeItem(ACT_KEY);
-      } catch (e) {}
-      return false;
-    }
-    touch();
-    return true;
-  }
-
-  window.A_TULS_TOUCH = touch;
-  window.A_TULS_CHECK_SESSION = checkSession;
-
-  var _touchTimer = null;
-  function touchDebounced() {
-    if (_touchTimer) return;
-    _touchTimer = setTimeout(function(){ _touchTimer = null; touch(); }, 3000);
-  }
-  ['click','keydown','touchstart','scroll'].forEach(function(ev){
-    document.addEventListener(ev, touchDebounced, { passive: true });
-  });
-
-  // Check every 60s — only redirect if truly expired (no random refresh)
-  setInterval(function(){
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role) return;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last) { touch(); return; }
-    if ((Date.now() - last) > MAX_IDLE) {
-      try {
-        localStorage.removeItem(ROLE_KEY);
-        localStorage.removeItem(USER_KEY);
-        localStorage.removeItem(ACT_KEY);
-      } catch(e) {}
-      location.replace('index.html');
-    }
-  }, 60000);
-
-  // Init activity on load
-  touch();
-})();
 
 const role = localStorage.getItem('a_tuls_role');
 let user = JSON.parse(localStorage.getItem('a_tuls_user') || '{}');
@@ -1136,30 +1069,17 @@ let deviceInfo = null;
 let trackingDone = false;
 
 if (role !== 'user' && role !== 'admin') {
-    location.replace('index.html');
-} else {
-    try {
-        var last = parseInt(localStorage.getItem('a_tuls_last_active') || '0', 10);
-        var maxIdle = 10 * 60 * 1000;
-        if (last && (Date.now() - last) > maxIdle) {
-            localStorage.removeItem('a_tuls_role');
-            localStorage.removeItem('a_tuls_user');
-            localStorage.removeItem('a_tuls_last_active');
-            location.replace('index.html');
-        } else {
-            localStorage.setItem('a_tuls_last_active', String(Date.now()));
-            if (typeof A_TULS_TOUCH === 'function') A_TULS_TOUCH();
-        }
-    } catch (e) {
-        location.replace('index.html');
-    }
-}
+    location.href = 'index.html';
 }
 
-document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
+document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin' : 'User');
+
+// Admin হলে Dashboard + Admin Panel দুটো অপশন দেখাও
 if (role === 'admin') {
-    const acm = document.getElementById('adminControlMenu');
-    if (acm) acm.style.display = 'block';
+    const apMenu = document.getElementById('adminPanelMenu');
+    const apBtn = document.getElementById('adminPanelBtn');
+    if (apMenu) apMenu.style.display = '';
+    if (apBtn) apBtn.style.display = 'inline-flex';
 }
 
 /* ========== DEVICE FINGERPRINT ========== */
@@ -1238,13 +1158,7 @@ async function collectDeviceInfo() {
     };
 }
 
-
-/* ========== JSONBin Config ========== */
-const BIN_ID = '6a6eb29dda38895dfeae700a';
-const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
-const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
-
-/* ========== DB HELPERS ========== */
+/* ========== DB HELPERS (safe merge — পুরনো ইউজার/ডেটা মুছে যাবে না) ========== */
 async function fetchDB() {
     const res = await fetch(BIN_URL + '/latest', {
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -1254,42 +1168,96 @@ async function fetchDB() {
     return data.record || { users: [], settings: {} };
 }
 
+function mergeUser(remoteU, localU) {
+    const out = Object.assign({}, remoteU || {}, localU || {});
+    // nested objects
+    out.profile = Object.assign({}, (remoteU && remoteU.profile) || {}, (localU && localU.profile) || {});
+    // ফটো খালি দিয়ে মুছবে না
+    if (!(localU && localU.profile && localU.profile.photo) && remoteU && remoteU.profile && remoteU.profile.photo) {
+        out.profile.photo = remoteU.profile.photo;
+    }
+    out.toolUsage = Object.assign({}, (remoteU && remoteU.toolUsage) || {}, (localU && localU.toolUsage) || {});
+    out.toolLastUsed = Object.assign({}, (remoteU && remoteU.toolLastUsed) || {}, (localU && localU.toolLastUsed) || {});
+    // arrays: union by fingerprint / keep longer
+    const mergeArr = (a, b, key) => {
+        const map = {};
+        (a || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
+        (b || []).forEach(x => { map[key ? x[key] : JSON.stringify(x)] = x; });
+        return Object.values(map);
+    };
+    out.devices = mergeArr(remoteU && remoteU.devices, localU && localU.devices, 'fingerprint');
+    out.blockedDevices = Array.from(new Set([].concat((remoteU && remoteU.blockedDevices) || [], (localU && localU.blockedDevices) || [])));
+    out.approvedDevices = Array.from(new Set([].concat((remoteU && remoteU.approvedDevices) || [], (localU && localU.approvedDevices) || [])));
+    const hist = [].concat((remoteU && remoteU.loginHistory) || [], (localU && localU.loginHistory) || []);
+    out.loginHistory = hist.slice(-40);
+    if (Array.isArray(localU && localU.tools)) out.tools = localU.tools;
+    else if (Array.isArray(remoteU && remoteU.tools)) out.tools = remoteU.tools;
+    return out;
+}
+
+function mergeById(remoteArr, localArr, idKey) {
+    const map = {};
+    (remoteArr || []).forEach(x => { if (x && x[idKey]) map[x[idKey]] = x; });
+    (localArr || []).forEach(x => {
+        if (!x || !x[idKey]) return;
+        map[x[idKey]] = Object.assign({}, map[x[idKey]] || {}, x);
+    });
+    return Object.values(map);
+}
+
+function mergeDB(remote, local) {
+    const r = remote || { users: [], settings: {} };
+    const l = local || { users: [], settings: {} };
+    // কখনোই খালি local দিয়ে remote ইউজার মুছবে না
+    const byEmail = {};
+    (r.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (k) byEmail[k] = u;
+    });
+    (l.users || []).forEach(u => {
+        const k = (u.email || '').toLowerCase();
+        if (!k) return;
+        byEmail[k] = mergeUser(byEmail[k], u);
+    });
+    const users = Object.values(byEmail);
+    // settings: remote base + local overlay (admin changes)
+    const settings = Object.assign({}, r.settings || {}, l.settings || {});
+    // adminInfo photo protect
+    if (r.settings && r.settings.adminInfo && settings.adminInfo) {
+        if (!settings.adminInfo.photo && r.settings.adminInfo.photo) {
+            settings.adminInfo.photo = r.settings.adminInfo.photo;
+        }
+    }
+    const posts = mergeById(r.posts, l.posts, 'id').sort((a, b) => String(b.time || '').localeCompare(String(a.time || ''))).slice(0, 200);
+    const messages = mergeById(r.messages, l.messages, 'id').sort((a, b) => String(a.time || '').localeCompare(String(b.time || ''))).slice(-500);
+    const passwordRequests = mergeById(r.passwordRequests, l.passwordRequests, 'id');
+    const deviceRequests = mergeById(r.deviceRequests, l.deviceRequests, 'id');
+    return {
+        users,
+        settings,
+        posts,
+        messages,
+        passwordRequests,
+        deviceRequests
+    };
+}
+
 async function saveDB() {
     if (saving || !DB) return;
     saving = true;
     try {
-        // Safe merge: never drop remote users / posts / messages
+        // সবসময় আগে ক্লাউডের লেটেস্ট নাও, তারপর merge — পুরনো লোক হারাবে না
         let remote = { users: [], settings: {} };
         try {
-            const r = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': MASTER_KEY } });
-            if (r.ok) {
-                const j = await r.json();
-                remote = j.record || remote;
-            }
-        } catch (e) {}
-        const byEmail = {};
-        (remote.users || []).forEach(u => {
-            const k = (u.email || '').toLowerCase();
-            if (k) byEmail[k] = u;
-        });
-        (DB.users || []).forEach(u => {
-            const k = (u.email || '').toLowerCase();
-            if (!k) return;
-            const prev = byEmail[k] || {};
-            const merged = Object.assign({}, prev, u);
-            merged.profile = Object.assign({}, prev.profile || {}, u.profile || {});
-            // keep richer device/login data
-            if ((prev.devices || []).length > (u.devices || []).length) merged.devices = prev.devices;
-            if ((prev.loginHistory || []).length > (u.loginHistory || []).length) merged.loginHistory = prev.loginHistory;
-            byEmail[k] = merged;
-        });
-        DB.users = Object.values(byEmail);
-        // preserve remote arrays if local empty
-        if ((!DB.posts || !DB.posts.length) && remote.posts) DB.posts = remote.posts;
-        if ((!DB.messages || !DB.messages.length) && remote.messages) DB.messages = remote.messages;
-        if ((!DB.passwordRequests || !DB.passwordRequests.length) && remote.passwordRequests) DB.passwordRequests = remote.passwordRequests;
-        if ((!DB.deviceRequests || !DB.deviceRequests.length) && remote.deviceRequests) DB.deviceRequests = remote.deviceRequests;
-        DB.settings = Object.assign({}, remote.settings || {}, DB.settings || {});
+            remote = await fetchDB();
+        } catch (e) {
+            console.error('fetch before save failed', e);
+        }
+        // সুরক্ষা: local-এ ইউজার ০ কিন্তু remote-এ আছে → remote রাখো
+        if ((!DB.users || DB.users.length === 0) && remote.users && remote.users.length > 0) {
+            DB.users = remote.users;
+        }
+        DB = mergeDB(remote, DB);
         const res = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
@@ -1419,19 +1387,30 @@ function applyTheme(theme) {
 function updateAdminInfo(visible) {
     const box = document.getElementById('adminInfoBox');
     if (!box) return;
+    // HIDE ON DASH → শুধু এই বক্স লুকানো; SHOW → সবাই দেখবে
     box.style.display = visible !== false ? 'block' : 'none';
     const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
-    const tg = info.telegram || '+8801944035239';
-    const fb = info.facebook || 'Gourab Official';
-    const em = info.email || 'gourabmon112233@gmail.com';
-    const extra = info.extra || 'Developed by Gourab • 01944035239';
-    const an = info.name || 'Admin Gourab';
+    const tg = escapeHtmlLocal(info.telegram || '+8801944035239');
+    const fbRaw = (info.facebook || 'Gourab Official').trim();
+    const fb = escapeHtmlLocal(fbRaw);
+    const em = escapeHtmlLocal(info.email || 'gourabmon112233@gmail.com');
+    const extra = escapeHtmlLocal(info.extra || 'Developed by Gourab • 01944035239');
+    const an = escapeHtmlLocal(info.name || 'Admin Gourab');
+    const fbHtml = /^https?:\/\//i.test(fbRaw)
+        ? '<a href="' + escapeHtmlLocal(fbRaw) + '" target="_blank" rel="noopener">' + fb + '</a>'
+        : fb;
+    // Admin photo — সবাই দেখবে
+    const photo = info.photo || '';
+    const photoHtml = photo
+        ? '<img src="' + String(photo).replace(/"/g, '') + '" alt="Admin" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);margin-bottom:10px;display:block;">'
+        : '';
     box.innerHTML = '<div class="title"><i class="fas fa-user-shield"></i> Admin Information</div>'
+        + photoHtml
         + '<div><i class="fas fa-user"></i> Name: <strong>' + an + '</strong></div>'
         + '<div><i class="fas fa-id-badge"></i> Admin ID: <strong>' + em + '</strong></div>'
         + '<div><i class="fab fa-telegram"></i> Telegram: <strong>' + tg + '</strong></div>'
-        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fb + '</div>'
-        + '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>';
+        + '<div><i class="fab fa-facebook"></i> Facebook: ' + fbHtml + '</div>'
+        + (extra ? '<div style="margin-top:4px;opacity:0.7;font-size:12px;">' + extra + '</div>' : '');
 }
 
 function updateNotice(notice) {
@@ -1487,13 +1466,15 @@ async function syncFromCloud() {
                     location.href = 'pending.html';
                     return;
                 }
+                // প্রোফাইল/ফটো ক্লাউডে থাকলে সেটাই রাখো — খালি ডেটা দিয়ে মুছবে না
+                if (fresh.profile && user.profile) {
+                    if (!fresh.profile.photo && user.profile.photo) {
+                        fresh.profile.photo = user.profile.photo;
+                    }
+                }
                 user = fresh;
                 localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
-                document.getElementById('userName').textContent = user.name || (role === 'admin' ? 'Admin Gourab' : 'User');
-if (role === 'admin') {
-    const acm = document.getElementById('adminControlMenu');
-    if (acm) acm.style.display = 'block';
-}
+                document.getElementById('userName').textContent = user.name || 'User';
             }
         }
 
@@ -1605,10 +1586,7 @@ function showProfileSection() {
     const title = document.getElementById('toolsSectionTitle');
     if (title) title.style.display = 'none';
     setActiveMenu('profile');
-    (async function(){
-        try { if (!DB) DB = await fetchDB(); } catch(e) {}
-        loadProfileForm();
-    })();
+    loadProfileForm();
     closeSidebar();
 }
 
@@ -1653,6 +1631,7 @@ function setActiveMenu(which) {
 }
 
 function loadProfileForm() {
+    // Admin → settings.adminInfo থেকে লোড
     if (role === 'admin') {
         const info = (DB && DB.settings && DB.settings.adminInfo) ? DB.settings.adminInfo : {};
         document.getElementById('profileName').value = info.name || 'Admin Gourab';
@@ -1691,104 +1670,38 @@ function updatePhotoUI() {
 function onPhotoSelected(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-
-    const status = document.getElementById('profileSaveMsg');
-    const showStatus = (msg, ok) => {
-        if (!status) return;
-        status.style.display = 'block';
-        status.style.color = ok === false ? 'var(--danger-tx)' : (ok ? 'var(--primary)' : 'var(--muted)');
-        status.textContent = msg;
-    };
-
-    // Accept almost any image; some Android give empty MIME
     const name = (file.name || '').toLowerCase();
     const type = (file.type || '').toLowerCase();
-    const looksImage = type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?)$/i.test(name) || type === '';
-    if (!looksImage && type && !type.startsWith('image/')) {
-        showStatus((typeof t === 'function' ? t('photo_only') : null) || 'Please select a photo', false);
+    const looksImage = !type || type.startsWith('image/') || type === 'application/octet-stream'
+        || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?|jfif)$/i.test(name);
+    if (!looksImage) {
+        alert('Please select a photo (JPG/PNG/WEBP/GIF/BMP/HEIC)');
         return;
     }
-
-    showStatus((typeof t === 'function' ? t('photo_processing') : null) || 'Processing photo...', null);
-
-    const processBitmap = (bitmapOrImg, w, h) => {
-        try {
-            const width = w || bitmapOrImg.width || 1;
-            const height = h || bitmapOrImg.height || 1;
-            const size = Math.min(width, height);
-            const sx = (width - size) / 2;
-            const sy = (height - size) / 2;
-            // Always small square for stable JSONBin save
-            let out = 160;
-            const c = document.createElement('canvas');
-            c.width = out;
-            c.height = out;
-            const ctx = c.getContext('2d');
-            ctx.fillStyle = '#1a1a1a';
-            ctx.fillRect(0, 0, out, out);
-            if (typeof createImageBitmap !== 'undefined' && bitmapOrImg.close) {
-                ctx.drawImage(bitmapOrImg, sx, sy, size, size, 0, 0, out, out);
-                try { bitmapOrImg.close(); } catch (e) {}
-            } else {
-                ctx.drawImage(bitmapOrImg, sx, sy, size, size, 0, 0, out, out);
-            }
-            let q = 0.7;
-            let data = c.toDataURL('image/jpeg', q);
-            // Hard cap ~50–70KB so save never fails
-            while (data.length > 70000 && q > 0.3) {
-                q -= 0.1;
-                data = c.toDataURL('image/jpeg', q);
-            }
-            if (data.length > 90000) {
-                out = 120;
-                c.width = out; c.height = out;
-                ctx.fillStyle = '#1a1a1a';
-                ctx.fillRect(0, 0, out, out);
-                ctx.drawImage(bitmapOrImg.width ? bitmapOrImg : bitmapOrImg, sx, sy, size, size, 0, 0, out, out);
-                data = c.toDataURL('image/jpeg', 0.55);
-            }
-            profilePhotoData = data;
-            updatePhotoUI();
-            showStatus((typeof t === 'function' ? t('photo_ready') : null) || '✅ Photo ready — press Save Profile', true);
-        } catch (err) {
-            console.error(err);
-            showStatus((typeof t === 'function' ? t('photo_fail') : null) || 'Photo failed', false);
+    // Any size OK — auto compress + square crop center
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+        const out = 400; // profile square
+        const c = document.createElement('canvas');
+        c.width = out; c.height = out;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, out, out);
+        // compress until reasonable (<400KB data url roughly)
+        let q = 0.85;
+        profilePhotoData = c.toDataURL('image/jpeg', q);
+        while (profilePhotoData.length > 350000 && q > 0.4) {
+            q -= 0.1;
+            profilePhotoData = c.toDataURL('image/jpeg', q);
         }
+        URL.revokeObjectURL(url);
+        updatePhotoUI();
     };
-
-    // Path 1: createImageBitmap (best for large phone photos)
-    if (typeof createImageBitmap === 'function') {
-        createImageBitmap(file)
-            .then(function(bmp) {
-                processBitmap(bmp, bmp.width, bmp.height);
-            })
-            .catch(function() {
-                // Path 2: FileReader + Image
-                fallbackReader();
-            });
-    } else {
-        fallbackReader();
-    }
-
-    function fallbackReader() {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            const img = new Image();
-            img.onload = function() { processBitmap(img, img.width, img.height); };
-            img.onerror = function() {
-                showStatus((typeof t === 'function' ? t('photo_fail') : null) || 'Could not read this photo. Try JPG or PNG.', false);
-            };
-            img.src = ev.target.result;
-        };
-        reader.onerror = function() {
-            showStatus((typeof t === 'function' ? t('photo_fail') : null) || 'Could not read file', false);
-        };
-        try {
-            reader.readAsDataURL(file);
-        } catch (e) {
-            showStatus((typeof t === 'function' ? t('photo_fail') : null) || 'Could not read file', false);
-        }
-    }
+    img.onerror = function() { alert('ছবি লোড ব্যর্থ'); };
+    img.src = url;
 }
 
 async function clearMyNote() {
@@ -1801,7 +1714,7 @@ async function saveMyProfile() {
     try {
         if (!DB) DB = await fetchDB();
 
-        // Admin saves to settings.adminInfo (সবাই দেখবে)
+        // Admin → settings.adminInfo সেভ (সবার ড্যাশবোর্ডে দেখা যাবে)
         if (role === 'admin') {
             if (!DB.settings) DB.settings = {};
             const prev = DB.settings.adminInfo || {};
@@ -1811,11 +1724,12 @@ async function saveMyProfile() {
                 facebook: document.getElementById('profileBio').value.trim() || prev.facebook || '',
                 email: prev.email || 'gourabmon112233@gmail.com',
                 extra: document.getElementById('profileMessage').value.trim() || '',
+                // ফটো ডিলিট না করা পর্যন্ত থাকবে
                 photo: profilePhotoData || prev.photo || ''
             };
             document.getElementById('userName').textContent = DB.settings.adminInfo.name;
             await saveDB();
-            updateAdminInfo(true);
+            updateAdminInfo(DB.settings.adminInfoVisible !== false);
             const msg = document.getElementById('profileSaveMsg');
             if (msg) {
                 msg.style.display = 'block';
@@ -1823,7 +1737,7 @@ async function saveMyProfile() {
                 msg.textContent = '✅ Admin প্রোফাইল সেভ হয়েছে! সবাই দেখতে পারবে।';
                 setTimeout(() => { msg.style.display = 'none'; }, 3000);
             }
-            renderCommunity(false);
+            try { renderCommunity(false); } catch (e) {}
             return;
         }
 
@@ -1837,32 +1751,37 @@ async function saveMyProfile() {
         if (name) DB.users[idx].name = name;
 
         if (!DB.users[idx].profile) DB.users[idx].profile = {};
+        const prevPhoto = DB.users[idx].profile.photo || '';
         DB.users[idx].profile.phone = document.getElementById('profilePhone').value.trim();
         DB.users[idx].profile.bio = document.getElementById('profileBio').value.trim();
         DB.users[idx].profile.publicMessage = document.getElementById('profileMessage').value.trim();
         DB.users[idx].profile.showOnHome = document.getElementById('profileShowOnHome').checked;
-        if (profilePhotoData) DB.users[idx].profile.photo = profilePhotoData;
+        // ফটো মুছে না দেওয়া পর্যন্ত আগের ফটো রাখো (রিফ্রেশে হারাবে না)
+        DB.users[idx].profile.photo = profilePhotoData || prevPhoto || '';
 
         user = DB.users[idx];
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
         document.getElementById('userName').textContent = user.name || 'User';
 
         await saveDB();
+        // ক্লাউড থেকে আবার নিশ্চিত করে নাও — রিফ্রেশে একই থাকবে
+        try {
+            DB = await fetchDB();
+            const fresh = (DB.users || []).find(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
+            if (fresh) {
+                user = fresh;
+                localStorage.setItem('a_tuls_user', JSON.stringify(fresh));
+                profilePhotoData = (fresh.profile && fresh.profile.photo) || profilePhotoData || '';
+            }
+        } catch (e) {}
         const msg = document.getElementById('profileSaveMsg');
         msg.style.display = 'block';
         msg.style.color = 'var(--primary)';
         msg.textContent = '✅ প্রোফাইল সেভ হয়েছে!';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
-        renderCommunity(false);
+        try { renderCommunity(false); } catch (e) { try { renderCommunity(); } catch (e2) {} }
     } catch (e) {
-        console.error(e);
-        const msg = document.getElementById('profileSaveMsg');
-        if (msg) {
-            msg.style.display = 'block';
-            msg.style.color = 'var(--danger-tx)';
-            msg.textContent = 'Save failed. Photo too large or network error — try again.';
-        }
-        alert('Save failed: ' + (e.message || 'network') + '\nTry photo again or Save without changing photo.');
+        alert('সেভ ব্যর্থ: ' + e.message);
     }
 }
 
@@ -1893,15 +1812,18 @@ async function renderCommunity(fullList) {
                 const adminTg = ai.telegram || '+8801944035239';
                 const adminFb = ai.facebook || 'Gourab Official';
                 const adminExtra = ai.extra || '';
+                const adminPhoto = ai.photo || '';
+                // Admin photo — সবাই Members-এ দেখবে
+                const adminPhotoHtml = adminPhoto
+                    ? `<img src="${String(adminPhoto).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
+                    : `<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;"><i class="fas fa-user-shield"></i></div>`;
                 return `
                 <div class="card" style="cursor:default;padding:16px;border:1px solid var(--primary);">
                     <div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">
                         👑 OFFICIAL ADMIN
                     </div>
                     <div style="display:flex;gap:12px;align-items:center;">
-                        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
+                        ${adminPhotoHtml}
                         <div>
                             <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(adminName)}</div>
                             <div style="font-size:11px;color:var(--muted);">ADMIN ID</div>
@@ -1935,8 +1857,9 @@ async function renderCommunity(fullList) {
             const photoHtml = photo
                 ? `<img src="${String(photo).replace(/"/g,'')}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">`
                 : `<div style="width:56px;height:56px;border-radius:50%;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-user"></i></div>`;
-            const msgHtml = (isPremium && msg)
-                ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;">💬 ${escapeHtmlLocal(msg)}</div>`
+            // নোট থাকলে নাম/ID-এর উপরে সবাই দেখবে (Free + Premium)
+            const msgHtml = msg
+                ? `<div style="background:var(--notice-bg);border:1px solid var(--notice-bd);color:var(--notice-tx);padding:8px 10px;border-radius:10px;font-size:12.5px;margin-bottom:10px;font-weight:600;word-break:break-word;">💬 ${escapeHtmlLocal(msg)}</div>`
                 : '';
             const chatBtn = isMe ? '' : `<button onclick="openChat('${escapeHtmlLocal(u.email)}','${escapeHtmlLocal(u.name || 'User')}')" class="logout-btn" style="margin-top:8px;background:var(--primary);color:#000;border:none;font-size:12px;padding:7px 12px;"><i class="fas fa-comments"></i> Chat</button>`;
             const waBtn = phone ? `<a href="https://wa.me/${phone.replace(/[^0-9+]/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;margin-left:8px;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none;"><i class="fab fa-whatsapp"></i> WA</a>` : '';
@@ -1945,9 +1868,10 @@ async function renderCommunity(fullList) {
                 ${msgHtml}
                 <div style="display:flex;gap:12px;align-items:center;">
                     ${photoHtml}
-                    <div>
+                    <div style="min-width:0;">
                         <div style="font-weight:700;font-size:15px;">${escapeHtmlLocal(u.name || 'User')}${isMe ? ' (You)' : ''}</div>
                         <div style="font-size:11px;color:var(--muted);">${mode}</div>
+                        <div style="font-size:10px;color:var(--muted);opacity:0.85;word-break:break-all;">ID: ${escapeHtmlLocal(u.email || '')}</div>
                     </div>
                 </div>
                 ${bio ? `<div style="margin-top:10px;font-size:12.5px;color:var(--muted);">${escapeHtmlLocal(bio)}</div>` : ''}
@@ -1956,9 +1880,8 @@ async function renderCommunity(fullList) {
         }
 
         let html = '';
-        if (settings.adminInfoVisible !== false) {
-            html += memberCard(null, true);
-        }
+        // Members-এ Admin কার্ড সবসময় দেখাবে (HIDE শুধু উপরের Admin Information বক্সে)
+        html += memberCard(null, true);
 
         let users = (DB.users || []).filter(u => {
             const pr = u.profile || {};
@@ -1998,41 +1921,30 @@ function onPostPhotoSelected(e) {
     if (!file) return;
     const name = (file.name || '').toLowerCase();
     const type = (file.type || '').toLowerCase();
-    const looksImage = type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?)$/i.test(name) || type === '';
-    if (!looksImage && type && !type.startsWith('image/')) { alert('শুধু ছবি (JPG/PNG/WEBP/GIF/BMP/HEIC/AVIF)'); return; }
-    const finish = (bmp, w, h) => {
-        const maxW = 640;
-        const scale = Math.min(1, maxW / (w || bmp.width || 1));
+    const looksImage = !type || type.startsWith('image/') || type === 'application/octet-stream'
+        || /\.(jpe?g|png|webp|gif|bmp|heic|heif|avif|tiff?|jfif)$/i.test(name);
+    if (!looksImage) { alert('Please select a photo'); return; }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+        const maxW = 900;
+        const scale = Math.min(1, maxW / img.width);
         const c = document.createElement('canvas');
-        c.width = Math.round((w || bmp.width) * scale);
-        c.height = Math.round((h || bmp.height) * scale);
-        c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
-        if (bmp.close) try { bmp.close(); } catch(e) {}
+        c.width = Math.round(img.width * scale);
+        c.height = Math.round(img.height * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
         let q = 0.8;
         postPhotoData = c.toDataURL('image/jpeg', q);
-        while (postPhotoData.length > 120000 && q > 0.35) {
+        while (postPhotoData.length > 500000 && q > 0.4) {
             q -= 0.1;
             postPhotoData = c.toDataURL('image/jpeg', q);
         }
+        URL.revokeObjectURL(url);
         document.getElementById('postPhotoName').textContent = file.name;
         document.getElementById('postPhotoPreview').src = postPhotoData;
         document.getElementById('postPhotoPreviewWrap').style.display = 'block';
     };
-    if (typeof createImageBitmap === 'function') {
-        createImageBitmap(file).then(bmp => finish(bmp, bmp.width, bmp.height)).catch(() => {
-            const img = new Image();
-            const url = URL.createObjectURL(file);
-            img.onload = function() { finish(img, img.width, img.height); URL.revokeObjectURL(url); };
-            img.onerror = function() { alert('ছবি পড়া যায়নি — JPG/PNG চেষ্টা করুন'); URL.revokeObjectURL(url); };
-            img.src = url;
-        });
-    } else {
-        const img = new Image();
-        const url = URL.createObjectURL(file);
-        img.onload = function() { finish(img, img.width, img.height); URL.revokeObjectURL(url); };
-        img.onerror = function() { alert('ছবি পড়া যায়নি'); URL.revokeObjectURL(url); };
-        img.src = url;
-    }
+    img.src = url;
 }
 
 async function createPost() {
@@ -2224,54 +2136,72 @@ async function addComment(postId) {
 
 
 /* ===== CHAT (stored in JSONBin messages array) ===== */
+let chatPollTimer = null;
+
 function openChat(email, name) {
     chatPartnerEmail = email;
     chatPartnerName = name;
     document.getElementById('chatPanel').style.display = 'block';
-    document.getElementById('chatWithName').textContent = name;
+    document.getElementById('chatWithName').textContent = name + ' • ' + email;
     document.getElementById('chatPanel').scrollIntoView({ behavior: 'smooth' });
     loadChatMessages();
+    // অন্যজনের মেসেজ দেখতে অটো রিফ্রেশ
+    if (chatPollTimer) clearInterval(chatPollTimer);
+    chatPollTimer = setInterval(function() {
+        if (chatPartnerEmail && document.getElementById('chatPanel').style.display !== 'none') {
+            loadChatMessages(true);
+        }
+    }, 3000);
 }
 
 function closeChat() {
     document.getElementById('chatPanel').style.display = 'none';
     chatPartnerEmail = null;
+    if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
 }
 
-async function loadChatMessages() {
+async function loadChatMessages(silent) {
     const box = document.getElementById('chatMessages');
     if (!box || !chatPartnerEmail) return;
     try {
-        if (!DB) DB = await fetchDB();
+        // সবসময় ফ্রেশ ডেটা নাও যাতে অন্যজনের মেসেজ দেখা যায়
+        DB = await fetchDB();
         if (!Array.isArray(DB.messages)) DB.messages = [];
 
-        const me = (user && user.email || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
-        const other = chatPartnerEmail.toLowerCase();
+        const me = ((user && user.email) || (role === 'admin' ? 'admin@atuls.local' : '')).toLowerCase();
+        const other = String(chatPartnerEmail || '').toLowerCase();
+        if (!me || !other) return;
 
         const msgs = DB.messages.filter(m => {
-            const f = (m.from || '').toLowerCase();
-            const t = (m.to || '').toLowerCase();
+            const f = String(m.from || '').toLowerCase();
+            const t = String(m.to || '').toLowerCase();
             return (f === me && t === other) || (f === other && t === me);
-        }).slice(-80);
+        }).slice(-100);
 
         if (!msgs.length) {
-            box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</div>';
+            if (!silent) {
+                box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">কোনো মেসেজ নেই। প্রথম মেসেজ পাঠান!</div>';
+            }
             return;
         }
 
-        box.innerHTML = msgs.map(m => {
-            const mine = (m.from || '').toLowerCase() === me;
+        const html = msgs.map(m => {
+            const mine = String(m.from || '').toLowerCase() === me;
             const time = m.time ? new Date(m.time).toLocaleString('bn-BD', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : '';
             return `<div style="margin-bottom:10px;text-align:${mine ? 'right' : 'left'};">
-                <div style="display:inline-block;max-width:80%;padding:8px 12px;border-radius:12px;background:${mine ? 'var(--primary)' : 'var(--card)'};color:${mine ? '#000' : 'var(--text)'};border:1px solid var(--border);font-size:13px;">
+                <div style="display:inline-block;max-width:85%;padding:10px 14px;border-radius:14px;background:${mine ? 'var(--primary)' : 'var(--card)'};color:${mine ? '#000' : 'var(--text)'};border:1px solid var(--border);font-size:13.5px;line-height:1.45;word-break:break-word;text-align:left;">
+                    ${!mine ? '<div style="font-size:10px;opacity:0.7;margin-bottom:2px;">' + escapeHtmlLocal(chatPartnerName || 'User') + '</div>' : ''}
                     ${escapeHtmlLocal(m.text)}
                 </div>
                 <div style="font-size:10px;color:var(--muted);margin-top:2px;">${time}</div>
             </div>`;
         }).join('');
-        box.scrollTop = box.scrollHeight;
+
+        const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+        box.innerHTML = html;
+        if (!silent || nearBottom) box.scrollTop = box.scrollHeight;
     } catch (e) {
-        box.innerHTML = '<div style="color:var(--danger-tx);">মেসেজ লোড ব্যর্থ</div>';
+        if (!silent) box.innerHTML = '<div style="color:var(--danger-tx);">মেসেজ লোড ব্যর্থ</div>';
     }
 }
 
@@ -2284,17 +2214,16 @@ async function sendChat() {
     if (!me) return alert('লগইন প্রয়োজন');
 
     try {
-        if (!DB) DB = await fetchDB();
+        DB = await fetchDB();
         if (!Array.isArray(DB.messages)) DB.messages = [];
 
         DB.messages.push({
-            id: Date.now().toString(36),
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
             from: me,
             to: chatPartnerEmail,
             text: text,
             time: new Date().toISOString()
         });
-        // keep last 500 messages globally
         if (DB.messages.length > 500) DB.messages = DB.messages.slice(-500);
 
         await saveDB();
@@ -2321,7 +2250,66 @@ document.querySelectorAll('.sidebar-menu .menu-item[href="dashboard.html"]').for
 /* After sync, refresh community wall */
 const _origSync = typeof syncFromCloud === 'function' ? syncFromCloud : null;
 
-setInterval(syncFromCloud, 5000);
+// আগে ৫ সেকেন্ড ছিল — রেস কমাতে ১২ সেকেন্ড
+setInterval(syncFromCloud, 12000);
+
+/* ========== LANGUAGE (EN default / BN) ========== */
+const I18N = {
+  en: {
+    'Dashboard': 'Dashboard',
+    'My Profile': 'My Profile',
+    'Community': 'Community',
+    'Members': 'Members',
+    'Admin Panel': 'Admin Panel',
+    'Logout': 'Logout',
+    'Your Premium Tools': 'Your Premium Tools',
+    'Admin Information': 'Admin Information',
+    'Save Profile': 'Save Profile',
+    'Chat': 'Chat',
+    'See More': 'See More'
+  },
+  bn: {
+    'Dashboard': 'ড্যাশবোর্ড',
+    'My Profile': 'আমার প্রোফাইল',
+    'Community': 'কমিউনিটি',
+    'Members': 'সদস্যরা',
+    'Admin Panel': 'অ্যাডমিন প্যানেল',
+    'Logout': 'লগআউট',
+    'Your Premium Tools': 'আপনার প্রিমিয়াম টুলস',
+    'Admin Information': 'অ্যাডমিন তথ্য',
+    'Save Profile': 'প্রোফাইল সেভ',
+    'Chat': 'চ্যাট',
+    'See More': 'আরও দেখুন'
+  }
+};
+let uiLang = localStorage.getItem('a_tuls_lang') || 'en';
+
+function applyLang() {
+  const dict = I18N[uiLang] || I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  const lab = document.getElementById('langToggleLabel');
+  if (lab) lab.textContent = uiLang === 'en' ? 'EN' : 'বাং';
+  document.documentElement.lang = uiLang === 'bn' ? 'bn' : 'en';
+}
+
+function toggleLang() {
+  uiLang = uiLang === 'en' ? 'bn' : 'en';
+  localStorage.setItem('a_tuls_lang', uiLang);
+  applyLang();
+}
+
+document.addEventListener('DOMContentLoaded', applyLang);
+setTimeout(applyLang, 300);
+
 </script>
+
+<!-- Language toggle (corner) -->
+<button id="langToggleBtn" onclick="toggleLang()" title="Language" style="position:fixed;right:14px;bottom:14px;z-index:9999;padding:10px 14px;border-radius:50px;border:1px solid var(--border);background:var(--card);color:var(--text);font-weight:700;font-size:12px;cursor:pointer;box-shadow:var(--shadow);backdrop-filter:blur(10px);">
+  🌐 <span id="langToggleLabel">EN</span>
+</button>
+
 </body>
 </html>

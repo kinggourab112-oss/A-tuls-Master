@@ -437,130 +437,10 @@ select, input[type="text"], input[type="search"] {
 </head>
 <body>
 <script>
-
-/* ===== Session: 30 min idle → login (never deletes cloud data) ===== */
-(function(){
-  var ROLE_KEY = 'a_tuls_role';
-  var USER_KEY = 'a_tuls_user';
-  var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 10 * 60 * 1000; // 30 minutes
-
-  function touch() {
-    try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
-  }
-
-  function checkSession() {
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role) return false;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    // If logged in but no timestamp yet — initialize (don't kick out)
-    if (!last) {
-      touch();
-      return true;
-    }
-    if ((Date.now() - last) > MAX_IDLE) {
-      try {
-        localStorage.removeItem(ROLE_KEY);
-        localStorage.removeItem(USER_KEY);
-        localStorage.removeItem(ACT_KEY);
-      } catch(e) {}
-      return false;
-    }
-    touch();
-    return true;
-  }
-
-  window.A_TULS_TOUCH = touch;
-  window.A_TULS_CHECK_SESSION = checkSession;
-
-  var _touchTimer = null;
-  function touchDebounced() {
-    if (_touchTimer) return;
-    _touchTimer = setTimeout(function(){ _touchTimer = null; touch(); }, 3000);
-  }
-  ['click','keydown','touchstart','scroll'].forEach(function(ev){
-    document.addEventListener(ev, touchDebounced, { passive: true });
-  });
-
-  // Check every 60s — only redirect if truly expired (no random refresh)
-  setInterval(function(){
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role) return;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last) { touch(); return; }
-    if ((Date.now() - last) > MAX_IDLE) {
-      try {
-        localStorage.removeItem(ROLE_KEY);
-        localStorage.removeItem(USER_KEY);
-        localStorage.removeItem(ACT_KEY);
-      } catch(e) {}
-      location.replace('index.html');
-    }
-  }, 60000);
-
-  // Init activity on load
-  touch();
-})();
-
-</script>
-
-<script>
-
-/* ===== Session: 10 min inactivity → login (data never auto-deleted) ===== */
-(function(){
-  var ROLE_KEY = 'a_tuls_role';
-  var USER_KEY = 'a_tuls_user';
-  var ACT_KEY = 'a_tuls_last_active';
-  var MAX_IDLE = 10 * 60 * 1000; // 10 minutes
-
-  function touch() {
-    try { localStorage.setItem(ACT_KEY, String(Date.now())); } catch(e) {}
-  }
-
-  function checkSession() {
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role || role === '') return false;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last || (Date.now() - last) > MAX_IDLE) {
-      // Session expired — only clear local session, NEVER delete cloud user data
-      localStorage.removeItem(ROLE_KEY);
-      localStorage.removeItem(USER_KEY);
-      localStorage.removeItem(ACT_KEY);
-      return false;
-    }
-    touch();
-    return true;
-  }
-
-  // Expose for pages
-  window.A_TULS_TOUCH = touch;
-  window.A_TULS_CHECK_SESSION = checkSession;
-
-  // Activity listeners
-  ['click','keydown','mousemove','scroll','touchstart'].forEach(function(ev){
-    document.addEventListener(ev, function(){ touch(); }, { passive: true });
-  });
-  setInterval(function(){
-    var role = localStorage.getItem(ROLE_KEY);
-    if (!role) return;
-    var last = parseInt(localStorage.getItem(ACT_KEY) || '0', 10);
-    if (!last || (Date.now() - last) > MAX_IDLE) {
-      localStorage.removeItem(ROLE_KEY);
-      localStorage.removeItem(USER_KEY);
-      localStorage.removeItem(ACT_KEY);
-      location.replace('index.html');
-    }
-  }, 30000);
-})();
-
 (function(){
   var r = localStorage.getItem('a_tuls_role');
   if (r !== 'admin') {
     location.replace('index.html');
-  } else if (typeof A_TULS_CHECK_SESSION === 'function' && !A_TULS_CHECK_SESSION()) {
-    location.replace('index.html');
-  } else if (typeof A_TULS_TOUCH === 'function') {
-    A_TULS_TOUCH();
   }
 })();
 </script>
@@ -659,27 +539,6 @@ select, input[type="text"], input[type="search"] {
         <button class="btn-sm btn-cyan" style="width:100%;margin-top:8px;" onclick="loadLagNotices()">REFRESH LAG NOTICES</button>
     </div>
 
-
-    <!-- Backup Data Vault -->
-    <div class="card">
-        <div class="card-title"><i class="fas fa-shield-alt"></i> Backup Data Vault</div>
-        <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;">
-            আলাদা JSONBin API দিয়ে ব্যাকআপ ডেটা দেখা ও ডিলিট করা যাবে। Primary সাইট ডেটা আলাদা থাকবে।
-        </p>
-        <label style="font-size:12px;color:var(--muted);">Vault Master Key</label>
-        <input type="password" id="vaultKeyInput" value="$2a$10$.2OpN37WS7H78hY.tLwSj.qWJqW/MGEyXUY4zfXOLphqIm6n74QOy" style="margin-bottom:8px;">
-        <label style="font-size:12px;color:var(--muted);">Vault Bin ID</label>
-        <input type="text" id="vaultBinInput" placeholder="JSONBin Bin ID (vault)" style="margin-bottom:8px;">
-        <div class="grid-2" style="margin-bottom:8px;">
-            <button class="btn-sm btn-cyan" onclick="loadVaultData()"><i class="fas fa-eye"></i> VIEW VAULT</button>
-            <button class="btn-sm btn-outline" onclick="saveVaultConfig()"><i class="fas fa-save"></i> SAVE CONFIG</button>
-        </div>
-        <button class="btn-sm btn-gold" style="width:100%;margin-bottom:8px;" onclick="copyPrimaryToVault()"><i class="fas fa-copy"></i> COPY PRIMARY → VAULT</button>
-        <button class="btn-sm btn-red" style="width:100%;background:rgba(255,59,92,0.2);border:1px solid var(--red);color:var(--red);" onclick="deleteVaultData()"><i class="fas fa-trash-alt"></i> DELETE VAULT DATA</button>
-        <pre id="vaultDataView" style="margin-top:12px;max-height:220px;overflow:auto;font-size:11px;background:rgba(0,0,0,0.35);padding:12px;border-radius:12px;color:var(--cyan);white-space:pre-wrap;word-break:break-all;display:none;"></pre>
-        <p id="vaultStatus" style="font-size:12px;color:var(--gold);margin-top:8px;"></p>
-    </div>
-
     <!-- Global Notice -->
     <div class="card">
         <div class="card-title"><i class="fas fa-bell"></i> Global Notice</div>
@@ -773,7 +632,6 @@ select, input[type="text"], input[type="search"] {
     <!-- Live User Management -->
     <div class="card">
         <div class="card-title"><i class="fas fa-users"></i> Live User Management + Ultra Tracking</div>
-        <p style="font-size:12px;color:var(--gold);margin-bottom:10px;">🛡 User Delete সুরক্ষিত — ভুলে ডিলিট হবে না (ইমেইল টাইপ করে ৩ ধাপে Confirm লাগবে)। সাধারণত BLOCK ব্যবহার করুন।</p>
         
         <div class="search-bar">
             <input type="search" id="userSearch" placeholder="নাম বা ইমেইল দিয়ে সার্চ করুন..." oninput="loadUsers()">
@@ -1287,7 +1145,7 @@ function loadUsers() {
                     SET PENDING
                 </button>
                 <button class="btn-sm btn-red" style="background:rgba(255,59,92,0.2);border:1px solid var(--red);color:var(--red);" onclick="deleteUser('${user.id}')">
-                    <i class="fas fa-trash-alt"></i> DELETE (Protected)
+                    <i class="fas fa-trash-alt"></i> DELETE
                 </button>
             </div>
         </div>`;
@@ -1386,37 +1244,15 @@ async function setPending(userId) {
 
 async function deleteUser(userId) {
     const user = DB.users.find(u => u.id === userId);
-    if (!user) return;
-    const userName = user.name || user.email || 'Unknown';
-    const userEmail = (user.email || '').toLowerCase();
+    const userName = user ? (user.name || user.email || 'Unknown') : 'Unknown';
 
-    // Step 1: soft warning — prefer BLOCK instead of DELETE
-    if (!confirm('⚠️ সতর্কতা!\n\n"' + userName + '" কে ডিলিট করবেন?\n\nইউজার হারিয়ে যাবে।\n\nবেশিরভাগ সময় BLOCK করাই যথেষ্ট।\n\nতবুও ডিলিট করতে চাইলে OK চাপুন।')) {
-        return;
-    }
-
-    // Step 2: must type full email to confirm (accidental delete রোধ)
-    const typed = prompt('সুরক্ষা: ডিলিট নিশ্চিত করতে ইউজারের পুরো ইমেইল টাইপ করুন:\n\n' + userEmail);
-    if (!typed || typed.trim().toLowerCase() !== userEmail) {
-        alert('❌ ইমেইল মিলেনি। ডিলিট বাতিল — ইউজার সেইফ আছে।');
-        return;
-    }
-
-    // Step 3: final confirm
-    if (!confirm('শেষ নিশ্চিতকরণ:\n\n' + userEmail + ' সম্পূর্ণ ডিলিট হবে।\n\nএটি আর ফেরানো যাবে না। OK = Delete')) {
+    if (!confirm('⚠️ আপনি কি নিশ্চিত?\n\n"' + userName + '" কে সাইট থেকে সম্পূর্ণ ডিলিট করতে চান?\n\nএই কাজ আর ফিরে পাওয়া যাবে না!')) {
         return;
     }
 
     DB.users = DB.users.filter(u => u.id !== userId);
-    // Clean related requests so orphan data না থাকে
-    if (Array.isArray(DB.passwordRequests)) {
-        DB.passwordRequests = DB.passwordRequests.filter(r => (r.email || '').toLowerCase() !== userEmail);
-    }
-    if (Array.isArray(DB.deviceRequests)) {
-        DB.deviceRequests = DB.deviceRequests.filter(r => (r.email || '').toLowerCase() !== userEmail);
-    }
     await saveDB();
-    alert('🗑️ ইউজার ডিলিট হয়েছে।');
+    alert('🗑️ ইউজার সম্পূর্ণ ডিলিট করা হয়েছে!');
     loadUsers();
 }
 
@@ -1640,138 +1476,6 @@ setInterval(function() {
         loadDB();
     }
 }, 8000);
-
-/* ========== Backup Data Vault ========== */
-const DEFAULT_VAULT_KEY = '$2a$10$.2OpN37WS7H78hY.tLwSj.qWJqW/MGEyXUY4zfXOLphqIm6n74QOy';
-
-function getVaultConfig() {
-    const key = (document.getElementById('vaultKeyInput') && document.getElementById('vaultKeyInput').value.trim())
-        || localStorage.getItem('a_tuls_vault_key')
-        || DEFAULT_VAULT_KEY;
-    const bin = (document.getElementById('vaultBinInput') && document.getElementById('vaultBinInput').value.trim())
-        || localStorage.getItem('a_tuls_vault_bin')
-        || (DB && DB.settings && DB.settings.vaultBinId)
-        || '';
-    return { key, bin };
-}
-
-function saveVaultConfig() {
-    const keyEl = document.getElementById('vaultKeyInput');
-    const binEl = document.getElementById('vaultBinInput');
-    const key = keyEl ? keyEl.value.trim() : DEFAULT_VAULT_KEY;
-    const bin = binEl ? binEl.value.trim() : '';
-    localStorage.setItem('a_tuls_vault_key', key);
-    localStorage.setItem('a_tuls_vault_bin', bin);
-    if (DB) {
-        if (!DB.settings) DB.settings = {};
-        DB.settings.vaultBinId = bin;
-        saveDB().then(() => {
-            document.getElementById('vaultStatus').textContent = '✅ Vault config saved';
-        }).catch(() => {
-            document.getElementById('vaultStatus').textContent = 'Config saved locally';
-        });
-    } else {
-        document.getElementById('vaultStatus').textContent = '✅ Saved locally';
-    }
-}
-
-async function loadVaultData() {
-    const st = document.getElementById('vaultStatus');
-    const view = document.getElementById('vaultDataView');
-    const { key, bin } = getVaultConfig();
-    if (!bin) {
-        st.textContent = '❌ Vault Bin ID দিন';
-        return;
-    }
-    st.textContent = 'Loading vault...';
-    try {
-        const res = await fetch('https://api.jsonbin.io/v3/b/' + bin + '/latest', {
-            headers: { 'X-Master-Key': key }
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        const record = data.record != null ? data.record : data;
-        view.style.display = 'block';
-        view.textContent = JSON.stringify(record, null, 2);
-        const users = (record && record.users && record.users.length) || 0;
-        st.textContent = '✅ Vault loaded' + (users ? (' — ' + users + ' users') : '');
-    } catch (e) {
-        view.style.display = 'block';
-        view.textContent = '';
-        st.textContent = '❌ Load failed: ' + (e.message || e);
-    }
-}
-
-async function copyPrimaryToVault() {
-    const st = document.getElementById('vaultStatus');
-    const { key, bin } = getVaultConfig();
-    if (!bin) { st.textContent = '❌ Vault Bin ID দিন'; return; }
-    if (!confirm('Primary DB → Vault কপি করবেন?')) return;
-    st.textContent = 'Copying...';
-    try {
-        if (!DB) DB = await fetchDB();
-        const res = await fetch('https://api.jsonbin.io/v3/b/' + bin, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': key
-            },
-            body: JSON.stringify(DB)
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        st.textContent = '✅ Primary copied to Vault';
-        loadVaultData();
-    } catch (e) {
-        st.textContent = '❌ Copy failed: ' + (e.message || e);
-    }
-}
-
-async function deleteVaultData() {
-    const st = document.getElementById('vaultStatus');
-    const { key, bin } = getVaultConfig();
-    if (!bin) { st.textContent = '❌ Vault Bin ID দিন'; return; }
-    if (!confirm('⚠️ Vault-এর সব ডেটা মুছে ফেলবেন?\nPrimary সাইট ডেটা থাকবে।')) return;
-    const typed = prompt('নিশ্চিত করতে DELETE টাইপ করুন:');
-    if (!typed || typed.trim().toUpperCase() !== 'DELETE') {
-        st.textContent = 'বাতিল — Vault সেইফ';
-        return;
-    }
-    st.textContent = 'Deleting vault data...';
-    try {
-        const empty = { users: [], settings: {}, posts: [], messages: [], passwordRequests: [], deviceRequests: [], clearedAt: new Date().toISOString() };
-        const res = await fetch('https://api.jsonbin.io/v3/b/' + bin, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': key
-            },
-            body: JSON.stringify(empty)
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const view = document.getElementById('vaultDataView');
-        if (view) {
-            view.style.display = 'block';
-            view.textContent = JSON.stringify(empty, null, 2);
-        }
-        st.textContent = '🗑️ Vault data deleted (empty)';
-    } catch (e) {
-        st.textContent = '❌ Delete failed: ' + (e.message || e);
-    }
-}
-
-// Prefill vault bin from settings on load
-function initVaultUI() {
-    try {
-        const keyEl = document.getElementById('vaultKeyInput');
-        const binEl = document.getElementById('vaultBinInput');
-        const sk = localStorage.getItem('a_tuls_vault_key');
-        const sb = localStorage.getItem('a_tuls_vault_bin') || (DB && DB.settings && DB.settings.vaultBinId) || '';
-        if (keyEl && sk) keyEl.value = sk;
-        if (binEl && sb) binEl.value = sb;
-    } catch (e) {}
-}
-
-
 </script>
 </body>
 </html>

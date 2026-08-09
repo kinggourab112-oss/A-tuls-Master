@@ -208,26 +208,6 @@ input:focus { border-color: var(--cyan); }
         <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:10px;" onclick="backToLoginFromError()">Back</button>
     </div>
 
-    
-    <div id="emailAlreadyBox" style="display:none;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">📧</div>
-        <h2 style="font-size:1.35rem;color:#ffc800;margin-bottom:12px;">Email Already Used</h2>
-        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="emailAlreadyMsg">
-            এই Gmail / ইমেইল ইতিমধ্যে রেজিস্টার্ড আছে। অন্য ইমেইল দিয়ে চেষ্টা করুন অথবা Login করুন।
-        </p>
-        <button class="btn" style="margin-top:14px;" onclick="backToLoginFromError()"><i class="fas fa-sign-in-alt"></i> Go to Login</button>
-        <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8b9cb3;margin-top:10px;" onclick="backToRegisterFromError()"><i class="fas fa-user-plus"></i> Try Another Email</button>
-    </div>
-
-    <div id="regErrorBox" style="display:none;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
-        <h2 style="font-size:1.35rem;color:#ff3b5c;margin-bottom:12px;">Registration Error</h2>
-        <p style="font-size:15px;color:#8b9cb3;line-height:1.6;margin-bottom:8px;" id="regErrorMsg">
-            রেজিস্ট্রেশনে সমস্যা হয়েছে।
-        </p>
-        <button class="btn" style="margin-top:14px;" onclick="backToRegisterFromError()"><i class="fas fa-arrow-left"></i> Back</button>
-    </div>
-
     <div id="registerForm">
         <input type="text" id="regName" placeholder="Full Name">
         <input type="email" id="regEmail" placeholder="Email address">
@@ -244,25 +224,6 @@ input:focus { border-color: var(--cyan); }
 </div>
 
 <script>
-
-// If already logged in with valid session, go to app (refresh-safe)
-(function(){
-  try {
-    var role = localStorage.getItem('a_tuls_role');
-    var last = parseInt(localStorage.getItem('a_tuls_last_active') || '0', 10);
-    var maxIdle = 10 * 60 * 1000;
-    if (role && last && (Date.now() - last) <= maxIdle) {
-      if (role === 'admin' || role === 'user') location.replace('dashboard.html');
-      else if (role === 'pending') location.replace('pending.html');
-    } else if (role) {
-      // expired session only — do NOT delete cloud data
-      localStorage.removeItem('a_tuls_role');
-      localStorage.removeItem('a_tuls_user');
-      localStorage.removeItem('a_tuls_last_active');
-    }
-  } catch(e) {}
-})();
-
 /* ========== JSONBin Config ========== */
 const BIN_ID = '6a6eb29dda38895dfeae700a';
 const MASTER_KEY = '$2a$10$GzWaV3W/AAwOB454.aieN.f04H/PIoDF0RFCqAUPrNxIr0OGg13qW';
@@ -422,19 +383,10 @@ function showForgot() {
 }
 
 function hideAllForms() {
-    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox','wrongPassBox','accountBlockedBox','emailAlreadyBox','regErrorBox'].forEach(id => {
+    ['loginForm','registerForm','forgotForm','resetForm','devicePendingBox','siteBlockedBox','wrongPassBox','accountBlockedBox'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
-}
-
-function backToRegisterFromError() {
-    hideAllForms();
-    const tabs = document.querySelector('.tabs');
-    if (tabs) tabs.style.display = 'flex';
-    document.getElementById('registerForm').style.display = 'block';
-    document.getElementById('regTab').classList.add('active');
-    document.getElementById('loginTab').classList.remove('active');
 }
 
 function backToLoginFromError() {
@@ -591,9 +543,6 @@ async function doLogin() {
                 }
                 await saveDB(db);
             } catch (e) { console.error('Admin device track', e); }
-            localStorage.setItem('a_tuls_last_activity', String(Date.now()));
-            try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
-            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'admin');
             localStorage.setItem('a_tuls_user', JSON.stringify({
                 name: 'Admin Gourab', email: ADMIN_EMAIL, status: 'Approved', mode: 'premium'
@@ -651,9 +600,6 @@ async function doLogin() {
         }
 
         if (user.status === 'Pending') {
-            localStorage.setItem('a_tuls_last_activity', String(Date.now()));
-            try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
-            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'pending');
             localStorage.setItem('a_tuls_user', JSON.stringify(user));
             window.location.href = 'pending.html';
@@ -747,9 +693,6 @@ async function doLogin() {
         db.users[userIdx] = user;
         await saveDB(db);
 
-        localStorage.setItem('a_tuls_last_activity', String(Date.now()));
-        try { sessionStorage.setItem('a_tuls_tab_session', '1'); } catch(e) {}
-        localStorage.setItem('a_tuls_last_active', String(Date.now()));
         localStorage.setItem('a_tuls_role', 'user');
         localStorage.setItem('a_tuls_user', JSON.stringify(user));
         window.location.href = 'dashboard.html';
@@ -808,26 +751,20 @@ async function doRegister() {
         }
 
         if (db.settings.siteLive === false) {
-            hideAllForms();
-            document.querySelector('.tabs').style.display = 'none';
-            document.getElementById('siteBlockedBox').style.display = 'block';
+            msg.className = 'msg error';
+            msg.textContent = 'সাইট সাময়িক বন্ধ আছে।';
             return;
         }
 
         if (db.settings.registrationOpen === false) {
-            hideAllForms();
-            document.querySelector('.tabs').style.display = 'none';
-            document.getElementById('regErrorBox').style.display = 'block';
-            document.getElementById('regErrorMsg').textContent = 'রেজিস্ট্রেশন এখন Admin কর্তৃক বন্ধ আছে। পরে আবার চেষ্টা করুন।';
+            msg.className = 'msg error';
+            msg.textContent = 'রেজিস্ট্রেশন এখন বন্ধ আছে!';
             return;
         }
 
         if (db.users.find(u => (u.email || '').toLowerCase() === email)) {
-            hideAllForms();
-            document.querySelector('.tabs').style.display = 'none';
-            document.getElementById('emailAlreadyBox').style.display = 'block';
-            const em = document.getElementById('emailAlreadyMsg');
-            if (em) em.innerHTML = '<strong style="color:#ffc800;">' + email + '</strong><br>এই Gmail / ইমেইল ইতিমধ্যে রেজিস্টার্ড আছে। অন্য ইমেইল দিয়ে চেষ্টা করুন অথবা Login করুন।';
+            msg.className = 'msg error';
+            msg.textContent = 'এই ইমেইল ইতিমধ্যে রেজিস্টার্ড';
             return;
         }
 
@@ -875,16 +812,13 @@ async function doRegister() {
         msg.textContent = 'রেজিস্ট্রেশন সফল! অ্যাডমিন অ্যাপ্রুভের জন্য অপেক্ষা করুন।';
 
         setTimeout(() => {
-            localStorage.setItem('a_tuls_last_active', String(Date.now()));
             localStorage.setItem('a_tuls_role', 'pending');
             localStorage.setItem('a_tuls_user', JSON.stringify(newUser));
             window.location.href = 'pending.html';
         }, 1200);
     } catch (e) {
-        hideAllForms();
-        document.querySelector('.tabs').style.display = 'none';
-        document.getElementById('regErrorBox').style.display = 'block';
-        document.getElementById('regErrorMsg').textContent = 'নেটওয়ার্ক এরর বা সার্ভার সমস্যা। ইন্টারনেট চেক করে আবার চেষ্টা করুন।';
+        msg.className = 'msg error';
+        msg.textContent = 'নেটওয়ার্ক এরর! আবার চেষ্টা করুন।';
         console.error(e);
     } finally {
         btn.disabled = false;
